@@ -22,15 +22,20 @@ function ActionCommand:new()
 			UI.{{vvar}} = {{vval}}
 		{{/global}}
 		{{#save}}
-      {{#vtype}}
+      {{#global}}
         Var:saveKwikVars({"{{vvar}}", _K.{{vvar}} })
-      {{/vtype}}
-      {{^vtype}}
+      {{/global}}
+      {{^global}}
         Var:saveKwikVars({"{{vvar}}", UI.{{vvar}} })
-      {{/vtype}}
+      {{/global}}
 		{{/save}}
 		{{#dynatxtArr}}
+      {{#global}}
+			layer.{{vlay}}.text = _K.{{vvar}}
+      {{/global}}
+      {{^global}}
 			layer.{{vlay}}.text = UI.{{vvar}}
+      {{/global}}
 		{{/dynatxtArr}}
 		end
 		return command

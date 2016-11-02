@@ -43,6 +43,7 @@ local randYEnd = {{randYEnd}}
 {{/randY}}
 local elFontSize = {{elFontSize}}
 {{/ultimate}}
+local oriAlpha = {{oriAlpha}}
 --
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view

@@ -319,7 +319,7 @@ Navigation.new = function( obj, params )
 				Navigation.hide()
 			end
 		end
-		_K.timerStash.timer_nav = timer.performWithDelay( 10000, hideAgain )
+		_K.timerStash.timer_nav = timer.performWithDelay( 5000, hideAgain )
 
 	end
 

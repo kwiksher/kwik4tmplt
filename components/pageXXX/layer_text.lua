@@ -1,0 +1,111 @@
+-- Code created by Kwik - Copyright: kwiksher.com {{year}}
+-- Version: {{vers}}
+-- Project: {{ProjName}}
+--
+local _M = {}
+--
+local _K = require "Application"
+--
+{{#ultimate}}
+local xFactor = display.contentWidth/1920
+local yFactor = display.contentHeight/1280
+local imageWidth = {{elW}}/4
+local imageHeight = {{elH}}/4
+local mX = {{mX}}*xFactor
+local mY = {{mY}}*yFactor
+{{#randX}}
+local randXStart = {{randXStart}}*xFactor
+local randXEnd = {{randXEnd}}*yFactor
+{{/randX}}
+{{#randY}}
+local randYStart = {{randYStart}}*xFactor
+local randYEnd = {{randYEnd}}*yFactor
+{{/randY}}
+local eloH = {{eloH}}/4
+local eloV = {{eloV}}/4
+local epadV ={{epadV}}/4
+local elFontSize = {{elFontSize}}/4
+{{/ultimate}}
+{{^ultimate}}
+local imageWidth = {{elW}}
+local imageHeight = {{elH}}
+local mX = {{mX}}
+local mY = {{mY}}
+{{#randX}}
+local randXStart = {{randXStart}}
+local randXEnd = {{randXEnd}}
+{{/randX}}
+{{#randY}}
+local randYStart = {{randYStart}}
+local randYEnd = {{randYEnd}}
+{{/randY}}
+local eloH = {{eloH}}
+local eloV = {{eloV}}
+local epadV ={{epadV}}
+local elFontSize = {{elFontSize}}
+{{/ultimate}}
+local oriAlpha = {{oriAlpha}}
+--
+function _M:localPos(UI)
+    local sceneGroup  = UI.scene.view
+    local layer       = UI.layer
+  {{#multLayers}}
+    UI.tab{{um}}["{{dois}}"] = { imageHeight, imageWidth, "{{elContent}}", mX, mY, eloH, eloV, {{elFont}}, epadV, elFontSize, {{elR}}, {{elG}}, {{elB}} }
+  {{/multLayers}}
+  {{^multLayers}}
+    {{#elpara}}
+      local {{myLName}}_options = { text = "{{elContent}}", x = mX, y = mY, fontSize = elFontSize, font = {{elFont}}, width = imageWidth, align = "{{elAlign}}" }
+      local {{myLName}}H = imageHeight
+      layer.{{myLName}} = display.newText( {{myLName}}_options )
+    {{/elpara}}
+    {{^elpara}}
+      local {{myLName}}_txt = "{{elContent}}"
+      layer.{{myLName}} = display.newText( {{myLName}}_txt, mX, mY, imageWidth+eloH, imageHeight+eloV, {{elFont}}, elFontSize)
+    {{/elpara}}
+    layer.{{myLName}}.originalH = imageHeight
+    layer.{{myLName}}.originalW = imageWidth
+    layer.{{myLName}}:setFillColor ({{elR}}, {{elG}}, {{elB}})
+
+    {{#epadV}}
+      layer.{{myLName}}.y = layer.{{myLName}}.y + epadV
+    {{/epadV}}
+    layer.{{myLName}}.anchorX = 0.5
+    layer.{{myLName}}.anchorY = 0
+    {{#scaleW}}
+      layer.{{myLName}}.xScale = scaleW
+    {{/scaleW}}
+    {{#scaleH}}
+      layer.{{myLName}}.yScale = scaleH
+    {{/scaleH}}
+    {{#rotate}}
+      layer.{{myLName}}:rotate({{rotate}})
+    {{/rotate}}
+    {{#randX}}
+      layer.{{myLName}}.x = math.random(randXStart, randXEnd)
+    {{/randX}}
+    {{#randY}}
+      layer.{{myLName}}.y = math.random(randYStart, randYEnd)
+    {{/randY}}
+    layer.{{myLName}}.oriX = layer.{{myLName}}.x
+    layer.{{myLName}}.oriY = layer.{{myLName}}.y
+    layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
+    layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
+    layer.{{myLName}}.alpha = oriAlpha
+    layer.{{myLName}}.oldAlpha = oriAlpha
+    sceneGroup:insert( layer.{{myLName}})
+    sceneGroup.{{myLName}} = layer.{{myLName}}
+  {{/multLayers}}
+end
+--
+function _M:allListeners()
+end
+--
+function _M:toDispose()
+end
+--
+function _M:localVars()
+  {{#multLayers}}
+  {{/multLayers}}
+end
+--
+return _M

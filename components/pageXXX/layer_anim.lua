@@ -407,6 +407,7 @@ function _M:buildAnim(UI)
 					})
 			{{/gtTypePath}}
 			_K.gt.{{gtName}}:pause()
+  		_K.gt.{{gtName}}:toBeginning()
 		{{/gtDissolve}}
 	--
 	-- {{gtName}}()

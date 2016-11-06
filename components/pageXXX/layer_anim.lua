@@ -40,8 +40,9 @@ function _M:toDestory()
 end
 --
 {{#groupAndPage}}
-local function getPosGroupAndPage(layer, endX, endY, isSceneGroup)
+local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
 	local mX, mY
+	local endX, endY =  _K.ultimatePosition(_endX, _endY)
 	{{#CenterReferencePoint}}
 		--CenterReferencePoint
 	  if isSceneGroup then
@@ -103,7 +104,8 @@ end
 {{/groupAndPage}}
 {{^groupAndPage}}
 --
-local function getPos(layer, endX, endY)
+local function getPos(layer, _endX, _endY)
+	local endX, endY =  _K.ultimatePosition(_endX, _endY)
 	{{#DefaultReference}}
     mX = layer.x + endX + layer.width/2  - layer.x
     mY = layer.y + endY + layer.height/2 - layer.y
@@ -208,8 +210,6 @@ function _M:repoHeader(UI)
 end
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
 {{#gtBread}}
 local gtbw = {{gtbw}}/4
 local gtbh = {{gtbh}}/4
@@ -220,10 +220,6 @@ local gtbh = {{gtbh}}/4
 local gtbw = {{gtbw}}
 local gtbh = {{gtbh}}
 {{/gtBread}}
-{{/ultimate}}
-{{^ultimate}}
-local xFactor = 1
-local yFactor = 1
 {{/ultimate}}
 --
 function _M:buildAnim(UI)
@@ -287,10 +283,10 @@ function _M:buildAnim(UI)
 			end --ends reStart for {{gtName}}
 			{{#endX}}
 				{{^groupAndPage}}
-				local mX, mY = getPos({{gtLayer}}, {{endX}}*xFactor, {{endY}}*yFactor)
+				local mX, mY = getPos({{gtLayer}}, {{endX}}, {{endY}})
 				{{/groupAndPage}}
 	   		{{#groupAndPage}}
-				local mX, mY = getPosGroupAndPage({{gtLayer}}, {{endX}}*xFactor, {{endY}}*yFactor, {{isSceneGroup}})
+				local mX, mY = getPosGroupAndPage({{gtLayer}}, {{endX}}, {{endY}}, {{isSceneGroup}})
 				{{/groupAndPage}}
 			{{/endX}}
 			{{^gtTypePath}}

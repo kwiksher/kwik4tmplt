@@ -15,12 +15,10 @@ function _M:toDispose()
 end
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
 local imageWidth = {{elW}}/4
 local imageHeight = {{elH}}/4
-local mX = {{mX}}*xFactor
-local mY = {{mY}}*yFactor
+local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
+
 {{/ultimate}}
 {{^ultimate}}
 local imageWidth = {{elW}}

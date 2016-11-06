@@ -8,19 +8,16 @@ function _M:localVars(UI)
 end
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
 local imageWidth = {{elW}}/4
 local imageHeight = {{elH}}/4
-local mX = {{mX}}*xFactor
-local mY = {{mY}}*yFactor
+local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
 {{#randX}}
-local randXStart = {{randXStart}}*xFactor
-local randXEnd = {{randXEnd}}*yFactor
+local randXStart = _K.ultimatePosition({{randXStart}})
+local randXEnd = _K.ultimatePosition({{randXEnd}})
 {{/randX}}
 {{#randY}}
-local randYStart = {{randYStart}}*xFactor
-local randYEnd = {{randYEnd}}*yFactor
+local dummy, randYStart = _K.ultimatePosition(0, {{randYStart}})
+local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 {{/randY}}
 {{/ultimate}}
 {{^ultimate}}

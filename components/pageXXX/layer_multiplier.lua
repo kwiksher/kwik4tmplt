@@ -7,19 +7,13 @@ local _M = {}
 local _K = require "Application"
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
 local imageWidth = {{elW}}/4
 local imageHeight = {{elH}}/4
-local mX       = {{mX}}*xFactor
-local mY       = {{mY}}*yFactor
-local elStartX = {{elStartX}}*xFactor
-local elEndX   = {{elEndX}}*xFactor
-local elStartY = {{elStartY}}*yFactor
-local elEndY   = {{elEndY}}*yFactor
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}})
+local elStartX, elStartY = _K.ultimatePosition({{elStartX}}, {{elStartY}})
+local elEndX, elEndY   = _K.ultimatePosition({{elEndX}}, {{elEndY}})
 {{^elDistance}}
-local elFixX   = {{elFixX}}*xFactor
-local elFixY   = {{elFixY}}*yFactor
+local elFixX, elFixY   = _K.ultimatePosition({{elFixX}}, {{elFixY}})
 {{/elDistance}}
 {{/ultimate}}
 {{^ultimate}}

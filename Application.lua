@@ -140,5 +140,9 @@ function Application.cancelAllTransitions()
     Application.trans = nil
     Application.trans = {}
 end
+--
+function Application.ultimatePosition(x,y)
+		return  display.contentWidth/2 + (x*0.25 - 480*0.5),  display.contentHeight/2 + (y*0.25 - 320*0.5)
+end
 	--
 return Application

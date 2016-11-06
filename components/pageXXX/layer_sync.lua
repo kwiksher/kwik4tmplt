@@ -7,24 +7,22 @@ local _M = {}
 local _K = require "Application"
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
-local mX = {{mX}}*xFactor
-local mY = {{mY}}*yFactor
-local elpad = {{elpad}}*xFactor
+local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
+
+local elpad = {{elpad}}/4
 local elFontSize = {{elFontSize}}/4
 local audioImage = "kAudio.png"
 local audioImageHi = "kAudio.png"
+local speakW, speakH = 60/4, 60/4
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
 local mX = {{mX}}
 local mY = {{mY}}
 local elpad = {{elpad}}
 local elFontSize = {{elFontSize}}
 local audioImage = "kAudioHi.png"
 local audioImageHi = "kAudioHi.png"
+local speakW, speakH = 60, 60
 {{/ultimate}}
 --
 function _M:localPos(UI)
@@ -60,7 +58,7 @@ function _M:localPos(UI)
   }
 
   {{#deviceH}}
-    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, 60*xFactor, 60*yFactor );
+    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, speakW, speakH);
   {{/deviceH}}
   {{^deviceH}}
     layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, 30, 30 );

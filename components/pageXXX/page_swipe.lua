@@ -11,10 +11,10 @@ local Navigation = require("extlib.kNavi")
 {{#ultimate}}
 local xFactor = display.contentWidth/1920
 local yFactor = display.contentHeight/1280
+local pSpa = {{pSpa}}/4
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
+local pSpa  = {{pSpa}}
 {{/ultimate}}
 --
 function _M:allListeners(UI)
@@ -24,10 +24,10 @@ function _M:allListeners(UI)
   local numPages    = UI.numPages
 
   if layer.{{backLayer}} == nil then return end
-  _K.Gesture.activate( layer.{{backLayer}}, {swipeLength= {{pSpa}}*xFactor }) --why
+  _K.Gesture.activate( layer.{{backLayer}}, {swipeLength= pSpa }) --why
   {{#infinity}}
     if layer.{{backLayer}}_2 == nil then return end
-    _K.Gesture.activate( layer.{{backLayer}}_2, {swipeLength= {{pSpa}}*xFactor })
+    _K.Gesture.activate( layer.{{backLayer}}_2, {swipeLength= pSpa })
   {{/infinity}}
   _K.pageSwap = function (event )
     local options

@@ -6,18 +6,16 @@ local _M = {}
 local ads = require "ads"
 ---------------------
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
+local adX, adY = _K.ultimatePosition({{adX}}, {{adY}})
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
+local adX, adY = {{adX}}, {{adY}}
 {{/ultimate}}
 
 function _M:allListeners()
   {{#addShow}}
     -- Monetization with Ads
-    ads.show("banner", { x={{adX}}*xFactor, y={{adY}}*yFactor } )
+    ads.show("banner", { x=adX, y=adY } )
   {{/addShow}}
   {{^addShow}}
     -- Monetization with Ads

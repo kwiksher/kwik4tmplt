@@ -7,8 +7,6 @@ local _M = {}
 local _K = require "Application"
 ---------------------
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
 local bs = {{bs}}/4
 {{/ultimate}}
 {{^ultimate}}

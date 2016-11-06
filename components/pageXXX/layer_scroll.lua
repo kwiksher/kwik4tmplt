@@ -13,12 +13,38 @@ function _M:localPos()
 end
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
+  {{#para}}
+  local ggwid  = {{ggwid}}/4
+  {{/para}}
+  {{#page}}
+  local gww, gwh   = {{gww}}/4, {{gwh}}/4
+  local gwsw, gwsh = {{gwsw}}/4, {{gwsh}}/4
+  {{/page}}
+  {{#object}}
+  local ggwid  = {{ggwid}}/4
+  {{/object}}
+  {{#manual}}
+  local gmt, gml   = {{gmt}}, {{gml}}
+  local gww, gwh   = {{gww}}/4, {{gwh}}/4
+  local gwsw, gwsh = {{gwsw}}/4, {{gwsh}}/4
+  {{/manual}}
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
+  {{#para}}
+  local ggwid  = {{ggwid}}
+  {{/para}}
+  {{#page}}
+  local gww, gwh   = {{gww}}, {{gwh}}
+  local gwsw, gwsh = {{gwsw}}, {{gwsh}}
+  {{/page}}
+  {{#object}}
+  local ggwid  = {{ggwid}}
+  {{/object}}
+  {{#manual}}
+  local gmt, gml   = {{gmt}}, {{gml}}
+  local gww, gwh   = {{gww}}, {{gwh}}
+  local gwsw, gwsh = {{gwsw}}, {{gwsh}}
+  {{/manual}}
 {{/ultimate}}
 --
 function _M:allListeners(UI)
@@ -28,7 +54,7 @@ function _M:allListeners(UI)
    {{#para}}
     local _top         = layer.{{glayer}}.contentBounds.yMin
     local _left        = layer.{{glayer}}.contentBounds.xMin
-    local _width       = layer.{{glayer}}.width + 10 - {{ggwid}}*xFactor
+    local _width       = layer.{{glayer}}.width + 10 - ggwid
     local _height      = layer.{{glayer}}.height
     local _scrollWidth = layer.{{glayer}}.width
     local _scrollHeight = layer.{{glayer}}.height
@@ -36,26 +62,26 @@ function _M:allListeners(UI)
   {{#page}}
     local _top          = layer.{{glayer}}.contentBounds.yMin
     local _left         = layer.{{glayer}}.contentBounds.xMin
-    local _width        = {{gww}}*xFactor
-    local _height       = {{gwh}}*yFactor
-    local _scrollWidth  = {{gwsw}}*xFactor
-    local _scrollHeight = {{gwsh}}*yFactor
+    local _width        = gww
+    local _height       = gwh
+    local _scrollWidth  = gwsw
+    local _scrollHeight = gwsh
   {{/page}}
   {{#object}}
     local _top          = layer.{{glayer}}.contentBounds.yMin
     local _left         = layer.{{glayer}}.contentBounds.xMin
-    local _width        = layer.{{glayer}}.width + 10- {{ggwid}}*xFactor
+    local _width        = layer.{{glayer}}.width + 10- ggwid
     local _height       = layer.{{glayer}}.height
     local _scrollWidth  = layer.{{glayer}}.width
     local _scrollHeight = layer.{{glayer}}.height
   {{/object}}
   {{#manual}}
-    local _top          = {{gmt}}*xFactor
-    local _left         = {{gml}}*yFactor
-    local _width        = {{gww}}*xFactor
-    local _height       = {{gwh}}*yFactor
-    local _scrollWidth  = {{gwsw}}*xFactor
-    local _scrollHeight = {{gwsh}}*yFactor
+    local _top          = gmt
+    local _left         = gml
+    local _width        = gww
+    local _height       = gwh
+    local _scrollWidth  = gwsw
+    local _scrollHeight = gwsh
   {{/manual}}
 
   _width        = (_width        ==0) and layer.{{glayer}}.height or _width
@@ -97,32 +123,32 @@ function _M:allListeners(UI)
     local _left   = layer.{{glayer}}.x
     local _width  = layer.{{glayer}}.originalW
     local _height = layer.{{glayer}}.originalH
-    local _scrollWidth  = {{gwsw}}*xFactor
-    local _scrollHeight = {{gwsh}}*yFactor
+    local _scrollWidth  = gwsw
+    local _scrollHeight = gwsh
   {{/para}}
   {{#page}}
     local _top    = layer.{{glayer}}.y
     local _left   = layer.{{glayer}}.x
     local _width  = layer.{{glayer}}.width + 10
-    local _height = {{gwh}}*xFactor
-    local _scrollWidth  = {{gwsw}}*xFactor
-    local _scrollHeight = {{gwsh}}*yFactor
+    local _height = gwh
+    local _scrollWidth  = gwsw
+    local _scrollHeight = gwsh
   {{/page}}
   {{#object}}
     local _top    = layer.{{glayer}}.y
     local _left   = layer.{{glayer}}.x
     local _width  = layer.{{glayer}}.width + 10
     local _height = layer.{{glayer}}.height
-    local _scrollWidth  = {{gwsw}}*xFactor
-    local _scrollHeight = {{gwsh}}*yFactor
+    local _scrollWidth  = gwsw
+    local _scrollHeight = gwsh
   {{/object}}
   {{#manual}}
-    local _top          = {{gmt}}*xFactor
-    local _left         = {{gml}}*yFactor
-    local _width        = {{gww}}*xFactor
-    local _height       = {{gwh}}*yFactor
-    local _scrollWidth  = {{gwsw}}*xFactor
-    local _scrollHeight = {{gwsh}}*yFactor
+    local _top          = gmt
+    local _left         = gml
+    local _width        = gww
+    local _height       = gwh
+    local _scrollWidth  = gwsw
+    local _scrollHeight = gwsh
   {{/manual}}
 
   _width        = (_width        ==0) and layer.{{glayer}}.height or _width

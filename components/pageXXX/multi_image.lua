@@ -7,18 +7,16 @@ local _M = {}
 local _K = require "Application"
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
-  {{#randX}}
-  local randXStart = {{randXStart}}/4
-  local randXEnd = {{randXEnd}}/4
-  {{/randX}}
-  {{#randY}}
-  local randYStart = {{randYStart}}/4
-  local randYEnd = {{randYEnd}}/4
-  {{/randY}}
+{{#randX}}
+local randXStart = _K.ultimatePosition({{randXStart}})
+local randXEnd = _K.ultimatePosition({{randXEnd}})
+{{/randX}}
+{{#randY}}
+local dummy, randYStart = _K.ultimatePosition(0, {{randYStart}})
+local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
+{{/randY}}
   {{#idist}}
-  local idist = {{idist}}*xFactor
+  local idist = {{idist}}/4
   {{/idist}}
 {{/ultimate}}
 {{^ultimate}}

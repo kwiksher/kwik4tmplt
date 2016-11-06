@@ -8,12 +8,14 @@ local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
+local bgW, bgH = 2048/4, 1152/4
+local pgX, pgY = _K.ultimatePosition(1024, 768)
+local curlWidth = 400/4
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
+local bgW, bgH = 2048, 1152
+local pgX, pgY = 1024, 768
+local curlWidth = 400
 {{/ultimate}}
 --
 function _M:allListeners(UI)
@@ -34,17 +36,17 @@ function _M:allListeners(UI)
     local curl = event.target
     if event.dir == "right" then
       if next == nil and curPage~=nextPage then
-        next = display.newImageRect( _K.imgDir.. "p"..nextPage.."_background.png", 2048*xFactor, 1152*yFactor )
-        next.x = 1024*xFactor
-        next.y = 768*yFactor
+        next = display.newImageRect( _K.imgDir.. "p"..nextPage.."_background.png", bgW, bgH )
+        next.x = pgX
+        next.y = pgY
         sceneGroup:insert(next)
         next:toFront()
       end
     else
       if prev == nil and curPage ~= prevPage then
-        prev = display.newImageRect( _K.imgDir.."p"..prevPage.."_background.png", 2048*xFactor, 1152*yFactor )
-        prev.x = 1024*xFactor
-        prev.y = 768*yFactor
+        prev = display.newImageRect( _K.imgDir.."p"..prevPage.."_background.png", bgW, bgH )
+        prev.x = pgX
+        prev.y = pgY
         sceneGroup:insert(prev)
         prev:toFront()
       end
@@ -96,7 +98,7 @@ function _M:allListeners(UI)
   end
   --
   if back == nil then
-    back = page_curl.NewPageCurlWidget{width =W, height=H, size = 400*xFactor}
+    back = page_curl.NewPageCurlWidget{width =W, height=H, size = curlWidth}
     back:SetImage(_K.imgDir.."p"..curPage.."_background.png")
     back.y  = display.contentCenterY - H/2
     back:SetTouchSides("left_and_right")

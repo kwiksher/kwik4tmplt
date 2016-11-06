@@ -6,14 +6,6 @@ local ActionCommand = {}
 local _AC           = require("commands.kwik.actionCommand")
 local _K            = require "Application"
 --
-{{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
-{{/ultimate}}
-{{^ultimate}}
-local xFactor = 1
-local yFactor = 1
-{{/ultimate}}
 -----------------------------
 -----------------------------
 function ActionCommand:new()
@@ -146,7 +138,7 @@ function ActionCommand:new()
 		{{/external.externalCode}}
 
 		{{#image.editImage}}
-			_AC.Image:editImage(layer.{{lay}}, {{mx}}, {{my}}, {{sw}}, {{sh}}, {{fh}}, {{fv}}, {{ro}}, xFactor, yFactor)
+			_AC.Image:editImage(layer.{{lay}}, {{mx}}, {{my}}, {{sw}}, {{sh}}, {{fh}}, {{fv}}, {{ro}})
 		{{/image.editImage}}
 
 		{{#language.setLanguage}}

@@ -9,10 +9,8 @@ local _K = require "Application"
 local particleDesigner = require("extLib.particleDesigner")
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
-local mX = {{mX}}*xFactor
-local mY = {{mY}}*yFactor
+local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
+
 {{/ultimate}}
 {{^ultimate}}
 local mX = {{mX}}

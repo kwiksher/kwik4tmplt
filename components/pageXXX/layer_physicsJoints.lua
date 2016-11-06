@@ -13,28 +13,64 @@ function _M:localPos()
 end
 --
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
+    {{#piston}}
+    local bX, bY   = _K.ultimatePosition({{bX}}, {{bY}})
+    local aXd, aYd = _K.ultimatePosition({{aXd}}, {{aYd}})
+    {{/piston}}
+    {{#distance}}
+    local bX, bY   = _K.ultimatePosition({{bX}}, {{bY}})
+    local bcX, bcY = _K.ultimatePosition({{bcX}}, {{bcY}})
+    {{/distance}}
+    {{#pulley}}
+    local aXd, aYd = _K.ultimatePosition({{aXd}}, {{aYd}})
+    local bXd, bYd = _K.ultimatePosition({{bXd}}, {{bYd}})
+    local bX, bY   = _K.ultimatePosition({{bX}}, {{bY}})
+    local bcX, bcY ={{bcX}}, {{bcY}}
+    {{/pulley}}
+    {{#default}}
+    local bX, bY = _K.ultimatePosition({{bX}}, {{bY}})
+    {{/default}}
+    {{#rotationx}}
+    local rotX, rotY =_K.ultimatePosition( {{rotationx}}, {{rotationy}})
+    {{/rotationx}}
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
+    {{#piston}}
+    local bX, bY   = {{bX}}, {{bY}}
+    local aXd, aYd = {{aXd}}, {{aYd}}
+    {{/piston}}
+    {{#distance}}
+    local bX, bY   = {{bX}}, {{bY}}
+    local bcX, bcY = {{bcX}}, {{bcY}}
+    {{/distance}}
+    {{#pulley}}
+    local aXd, aYd = {{aXd}}, {{aYd}}
+    local bXd, bYd = {{bXd}}, {{bYd}}
+    local bX, bY   = {{bX}}, {{bY}}
+    local bcX, bcY ={{bcX}}, {{bcY}}
+    {{/pulley}}
+    {{#default}}
+    local bX, bY = {{bX}}, {{bY}}
+    {{/default}}
+    {{#rotationx}}
+    local rotX, rotY = {{rotationx}}, {{rotationy}}
+    {{/rotationx}}
 {{/ultimate}}
 --
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
     {{#piston}}
-      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, {{bX}}*xFactor, {{bY}}*yFactor, {{aXd}}*xFactor, {{aYd}}*yFactor)
+      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, bX, bY, aXd, aYd)
     {{/piston}}
     {{#distance}}
-      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, {{bX}}*xFactor, {{bY}}*yFactor, {{bcX}}*xFactor, {{bcY}}*yFactor)
+      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, bX, bY, bcX, bcY)
     {{/distance}}
     {{#pulley}}
-      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, {{aXd}}*xFactor, {{aYd}}*yFactor, {{bXd}}*xFactor, {{bYd}}*yFactor, {{bX}}*xFactor, {{bY}}*yFactor, {{bcX}}*xFactor, {{bcY}}*yFactor, {{ratio}})
+      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, aXd, aYd, bXd, bYd, bX, bY, bcX, bcY, {{ratio}})
     {{/pulley}}
     {{#default}}
-      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, {{bX}}*xFactor, {{bY}}*yFactor)
+      local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, bX, bY)
     {{/default}}
     {{#menabled}}
         {{bgroup}}.isMotorEnabled = {{menabled}}
@@ -50,7 +86,7 @@ function _M:allListeners(UI)
     {{/mtorque}}
     {{#rotationx}}
         {{bgroup}}.isLimitEnabled = true
-        {{bgroup}}:setRotationLimits({{rotationx}}, {{rotationy}})
+        {{bgroup}}:setRotationLimits(rotX, rotY)
     {{/rotationx}}
 end
 --

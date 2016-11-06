@@ -7,12 +7,10 @@ local Navigation = require("extlib.kNavi")
 local _K = require("Application")
 ---------------------
 {{#ultimate}}
-local xFactor = display.contentWidth/1920
-local yFactor = display.contentHeight/1280
+local tw, th = {{tw}}/4, {{th}}/4
 {{/ultimate}}
 {{^ultimate}}
-local xFactor = 1
-local yFactor = 1
+local tw, th = {{tw}}, {{th}}
 {{/ultimate}}
 ---------------------
 --
@@ -42,8 +40,8 @@ function _M:allListeners(UI)
   	{{/mm}}
 			totPages = numPages,
 			curPage  = curPage,
-			thumbW   = {{tw}}*xFactor,
-			thumbH   = {{th}}*yFactor,
+			thumbW   = tw,
+			thumbH   = th,
 			alpha    = {{bal}},
 			imageDir = _K.thumbDir,
 			dire     = "{{bdir}}",

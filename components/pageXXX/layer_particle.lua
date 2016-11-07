@@ -6,7 +6,7 @@ local _M = {}
 --
 local _K = require "Application"
 --
-local particleDesigner = require("extLib.particleDesigner")
+local particleDesigner = require("extlib.particleDesigner")
 --
 function _M:allListeners()
 end

@@ -3,7 +3,8 @@
 -- Project: {{ProjName}}
 --
 local _M = {}
---
+local _K            = require "Application"
+ --
 function _M:allListeners()
   if UI.tSearch["{{bn}}"] == nil then return end
   -- Multipliers for {{myLName}}
@@ -11,19 +12,19 @@ function _M:allListeners()
   layer.c_{{myLName}}            = 0
   local {{myLName}}_m_loop       = {{elfora}} --1 plays multiplier forever
   local {{myLName}}_m_counter    = {{elCopies}}
-  composer.{{myLName}}_m_restart = {{elCopies}}
+  _K.{{myLName}}_m_restart = {{elCopies}}
 
   {{#elphys}}
      physics.start(true);
   {{/elphys}}
 
-  composer.mt_{{myLName}} = function(counter)
+  _K.mt_{{myLName}} = function(counter)
   {{#multLayers}}
     {{#elwind}}
       physics.setGravity(math.random(tSearch["{{bn}}"][9]*-1, tSearch["{{bn}}"[9])/10, 4);
     {{/elwind}}
 
-    layer.{{myLName}} = display.newImageRect( composer.imgDir.. tSearch["{{bn}}"][1], tSearch["{{bn}}"][2], tSearch["{{bn}}"][3] );
+    layer.{{myLName}} = display.newImageRect( _K.imgDir.. tSearch["{{bn}}"][1], tSearch["{{bn}}"][2], tSearch["{{bn}}"][3] );
 
     {{#elDistance}}
          layer.{{myLName}}[counter].x = math.random(tSearch["{{bn}}"][10], tSearch["{{bn}}"][11])
@@ -65,42 +66,42 @@ function _M:allListeners()
 
     local function ct_{{myLName}}()
        layer.c_{{myLName}} = layer.c_{{myLName}} + 1
-       if composer.mt_{{myLName}} ~= nil then
-          composer.mt_{{myLName}}( layer.c_{{myLName}})
+       if _K.mt_{{myLName}} ~= nil then
+          _K.mt_{{myLName}}( layer.c_{{myLName}})
        end
 
-       if (layer.c_{{myLName}} == composer.{{myLName}}_m_restart and {{myLName}}_m_loop == 1)  then
-          composer.timerStash.mt = timer.performWithDelay( {{elInterval}}, ct_{{myLName}}, {{elCopies}} )
-          composer.{{myLName}}_m_restart = layer.c_{{myLName}} + {{myLName}}_m_counter
+       if (layer.c_{{myLName}} == _K.{{myLName}}_m_restart and {{myLName}}_m_loop == 1)  then
+          _K.timerStash.mt = timer.performWithDelay( {{elInterval}}, ct_{{myLName}}, {{elCopies}} )
+          _K.{{myLName}}_m_restart = layer.c_{{myLName}} + {{myLName}}_m_counter
        end
     end
-    composer.timerStash.mt = timer.performWithDelay( {{elInterval}}, ct_{{myLName}}, {{elCopies}} )
+    _K.timerStash.mt = timer.performWithDelay( {{elInterval}}, ct_{{myLName}}, {{elCopies}} )
 
   {{/multLayers}}
 
   {{#hasMutliplier}}
     -- Clean up memory for Multiplier set to forever
     -- control variable to dispose kClean via kNavi
-    composer.disposeMultiplier = nil
-    composer.kClean = function()
-       if composer.disposeMultiplier == 1 then
+    _K.disposeMultiplier = nil
+    _K.kClean = function()
+       if _K.disposeMultiplier == 1 then
           -- remove all past listeners
         {{#Multiplier}}
-          composer.mt_{{layer}} = nil
-          Runtime:removeEventListener("enterFrame", composer.kClean)
+          _K.mt_{{layer}} = nil
+          Runtime:removeEventListener("enterFrame", _K.kClean)
         {{/Multiplier}}
-        composer.disposeMultiplier = nil
+        _K.disposeMultiplier = nil
        else
           -- runs normal code
           {{codeMultiplier}}
        end
     end
-    Runtime:addEventListener("enterFrame", composer.kClean)
+    Runtime:addEventListener("enterFrame", _K.kClean)
   {{/hasMutliplier}}
 end
 --
 function _M:codeMultiplier()
-  for i = 1, composer.{{myLName}}_m_restart do
+  for i = 1, _K.{{myLName}}_m_restart do
     if layer.{{myLName}}[i] ~= nil then
       if layer.{{myLName}}[i].y ~= nil then
         if  layer.{{myLName}}[i].y {{aa}} then
@@ -115,18 +116,18 @@ end
 --
 function _M:toDispose()
   {{#hasMutliplier}}
-    Runtime:removeEventListener("enterFrame", composer.kClean)
+    Runtime:removeEventListener("enterFrame", _K.kClean)
   {{/hasMutliplier}}
 end
 --
 function _M:toDistory()
   {{#multLayers}}
-    composer.mt_{{myLName}} = nil
+    _K.mt_{{myLName}} = nil
     layer.gp_{{myLName}}:removeSelf()
     layer.gp_{{myLName}} = nil
   {{/multLayers}}
   {{#hasMutliplier}}
-    composer.kClean = nil
+    _K.kClean = nil
   {{/hasMutliplier}}
 end
 --

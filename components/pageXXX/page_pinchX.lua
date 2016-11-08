@@ -9,18 +9,18 @@ function _M:pPinchPag(pag)
   sceneGroup.anchorY = 0.5
   MultiTouch.activate( sceneGroup, "move", {"single"} )
   MultiTouch.activate( sceneGroup, "scale", {"multi"}, { minScale=1.0, maxScale=2.0 } )
-  composer.pinchHandler = function (event)
+  _M.pinchHandler = function (event)
      if (sceneGroup.xScale == 1 ) then
         sceneGroup.x = display.contentWidth / 2
         sceneGroup.y = display.contentHeight / 2;
      end
      return true
   end
-  sceneGroup:addEventListener(MultiTouch.MULTITOUCH_EVENT, composer.pinchHandler)
+  sceneGroup:addEventListener(MultiTouch.MULTITOUCH_EVENT, _M.pinchHandler)
 end
 --
 function _M:dsipose()
-  sceneGroup:removeEventListener( MultiTouch.MULTITOUCH_EVENT, composer.pinchHandler );
+  sceneGroup:removeEventListener( MultiTouch.MULTITOUCH_EVENT, _M.pinchHandler );
     --Gesture.deactivate(sceneGroup)
 end
 --

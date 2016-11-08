@@ -3,6 +3,7 @@
 -- Project: {{ProjName}}
 --
 local _Command = {}
+local composer = require("composer")
 -----------------------------
 -----------------------------
 function _Command:new()

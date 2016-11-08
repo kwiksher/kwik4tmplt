@@ -5,6 +5,7 @@
 local _M = {}
 --
 local widget = require("widget")
+local _K            = require "Application"
 --
 function _M:localVars()
 end
@@ -103,7 +104,7 @@ function _M:allListeners(UI)
      hideBackground = true,
   {{/gHideBack}}
   {{#gmask}}
-     maskFile = composer.imgDir.."{{fileName}}",
+     maskFile = _K.imgDir.."{{fileName}}",
   {{/gmask}}
   {{#gdH}}
      horizontalScrollDisabled = true,
@@ -170,7 +171,7 @@ function _M:allListeners(UI)
      hideBackground = true,
   {{/gHideBack}}
   {{#gmask}}
-     maskFile = composer.imgDir.."{{fileName}}",
+     maskFile = _K.imgDir.."{{fileName}}",
   {{/gmask}}
   {{#gdH}}
      horizontalScrollDisabled = true,

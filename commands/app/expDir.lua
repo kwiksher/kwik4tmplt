@@ -5,7 +5,8 @@
 local _Command = {}
 -----------------------------
 -----------------------------
-function _Command:new()
+ local _K            = require "Application"
+ function _Command:new()
 	local command = {}
 	--
 	function command:execute(params)
@@ -13,17 +14,17 @@ function _Command:new()
 		local expDir        = params.expDir
 		if event=="init" then
 			if expDir then
-			composer.imgDir    = "assets/images/"
-			composer.audioDir  = "assets/audio/"
-			composer.videoDir  = "assets/videos/"
-			composer.spriteDir = "assets/sprites/"
-			composer.thumbDir  = "assets/thumbnails/"
+			_K.imgDir    = "assets/images/"
+			_K.audioDir  = "assets/audio/"
+			_K.videoDir  = "assets/videos/"
+			_K.spriteDir = "assets/sprites/"
+			_K.thumbDir  = "assets/thumbnails/"
 			else
-				composer.imgDir    = "assets/"
-				composer.audioDir  = "assets/"
-				composer.videoDir  = "assets/"
-				composer.spriteDir = "assets/"
-				composer.thumbDir  = "assets/"
+				_K.imgDir    = "assets/"
+				_K.audioDir  = "assets/"
+				_K.videoDir  = "assets/"
+				_K.spriteDir = "assets/"
+				_K.thumbDir  = "assets/"
 			end
 		end
 	end

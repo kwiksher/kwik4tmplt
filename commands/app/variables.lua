@@ -3,6 +3,7 @@
 -- Project: {{ProjName}}
 --
 local _Command = {}
+local _K            = require "Application"
 -----------------------------
 -----------------------------
 function _Command:new()
@@ -11,10 +12,10 @@ function _Command:new()
 	function command:execute(params)
 		local event         = params.event
 		if event=="init" then
-			composer.kwk_readMe = 0
-			composer.kBidi     = {{use.bidi}}
-			composer.kAutoPlay = 0
-			composer.goPage    = {{curPage}}
+			_K.kwk_readMe = 0
+			_K.kBidi     = {{use.bidi}}
+			_K.kAutoPlay = 0
+			_K.goPage    = {{curPage}}
 		end
 	end
 	return command

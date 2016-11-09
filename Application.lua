@@ -142,9 +142,14 @@ function Application.cancelAllTransitions()
 end
 --
 function Application.ultimatePosition(x,y)
+{{#ultimate}}
 		local mX = x and display.contentWidth/2 + (x*0.25 - 480*0.5) or 0
 		local mY = y and display.contentHeight/2 + (y*0.25 - 320*0.5) or 0
 		return mX, mY
+{{/ultimate}}
+{{^ultimate}}
+		return x, y
+{{/ultimate}}
 end
 	--
 return Application

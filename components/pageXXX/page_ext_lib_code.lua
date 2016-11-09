@@ -5,6 +5,7 @@
 local _M = {}
 ---------------------
 -- External libraries
+local _K = require "Application"
   {{#extLib}}
     local {{name}} = require("{{libname}}")
   {{/extLib}}

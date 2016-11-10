@@ -105,6 +105,7 @@ end
 
 function _M:toDispose(UI)
   -- audio
+  {{^akeep}}
     if audio.isChannelActive ( {{achannel}} ) then
       audio.stop({{achannel}})
     end
@@ -128,6 +129,7 @@ function _M:toDispose(UI)
         end
         {{/allowRepeat}}
     {{/areadme}}
+  {{/akeep}}
 --/audio
 end
 

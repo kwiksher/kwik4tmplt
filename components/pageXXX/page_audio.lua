@@ -31,8 +31,8 @@ function _M:localPos(UI)
         {{#adelay}}
         {{/adelay}}
         local a = audio.getDuration( {{atype}}kwk_readMeFile );
-        if (a > tonumber(_K.allAudios.kAutoPlay)*1000 ) then
-          _K.allAudios.kAutoPlay = math.ceil((a + 1000)/1000)
+        if a > UI.allAudios.kAutoPlay  then
+          UI.allAudios.kAutoPlay = a
         end
         {{#adelay}}
         {{/adelay}}
@@ -40,8 +40,8 @@ function _M:localPos(UI)
     {{/areadme}}
     {{^areadme}}
       local a = audio.getDuration( {{atype}}{{aname}} );
-      if (a > tonumber(_K.allAudios.kAutoPlay)*1000 ) then
-        _K.allAudios.kAutoPlay = math.ceil((a + 1000)/1000)
+      if a > UI.allAudios.kAutoPlay  then
+        UI.allAudios.kAutoPlay = a
       end
       {{#allowRepeat}}
         {{atype}}{{aname}}x9 = 0

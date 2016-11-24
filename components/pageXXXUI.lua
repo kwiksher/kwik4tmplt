@@ -19,7 +19,7 @@ _Class.new = function(scene)
     UI.layer     = {}
     -- All audio files on a table
     UI.allAudios = {}
-    UI.allAudios.kAutoPlay = _K.kAutoPlay
+    UI.allAudios.kAutoPlay = 0
     UI.tSearch   = nil
     {{#language}}
       {{#lang}}

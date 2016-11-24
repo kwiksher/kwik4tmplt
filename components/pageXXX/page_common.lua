@@ -49,8 +49,9 @@ function _M:allListeners(UI)
             end
          end
        end
-       if (tonumber(allAudios.kAutoPlay) > _K.kAutoPlay) then
-           _K.timerStash.timer_AP = timer.performWithDelay( allAudios.kAutoPlay*1000, act_autoPlay, 1 )
+       if (UI.allAudios.kAutoPlay > _K.kAutoPlay*1000) then
+           _K.timerStash.timer_AP = timer.performWithDelay(
+             UI.allAudios.kAutoPlay + 1000, act_autoPlay, 1 )
        else
            _K.timerStash.timer_AP = timer.performWithDelay( _K.kAutoPlay*1000, act_autoPlay, 1 )
        end

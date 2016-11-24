@@ -162,7 +162,7 @@ function ActionCommand:new()
 		{{/multiplier.stopMultiplier}}
 
 		{{#page.autoPlay}}
-      _K.kAutoPlay = {{layer}}
+      _K.kAutoPlay = {{autoPlaySec}}
  	    {{#goNext}}
 	    	_AC.Page:autoPlay(UI.curPage)
 	    {{/goNext}}

@@ -9,15 +9,16 @@ local page_curl  = require("extlib.page_curl")
 local _BackgroundLayerName = "background.jpg"
 --
 {{#ultimate}}
-local bgW, bgH = 1920/4, 1280/4                --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
-local pgX, pgY = _K.ultimatePosition(960, 640) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
+local bgW, bgH = 1280/4, 1920/4                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
+local pgX, pgY = _K.ultimatePosition(640, 960) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
 local curlWidth = 400/4
 {{/ultimate}}
 {{^ultimate}}
-local bgW, bgH = 2048, 1152
-local pgX, pgY = 1024, 768
+local bgW, bgH = 1152, 2048
+local pgX, pgY = 768,  1024
 local curlWidth = 400
 {{/ultimate}}
+--
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
@@ -109,7 +110,6 @@ function _M:allListeners(UI)
     sceneGroup:insert(back)
     back:toBack()
     -- debug mode
-    --[[
     local regions = back:GetGrabRegions()
     for _, region in pairs(regions) do
       local rect = display.newRoundedRect(back.parent, region.x, region.y, region.width, region.height, 12)
@@ -118,9 +118,7 @@ function _M:allListeners(UI)
       rect.strokeWidth = 10
       sceneGroup:insert(rect)
     end
-    --]]
   end
-  layer.pageCurl = back
   layer.{{backLayer}}.alpha = 0
 end
 --

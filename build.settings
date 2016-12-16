@@ -57,13 +57,7 @@ settings =
   {{#portraitUpsideDown}}
     supported = { "portrait", "portraitUpsideDown" },
   {{/portraitUpsideDown}}
-  {{^portraitUpsideDown}}
-   supported = { "portrait" },
-  {{/portraitUpsideDown}}
   {{#landscapeUpsideDown}}
-    supported = { "landscapeLeft", "landscapeRight" },
-  {{/landscapeUpsideDown}}
-  {{^landscapeUpsideDown}}
     supported = { "landscapeLeft", "landscapeRight" },
   {{/landscapeUpsideDown}}
   },

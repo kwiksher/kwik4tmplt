@@ -85,6 +85,7 @@ function showNextBallon(ballon, fX, fY, oriX, oriY, delay)
   -- anim---
   if ballon.anim then
     for k, v in pairs(ballon.anim) do
+        v:toBeginning()
         v:play()
     end
   end
@@ -115,6 +116,7 @@ local function translatePanel(UI, target, frame)
   -- anim---
   if target.panel.anim then
     for k, v in pairs(target.panel.anim) do
+        v:toBeginning()
         v:play()
     end
   end

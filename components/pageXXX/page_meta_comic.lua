@@ -252,6 +252,9 @@ function _M:allListeners(UI)
     frame1.x, frame1.y       = _K.ultimatePosition(target.x, target.y)
     frame1.oriX              = frame1.x
     frame1.oriY              = frame1.y
+    frame1.oriXs             = _Scale
+    frame1.oriYs             = _Scale
+    frame1.oldAlpha          = 1
     frame1.anim              = {}
     frame1.scrollView        = scrollView
     target.panel             = frame1

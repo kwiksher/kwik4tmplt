@@ -120,7 +120,7 @@ function _M:allListeners(UI)
     -- end
   end
   layer.pageCurl = back
-  layer.pageCurl.alpha = 0
+  layer.pageCurl.alpha = 1
     layer.{{backLayer}}.alpha = 0
 end
 --

@@ -44,27 +44,35 @@ function _M:allListeners(UI)
          if(curPage < numPages) then
             if nil~= composer.getScene( "views.page0"..(curPage+1).."Scene") then composer.removeScene( "views.page0"..(curPage+1).."Scene", true) end
             if(_K.kBidi == false) then
-              composer.gotoScene( "views.page0"..(curPage+1).."Scene", { effect = "fromRight"} )
+              composer.gotoScene( "views.page0"..(curPage+1).."Scene" )
             else
-              composer.gotoScene( "views.page0"..(curPage-1).."Scene", { effect = "fromLeft"} )
+              composer.gotoScene( "views.page0"..(curPage-1).."Scene" )
             end
          end
        end
        if (UI.allAudios.kAutoPlay > _K.kAutoPlay*1000) then
            _K.timerStash.timer_AP = timer.performWithDelay(
-             UI.allAudios.kAutoPlay + _Delay, act_autoPlay, 1 )
+             UI.allAudios.kAutoPlay + _Delay ,
+              function()
+                UI.autoPlayCurl(act_autoPlay)
+              end , 1 )
        else
-           _K.timerStash.timer_AP = timer.performWithDelay( _K.kAutoPlay*1000, act_autoPlay, 1 )
+           _K.timerStash.timer_AP = timer.performWithDelay( _K.kAutoPlay*1000,
+            function()
+              UI.autoPlayCurl(act_autoPlay)
+            end , 1 )
        end
      end
 
     {{#preload}}
-       -- Preloads next scene. Must be off to use page curl
+    -- Preloads next scene. Must be off to use page curl
+    --[[
       if not _K.exportCurrent then
        _K.timerStash.timer_pl = timer.performWithDelay( 5000, function()
           composer.loadScene( "views.page0{{nextScene}}Scene")
        end)
        end
+    --]]
     {{/preload}}
 
 end

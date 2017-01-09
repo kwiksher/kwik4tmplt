@@ -7,6 +7,10 @@ local _M = {}
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
 local _BackgroundLayerName = "background.jpg"
+local flip_audio = false
+if flip_audio then
+  local laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
+end
 --
 {{#ultimate}}
 local bgW, bgH = 1920/4, 1280/4                --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
@@ -66,14 +70,12 @@ function _M:allListeners(UI)
     end
   end
   --
+  local passed_threshold = false
+  --
   local function Moved (event)
-    local curl, passed_threshold = event.target
-    if event.dir == "right" then
-      passed_threshold = curl.edge_x < .3
-    else
-      passed_threshold = curl.edge_x > .7
-    end
-    if passed_threshold then
+    local curl = event.target
+    --
+    local function GoNext()
        if event.dir == "right" and _K.kBidi == false then
           wPage = curPage + 1
           if wPage > numPages then wPage = curPage end
@@ -94,20 +96,44 @@ function _M:allListeners(UI)
        if tonumber(wPage) ~= tonumber(curPage) then
             _K.appInstance:showView("views.page0"..wPage.."Scene", options)
          end
+     end
+
+    if event.dir == "right" and not passed_threshold then
+      if curl.edge_x < .3 then
+        passed_threshold = true
+        if flip_audio then
+          local laserChannel = audio.play( laserSound )
+        end
+        transition.to(curl, {edge_x=0, time=100, transition=easing.inOutSine, onComplete = GoNext})
+      end
+    else
+      if curl.edge_x > .7 and not passed_threshold then
+        passed_threshold = true
+        if flip_audio then
+          local laserChannel = audio.play( laserSound )
+        end
+        transition.to(curl, {edge_x=1, time=100, transition=easing.inOutSine, onComplete = GoNext})
+      end
     end
   end
   --
   if back == nil then
-    back = page_curl.NewPageCurlWidget{width =bgW, height=bgH, size = curlWidth}
-    back:SetImage(_K.imgDir.."p"..curPage.."/".._BackgroundLayerName)
-    back.x = display.contentCenterX - bgW/2
-    back.y  = display.contentCenterY - bgH/2
-    back:SetTouchSides("left_and_right")
-    back:addEventListener("page_grabbed", Grabbed)
-    back:addEventListener("page_dragged", Moved)
-    back:addEventListener("page_released", Released)
-    sceneGroup:insert(back)
-    back:toBack()
+    local function saveWithDelay()
+      display.save( sceneGroup, { filename="entireGroup.jpg", baseDir=system.TemporaryDirectory, captureOffscreenArea=false, backgroundColor={0,0,0,0} } )
+      back = page_curl.NewPageCurlWidget{width =bgW, height=bgH, size = curlWidth}
+      -- back:SetImage(_K.imgDir.."p"..curPage.."/".._BackgroundLayerName)
+      back:SetImage("entireGroup.jpg", {dir=system.TemporaryDirectory})
+      back.x = display.contentCenterX - bgW/2
+      back.y  = display.contentCenterY - bgH/2
+      back:SetTouchSides("left_and_right")
+      back:addEventListener("page_grabbed", Grabbed)
+      back:addEventListener("page_dragged", Moved)
+      back:addEventListener("page_released", Released)
+      sceneGroup:insert(back)
+      back:toBack()
+      layer.pageCurl = back
+    end
+    timer.performWithDelay( 100, saveWithDelay )
     -- debug mode
     --[[
     local regions = back:GetGrabRegions()
@@ -120,8 +146,18 @@ function _M:allListeners(UI)
     end
     --]]
   end
-  layer.pageCurl = back
-  layer.{{backLayer}}.alpha = 0
+  -----------------
+  -----------------
+  UI.autoPlayCurl = function(act_autoPlay)
+    back.angle_radians = math.pi/10
+    back.edge_x, back.edge_y =  0.9, 0.5
+    Grabbed({target=back, dir="right"})
+    if flip_audio then
+        local laserChannel = audio.play( laserSound )
+     end
+    transition.to(back, {edge_x=0, time=1000, transition=easing.inOutSine, onComplete = act_autoPlay})
+  end
+  -- layer.{{backLayer}}.alpha = 1
 end
 --
 function _M:dispose()

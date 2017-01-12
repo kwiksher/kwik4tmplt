@@ -51,7 +51,7 @@ local pause = false
 local function reset(UI, panels, ballons)
   print("--- reset ---")
     UI.scrollView.alpha = 0
-    UI.layer.pageCurl.alpha = 1
+    -- UI.layer.pageCurl.alpha = 1
     for i=1, #panels do
       local target = panels[i]
       target.panel.alpha  = 1
@@ -71,6 +71,7 @@ local function reset(UI, panels, ballons)
     ballons:toFront()
     ballons.alpha = 1
     index = 1
+    UI.layer.background.alpha = 1
 end
 --
 function showNextBallon(ballon, fX, fY, oriX, oriY, delay)
@@ -304,14 +305,13 @@ function _M:allListeners(UI)
   end
   UI.layer.background.alpha = 0
   UI.layer.ballons.alpha    = 0
-
   --
   self._start = function()
     self.isPlaying = true
     if index > #panels then
       index = 1
     end
-    UI.layer.pageCurl.alpha   = 0
+    -- UI.layer.pageCurl.alpha   = 0
     UI.layer.background.alpha = 0
     UI.scrollView.alpha       = 1
     UI.layer.ballons.alpha = 1
@@ -326,7 +326,7 @@ function _M:allListeners(UI)
   UI.panels = self
   --
   local t =  timer.performWithDelay(500, -- need to wait for pageCurl obj processed
-   self._start, 1)
+   self._reset, 1)
   table.insert(self.timer, t)
 end
 --

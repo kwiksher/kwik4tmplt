@@ -6,14 +6,15 @@ local _M = {}
 --
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
-local _BackgroundLayerName = "background.jpg"
+-- local _BackgroundLayerName = "background.jpg"
 local flip_audio = false
 if flip_audio then
   local laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
 end
 --
 {{#ultimate}}
-local bgW, bgH = 1280/4, 1920/4                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
+-- local bgW, bgH = 1280/4, 1920/4                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
+local bgW, bgH = display.contentWidth, display.contentHeight
 local pgX, pgY = _K.ultimatePosition(640, 960) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
 local curlWidth = 400/4
 {{/ultimate}}
@@ -39,19 +40,32 @@ function _M:allListeners(UI)
   local W, H = layer.{{backLayer}}.width, layer.{{backLayer}}.height
   local function Grabbed(event)
     local curl = event.target
+    curl.alpha = 1
     if event.dir == "right" then
       if next == nil and curPage~=nextPage then
-        next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, bgW, bgH )
-        next.x = pgX
-        next.y = pgY
+        -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- next.x = pgX
+        -- next.y = pgY
+        -- sceneGroup:insert(next)
+        -- next:toFront()
+        local scene ={view=display.newGroup()}
+        local pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
+        pageNextUI:create()
+        next = scene.view
         sceneGroup:insert(next)
         next:toFront()
       end
     else
       if prev == nil and curPage ~= prevPage then
-        prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, bgW, bgH )
-        prev.x = pgX
-        prev.y = pgY
+        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- prev.x = pgX
+        -- prev.y = pgY
+        -- sceneGroup:insert(prev)
+        -- prev:toFront()
+        local scene ={view=display.newGroup()}
+        local pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
+        pagePrevUI:create()
+        prev = scene.view
         sceneGroup:insert(prev)
         prev:toFront()
       end
@@ -61,6 +75,7 @@ function _M:allListeners(UI)
   --
   local function Released(event)
     back:toBack()
+    back.alpha = 0.1
     if next then
       next:removeSelf()
       next = nil
@@ -118,10 +133,10 @@ function _M:allListeners(UI)
   --
   if back == nil then
     local function saveWithDelay()
-      -- display.save( sceneGroup, { filename="entireGroup.jpg", baseDir=system.TemporaryDirectory, captureOffscreenArea=false, backgroundColor={0,0,0,0} } )
+      display.save( sceneGroup, { filename="entireGroup.jpg", baseDir=system.TemporaryDirectory, captureOffscreenArea=false, backgroundColor={0,0,0,0} } )
       back = page_curl.NewPageCurlWidget{width =bgW, height=bgH, size = curlWidth}
-      back:SetImage(_K.imgDir.."p"..curPage.."/".._BackgroundLayerName)
-      -- back:SetImage("entireGroup.jpg", {dir=system.TemporaryDirectory})
+      -- back:SetImage(_K.imgDir.."p"..curPage.."/".._BackgroundLayerName)
+      back:SetImage("entireGroup.jpg", {dir=system.TemporaryDirectory})
       back.x = display.contentCenterX - bgW/2
       back.y  = display.contentCenterY - bgH/2
       back:SetTouchSides("left_and_right")
@@ -130,8 +145,8 @@ function _M:allListeners(UI)
       back:addEventListener("page_released", Released)
       sceneGroup:insert(back)
       back:toBack()
+      back.alpha = 0.1
       layer.pageCurl = back
-      layer.pageCurl.alpha = 0
     end
     timer.performWithDelay( 100, saveWithDelay )
     -- debug mode
@@ -157,7 +172,7 @@ function _M:allListeners(UI)
      end
     transition.to(back, {edge_x=0, time=1000, transition=easing.inOutSine, onComplete = act_autoPlay})
   end
-  layer.{{backLayer}}.alpha = 0
+  -- layer.{{backLayer}}.alpha = 0
 end
 --
 function _M:dispose()

@@ -6,7 +6,7 @@ local _M = {}
 --
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
-local _BackgroundLayerName = "background.jpg"
+-- local _BackgroundLayerName = "background.jpg"
 local flip_audio = false
 if flip_audio then
   local laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
@@ -38,19 +38,33 @@ function _M:allListeners(UI)
   local W, H = layer.{{backLayer}}.width, layer.{{backLayer}}.height
   local function Grabbed(event)
     local curl = event.target
+    curl.alpha = 1
     if event.dir == "right" then
       if next == nil and curPage~=nextPage then
-        next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, bgW, bgH )
-        next.x = pgX
-        next.y = pgY
+        -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- next.x = pgX
+        -- next.y = pgY
+        -- sceneGroup:insert(next)
+        -- next:toFront()
+        local scene ={view=display.newGroup()}
+        local pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
+        pageNextUI:create()
+        next = scene.view
         sceneGroup:insert(next)
         next:toFront()
+
       end
     else
       if prev == nil and curPage ~= prevPage then
-        prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, bgW, bgH )
-        prev.x = pgX
-        prev.y = pgY
+        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- prev.x = pgX
+        -- prev.y = pgY
+        -- sceneGroup:insert(prev)
+        -- prev:toFront()
+        local scene ={view=display.newGroup()}
+        local pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
+        pagePrevUI:create()
+        prev = scene.view
         sceneGroup:insert(prev)
         prev:toFront()
       end
@@ -60,6 +74,7 @@ function _M:allListeners(UI)
   --
   local function Released(event)
     back:toBack()
+    back.alpha = 0.1
     if next then
       next:removeSelf()
       next = nil
@@ -131,6 +146,7 @@ function _M:allListeners(UI)
       back:addEventListener("page_released", Released)
       sceneGroup:insert(back)
       back:toBack()
+      back.alpha = 0.1
       layer.pageCurl = back
     end
     timer.performWithDelay( 100, saveWithDelay )

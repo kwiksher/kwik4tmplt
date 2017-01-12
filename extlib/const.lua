@@ -33,7 +33,7 @@ function Const:new(o)
 	for k, v in pairs(o) do
 		-- print (k, v)
 		if _[t][v] ~= nil then
-			error('"' .. k .. '" can not be set.', 2)
+			error('"' .. v .. '" can not be set.', 2)
 		end
 		_[t][v] = v
 	end

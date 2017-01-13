@@ -325,7 +325,7 @@ function _M:allListeners(UI)
   --
   UI.panels = self
   --
-  local t =  timer.performWithDelay(500, -- need to wait for pageCurl obj processed
+  local t =  timer.performWithDelay(50, -- need to wait for pageCurl obj processed
    self._reset, 1)
   table.insert(self.timer, t)
 end

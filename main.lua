@@ -41,6 +41,13 @@ local function startThisMug()
 		_K.appInstance = _K:new()
 		_K.randomAction  = {}
 		_K.randomAnim  = {}
+		_K.kwikDir      = "{{kwikDir}}"
+		_K.asmModel = {
+		  sandboxPath = system.pathForFile( nil, system.DocumentsDirectory ),
+		  projPath    = _K.kwikDir,
+		  APNG        = {},
+		  AGIF        = {}
+		}
 	end
 	--
 	bootstrap()

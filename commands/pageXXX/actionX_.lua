@@ -252,6 +252,10 @@ function ActionCommand:new()
 				)
 		{{/screenshot.takeScreenShot}}
 
+		{{#screenshot.screenRecording}}
+			_AC.Screenshot:saveToFile({{delay}}, {{target}}, "{{filename}}",  {{numFrames}}	)
+		{{/screenshot.screenRecording}}
+
 		{{#sprite.playSprite}}
 			_AC.Sprite:playSprite(layer.{{layer}}, "{{vseq}}")
 		{{/sprite.playSprite}}

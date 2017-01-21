@@ -117,15 +117,6 @@ function _M:localPos(UI)
       -- send button out of screen
       layer.speak{{spe}}.x = -500
     {{/elshow}}
-    {{#elaudio}}
-      _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}},
-        function()
-        _K.syncSound.saySentence( {
-          sentence= allAudios.{{elaudio}},
-          line=layer.{{myLName}}_txt,
-          button=layer.b_{{myLName}} })
-      end)
-    {{/elaudio}}
   {{/multLayers}}
 end
 --
@@ -137,6 +128,15 @@ function _M:toDestroy()
   {{#daTrigger}}
     _K.s{{trigger}} = nil
   {{/daTrigger}}
+    {{#elaudio}}
+      _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}},
+        function()
+        _K.syncSound.saySentence( {
+          sentence= allAudios.{{elaudio}},
+          line=layer.{{myLName}}_txt,
+          button=layer.b_{{myLName}} })
+      end)
+    {{/elaudio}}
   {{/multLayers}}
 end
 --

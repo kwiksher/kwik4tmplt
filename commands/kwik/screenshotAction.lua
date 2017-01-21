@@ -67,7 +67,7 @@ function _M:saveToFile(delay, _target, _filename, numFrames)
             end
         end
     end
-    timer.performWithDelay( delay, APNGGen , numFrames )
+    _K.timerStash.scrnRecord = timer.performWithDelay( delay, APNGGen , numFrames )
   end
 end
 --

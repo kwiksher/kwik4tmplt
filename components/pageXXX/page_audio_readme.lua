@@ -9,17 +9,6 @@ local _K = require("Application")
 -- local allAudios = {}
 ---
 --
-{{#areadme}}
-  if {{atype}}.kwk_readMeFile == nil then
-    {{#alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
-    {{/alang}}
-    {{^alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
-    {{/alang}}
-  end
-{{/areadme}}
---
 function _M:localPos(UI)
   --UI.allAudios or _K.allAudios
 {{#areadme}}

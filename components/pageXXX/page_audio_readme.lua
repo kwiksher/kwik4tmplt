@@ -23,7 +23,7 @@ function _M:localPos(UI)
 {{/areadme}}
   -- #audio
     {{#areadme}}
-      {{^tempSync}}
+      {{^temSync}}
         {{#adelay}}
         {{/adelay}}
         local a = audio.getDuration( {{atype}}.kwk_readMeFile );
@@ -32,7 +32,7 @@ function _M:localPos(UI)
         end
         {{#adelay}}
         {{/adelay}}
-      {{/tempSync}}
+      {{/temSync}}
     {{/areadme}}
   --  /audio
 end
@@ -44,19 +44,19 @@ function _M:allListeners(UI)
       {{/alang}}
       {{^alang}}
       {{/alang}}
-      {{^tempSync}}
+      {{^temSync}}
          if (_K.kwk_readMe == 1 and _K.lang == "{{langID}}") then
         {{#adelay}}
           local kwkDelay = function()
         {{/adelay}}
           audio.setVolume({{avol}}, { channel={{achannel}} });
-          audio.play({{atype}}.kwk_readMeFile, { channel={{achannel}}, loops={{aloop}}{{tofade}} });
+          -- audio.play({{atype}}.kwk_readMeFile, { channel={{achannel}}, loops={{aloop}}{{tofade}} });
         {{#adelay}}
           end
           _K.timerStash.kwkDelay = timer.performWithDelay({{adelay}}, kwkDelay, 1)
         {{/adelay}}
         end
-      {{/tempSync}}
+      {{/temSync}}
     {{/areadme}}
   --  /audio
 end

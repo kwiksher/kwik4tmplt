@@ -10,41 +10,41 @@ local _K = require("Application")
 function _M:localPos(UI)
 {{#areadme}}
   {{#alang}}
-   {{atype}}kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
+   {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
   {{/alang}}
   {{^alang}}
-   {{atype}}kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
+   {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
   {{/alang}}
 {{/areadme}}
 {{^areadme}}
     {{#alang}}
-     {{atype}}{{aname}} =  audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}")
+     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}")
     {{/alang}}
     {{^alang}}
-     {{atype}}{{aname}} =  audio.{{loadType}}( _K.audioDir.."{{fileName}}")
+     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.."{{fileName}}")
     {{/alang}}
 {{/areadme}}
 
   -- audio
     {{#areadme}}
-      {{^tempSync}}
+      {{^temSync}}
         {{#adelay}}
         {{/adelay}}
-        local a = audio.getDuration( {{atype}}kwk_readMeFile );
+        local a = audio.getDuration( {{atype}}.kwk_readMeFile );
         if a > UI.allAudios.kAutoPlay  then
           UI.allAudios.kAutoPlay = a
         end
         {{#adelay}}
         {{/adelay}}
-      {{/tempSync}}
+      {{/temSync}}
     {{/areadme}}
     {{^areadme}}
-      local a = audio.getDuration( {{atype}}{{aname}} );
+      local a = audio.getDuration( {{atype}}.{{aname}} );
       if a > UI.allAudios.kAutoPlay  then
         UI.allAudios.kAutoPlay = a
       end
       {{#allowRepeat}}
-        {{atype}}{{aname}}x9 = 0
+        {{atype}}.{{aname}}x9 = 0
       {{/allowRepeat}}
     {{/areadme}}
   --/audio
@@ -58,19 +58,19 @@ function _M:allListeners(UI)
       {{/alang}}
       {{^alang}}
       {{/alang}}
-      {{^tempSync}}
+      {{^temSync}}
          if _K.kwk_readMe == 1 then
         {{#adelay}}
           local kwkDelay = function()
         {{/adelay}}
           audio.setVolume({{avol}}, { channel={{achannel}} } );
-          audio.play({{atype}}kwk_readMeFile, { channel={{achannel}}, loops={{aloop}}{{tofade}} });
+          --audio.play({{atype}}.kwk_readMeFile, { channel={{achannel}}, loops={{aloop}}{{tofade}} });
         {{#adelay}}
           end
           _K.timerStash.kwkDelay = timer.performWithDelay({{adelay}}, kwkDelay, 1)
         {{/adelay}}
         end
-      {{/tempSync}}
+      {{/temSync}}
     {{/areadme}}
     {{^areadme}}
       {{#alang}}
@@ -85,10 +85,10 @@ function _M:allListeners(UI)
         {{/adelay}}
                audio.setVolume({{avol}}, { channel={{achannel}} });
             {{#allowRepeat}}
-               {{atype}}{{aname}}x9 = audio.play({{atype}}{{aname}}, {  channel={{achannel}}, loops={{aloop}}{{tofade}} } )
+               {{atype}}.{{aname}}x9 = audio.play({{atype}}.{{aname}}, {  channel={{achannel}}, loops={{aloop}}{{tofade}} } )
             {{/allowRepeat}}
             {{^allowRepeat}}
-              audio.play({{atype}}{{aname}}, {channel={{achannel}}, loops={{aloop}}{{tofade}} } )
+              audio.play({{atype}}.{{aname}}, {channel={{achannel}}, loops={{aloop}}{{tofade}} } )
             {{/allowRepeat}}
         {{#adelay}}
            end
@@ -110,22 +110,22 @@ function _M:toDispose(UI)
       audio.stop({{achannel}})
     end
     {{#areadme}}
-      if ({{atype}}kwk_readMeFile ~= 0) then
-        audio.dispose({{atype}}kwk_readMeFile)
-        {{atype}}kwk_readMeFile = nil
+      if ({{atype}}.kwk_readMeFile ~= 0) then
+        audio.dispose({{atype}}.kwk_readMeFile)
+        {{atype}}.kwk_readMeFile = nil
       end
     {{/areadme}}
     {{^areadme}}
       {{#allowRepeat}}
-        if ({{atype}}{{aname}}x9 ~= 0) then
-          audio.dispose({{atype}}{{aname}}x9)
-          {{atype}}{{aname}}x9 = nil
+        if ({{atype}}.{{aname}}x9 ~= 0) then
+          audio.dispose({{atype}}.{{aname}}x9)
+          {{atype}}.{{aname}}x9 = nil
         end
       {{/allowRepeat}}
       {{^allowRepeat}}
-        if ({{atype}}{{aname}} ~= 0) then
-          audio.dispose({{atype}}{{aname}})
-          {{atype}}{{aname}} = nil
+        if ({{atype}}.{{aname}} ~= 0) then
+          audio.dispose({{atype}}.{{aname}})
+          {{atype}}.{{aname}} = nil
         end
         {{/allowRepeat}}
     {{/areadme}}

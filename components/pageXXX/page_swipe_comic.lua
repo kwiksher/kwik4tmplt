@@ -8,8 +8,9 @@ local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
 -- local _BackgroundLayerName = "background.jpg"
 local flip_audio = false
+local laserSound
 if flip_audio then
-  local laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
+  laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
 end
 --
 {{#ultimate}}

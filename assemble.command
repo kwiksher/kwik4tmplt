@@ -5,9 +5,9 @@ PROJPATH="{{projPath}}"
 chmod a+x "$APNGASM"
 
 {{#APNG}}
-"$APNGASM" $PROJPATH/temp/{{filename}}.png "$SANDBOXPATH"/{{filename}}_*.png 1 {{frameRate}} -l{{loop}} -z2
+"$APNGASM" $PROJPATH/temp/{{fileName}}.png "$SANDBOXPATH"/{{fileName}}_*.png 1 {{fps}} -l{{loop}} -z2
 {{/APNG}}
 
 {{#AGIF}}
-gm convert -loop {{loop} -delay {{delay}} "$SANDBOXPATH"/{{filename}}_*.png $PROJPATH/temp/{{filename}}.gif
+gm convert -loop {{loop}} -delay {{delay}} "$SANDBOXPATH"/{{fileName}}_*.png $PROJPATH/temp/{{fileName}}.gif
 {{/AGIF}}

@@ -128,7 +128,13 @@ function _M:toDestroy()
   {{#daTrigger}}
     _K.s{{trigger}} = nil
   {{/daTrigger}}
+  {{/multLayers}}
+end
+--
+function _M:allListeners(UI)
+  {{^multLayers}}
     {{#elaudio}}
+    local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
       _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}},
         function()
         _K.syncSound.saySentence( {
@@ -138,9 +144,6 @@ function _M:toDestroy()
       end)
     {{/elaudio}}
   {{/multLayers}}
-end
---
-function _M:allListeners()
 end
 --
 function _M:toDispose()

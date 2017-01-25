@@ -8,11 +8,11 @@ set PROJPATH ={{projPath}}
 set SANDBOXPATH={{sandboxPath}}
 
 {{#AGIF}}
-%MAGICK% -loop {{loop} -delay {{delay}} %SANDBOXPATH%\\{{filename}}_*.png %PROJPATH%\\temp\\{{filename}}.gif
+%MAGICK% -loop {{loop} -delay {{delay}} %SANDBOXPATH%\\{{fileName}}_*.png %PROJPATH%\\temp\\{{fileName}}.gif
 {{/AGIF}}
 
 cd %PLUGIN_FOLDER%
 {{#APNG}}
-%PNGASM% %PROJPATH%\\temp\\{{filename}}.png %SANDBOXPATH%\\{{filename}}_*.png 1 {{frameRate}} -l{{loop}} -z2
+%PNGASM% %PROJPATH%\\temp\\{{fileName}}.png %SANDBOXPATH%\\{{fileName}}_*.png 1 {{frameRate}} -l{{loop}} -z2
 {{/APNG}}
 

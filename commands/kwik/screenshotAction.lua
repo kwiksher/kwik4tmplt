@@ -45,7 +45,11 @@ function _M:saveToFile(delay, _target, _filename, numFrames)
                 loop        = loop
             })
             --
-            local path = system.pathForFile( "assemble.command", system.ResourceDirectory )
+            local ext = "command"
+            if system.getInfo("platform") == "win32" then
+                ext = "bat"
+            end
+            local path = system.pathForFile( "assemble."..ext, system.ResourceDirectory )
             local file, errorString = io.open( path, "r" )
             if not file then
                 print( "File error: " .. errorString )
@@ -55,7 +59,7 @@ function _M:saveToFile(delay, _target, _filename, numFrames)
                 local lustache = require "extlib.lustache"
                 output = lustache:render(contents, _K.asmModel)
 
-                local path = _K.kwikDir.."/../assemble.command"
+                local path = _K.kwikDir.."/../assemble."..ext
                 local file, errorString = io.open( path, "w" )
                 if not file then
                     print( "File error: " .. errorString )

@@ -132,6 +132,8 @@ function _M:toDestroy()
 end
 --
 function _M:allListeners(UI)
+  local sceneGroup  = UI.scene.view
+  local layer       = UI.layer
   {{^multLayers}}
     {{#elaudio}}
     local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)

@@ -41,6 +41,7 @@ function _M:localPos (UI)
     layer.{{myLName}}.oriY = layer.{{myLName}}.y
     layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
     layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
+    layer.{{myLName}}.oldAlpha = layer.{{myLName}}.alpha
     layer.{{myLName}}.type = "particles"
     sceneGroup:insert( layer.{{myLName}})
     sceneGroup.{{myLName}} = layer.{{myLName}}

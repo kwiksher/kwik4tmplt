@@ -23,10 +23,10 @@ function _M:allListeners(UI)
       {{#PE}}
         local physicsData = (require "{{re}}").physicsData(1.0)
         {{#static}}
-          physics.addBody(layer.{{bname}}, "static", physicsData:get("p"..curPage.."_{{bnameLower}}"))
+          physics.addBody(layer.{{bname}}, "static", physicsData:get("{{bnameLower}}"))
         {{/static}}
         {{^static}}
-          physics.addBody(layer.{{bname}}, physicsData:get("p"..curPage.."_{{bnameLower}}"))
+          physics.addBody(layer.{{bname}}, physicsData:get("{{bnameLower}}"))
         {{/static}}
       {{/PE}}
       {{#Path}}

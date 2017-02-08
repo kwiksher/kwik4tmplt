@@ -213,22 +213,23 @@ function M.Touch (event)
 
 		-- If the touch has been dragged beyond the edge, leave the page uncurled. Otherwise,
 		-- use the position to calculate and update the curl parameters.
-		local ref_bounds = ref.contentBounds
-		local offset = FindOffset_Event(event, ref_bounds, dir)
+		if event.x ~= nil and event.y ~= nil then
+				local ref_bounds = ref.contentBounds
+				local offset = FindOffset_Event(event, ref_bounds, dir)
 
-		if offset < 1 then
-			local start, frac_perp = FindPerpendicularOffsets(event, target, ref_bounds, dir)
-			local dx, dy = GetDeltas(offset, start, frac_perp, dir)
-			local t = offsets.FindDistance(dx, dy)
+				if offset < 1 then
+					local start, frac_perp = FindPerpendicularOffsets(event, target, ref_bounds, dir)
+					local dx, dy = GetDeltas(offset, start, frac_perp, dir)
+					local t = offsets.FindDistance(dx, dy)
 
-			offsets.SetParameters(curl, atan2(dy, dx) % (2 * pi), GetXY(start, dx * t, dy * t, dir))
-		else
-			offsets.SetBaseParameters(curl, dir)
+					offsets.SetParameters(curl, atan2(dy, dx) % (2 * pi), GetXY(start, dx * t, dy * t, dir))
+				else
+					offsets.SetBaseParameters(curl, dir)
+				end
+
+				-- Announce the drag to any observers.
+				DoTouchEvent(curl, "page_dragged", name)
 		end
-
-		-- Announce the drag to any observers.
-		DoTouchEvent(curl, "page_dragged", name)
-
 		-- Update shadow proxies...
 
 	-- Ended / Cancelled --
@@ -236,12 +237,17 @@ function M.Touch (event)
 		display.getCurrentStage():setFocus(target, nil)
 
 		-- Unfurl the page and leave the handler stateless.
-		Unfurl(target, ref, dir)
+		if target.m_start then
+			Unfurl(target, ref, dir)
+		else
+			print("target.m_start is null at page_released")
+		end
 
-		target.m_unfurling, target.m_drag_state = transition.to(curl, UnfurlParams)
+			target.m_unfurling, target.m_drag_state = transition.to(curl, UnfurlParams)
 
-		-- Announce the release to any observers.
-		DoTouchEvent(curl, "page_released", name)
+			-- Announce the release to any observers.
+			DoTouchEvent(curl, "page_released", name)
+			print("page_released")
 	end
 
 	return true

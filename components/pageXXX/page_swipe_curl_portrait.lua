@@ -113,7 +113,7 @@ function _M:allListeners(UI)
      end
 
     if event.dir == "right" and not passed_threshold then
-      if curl.edge_x < .3 then
+      if curl.edge_x < .4 then
         passed_threshold = true
         if flip_audio then
           local laserChannel = audio.play( laserSound )
@@ -121,7 +121,7 @@ function _M:allListeners(UI)
         transition.to(curl, {edge_x=0, time=100, transition=easing.inOutSine, onComplete = GoNext})
       end
     else
-      if curl.edge_x > .7 and not passed_threshold then
+      if curl.edge_x > .6 and not passed_threshold then
         passed_threshold = true
         if flip_audio then
           local laserChannel = audio.play( laserSound )
@@ -164,13 +164,15 @@ function _M:allListeners(UI)
   -----------------
   -----------------
   UI.autoPlayCurl = function(act_autoPlay)
-    back.angle_radians = math.pi/10
-    back.edge_x, back.edge_y =  0.9, 0.5
-    Grabbed({target=back, dir="right"})
-    if flip_audio then
-        local laserChannel = audio.play( laserSound )
-     end
-    transition.to(back, {edge_x=0, time=1000, transition=easing.inOutSine, onComplete = act_autoPlay})
+    if UI.curPage < UI.numPages then
+      back.angle_radians = math.pi/10
+      back.edge_x, back.edge_y =  0.9, 0.5
+      Grabbed({target=back, dir="right"})
+      if flip_audio then
+          local laserChannel = audio.play( laserSound )
+       end
+      transition.to(back, {edge_x=0, time=1000, transition=easing.inOutSine, onComplete = act_autoPlay})
+    end
   end
   -- layer.{{backLayer}}.alpha = 1
 end

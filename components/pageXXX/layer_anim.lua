@@ -323,12 +323,12 @@ function _M:buildAnim(UI)
 						{{#rotation}}
 						rotation={{rotation}},
 						{{/rotation}}
-						{{#scaleW}}
+						{{#scalW}}
 						xScale={{scalW}},
-						{{/scaleW}}
-						{{#scaleH}}
+						{{/scalW}}
+						{{#scalH}}
 						yScale={{scalH}},
-						{{/scaleH}}
+						{{/scalH}}
 					},
 					{{/Linear}}
 					{

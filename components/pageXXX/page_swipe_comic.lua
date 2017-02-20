@@ -178,7 +178,11 @@ function _M:allListeners(UI)
   -- layer.{{backLayer}}.alpha = 0
 end
 --
-function _M:dispose()
+function _M:toDispose()
+  if laserSound then
+    audio.dispose( laserSound )
+    laserSound = nil
+  end
 end
 --
 function _M:destroy()

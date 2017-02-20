@@ -114,7 +114,7 @@ function _M:allListeners(UI)
      end
 
     if event.dir == "right" and not passed_threshold then
-      if curl.edge_x < .4 then
+      if curl.edge_x < .45 then
         passed_threshold = true
         if flip_audio then
           local laserChannel = audio.play( laserSound )
@@ -122,7 +122,7 @@ function _M:allListeners(UI)
         transition.to(curl, {edge_x=0, time=100, transition=easing.inOutSine, onComplete = GoNext})
       end
     else
-      if curl.edge_x > .6 and not passed_threshold then
+      if curl.edge_x > .55 and not passed_threshold then
         passed_threshold = true
         if flip_audio then
           local laserChannel = audio.play( laserSound )

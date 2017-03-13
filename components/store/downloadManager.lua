@@ -10,7 +10,7 @@ local onDownloadError
 -- local selectedPurchase
 local downloadQueue
 --
-local URL       = "http://localhost:4000/daily/downlodable/"
+local URL       = model.URL
 local filename = "/assets.zip"
 --
 local function zipListener( event, deferred , selectedPurchase)

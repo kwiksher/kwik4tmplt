@@ -2,6 +2,9 @@ local M = {}
 --
 local IAP             = require("components.store.IAP")
 --
+local YourHost = "http://localhost:4000/daily"
+M.URL          = YourHost.."/downlodable/"
+--
 M.epsodes = {
     {{#body}}
         {{product}}  ={name = "{{product}}", dir = "assets/images/p{{page}}", numOfPages = {{numOfPages}}, info = "p{{info}}"},

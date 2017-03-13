@@ -39,6 +39,7 @@ function M.new()
         local obj = display.newImageRect( _K.imgDir..src.imagePath, src.width, src.height)
             obj.x = dst.x + src.x - _W/2
             obj.y = dst.y + src.y - _H/2
+            src.alpha = 0
         return obj
     end
     --

@@ -2,13 +2,10 @@ settings =
 {
   plugins  =
   {
-    plugins =
-    {
         ["plugin.zip"] =
         {
             publisherId = "com.coronalabs",
         },
-    },
     {{#iAds}}
       ['CoronaProvider.ads.iads'] =
       {

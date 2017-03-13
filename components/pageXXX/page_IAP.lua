@@ -14,7 +14,7 @@ local ui          = require("components.store.UI")
 
 {{#inApp}}
     -- see iap(myi).jsx
-    -- In-app purchase
+    -- In-app purchase{{}}
     local listOfProducts = {
         {{#prod}}
           "{{pID}}",
@@ -29,6 +29,11 @@ function _M:resume()
   ui:refresh(true)
 end
 --
+local function hideOverlay()
+    composer.hideOverlay("fade", 400 )
+    return true
+end
+--
 local function store_init(sceneGroup, layer)
     ui:init(sceneGroup, layer, true)
     cmd:init(ui)
@@ -37,6 +42,10 @@ local function store_init(sceneGroup, layer)
     -- UI:createBuyButton(model.epsode03, _W/2, _H/2 + 50, 150, 50)
     -- UI:createRestoreButton(_W/2, _H/2+100, 150, 50)
     cmd:startDownload()
+    if layer.hideOverlayBtn then
+      layer.hideOverlayBtn:removeEventListener("tap", hideOverlay)
+    end
+{{/inApp}}
 end
 {{/inApp}}
 --
@@ -80,7 +89,9 @@ end
 --
 function _M:toDispose(UI)
 {{#inApp}}
-  UI.layer.bg:removeEventListener("tap", hideOverlay)
+  if UI.layer.hideOverlayBtn then
+    UI.layer.hideOverlayBtn:removeEventListener("tap", hideOverlay)
+  end
   cmd:dispose()
 {{/inApp}}
 end

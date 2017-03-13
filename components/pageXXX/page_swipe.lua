@@ -71,7 +71,8 @@ function _M:allListeners(UI)
     {{/infinity}}
 end
 --
-function _M:dispose()
+function _M:toDispose(UI)
+    local layer       = UI.layer
     layer.{{backLayer}}:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
     {{#infinity}}
       layer.{{backLayer}}_2:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
@@ -79,7 +80,7 @@ function _M:dispose()
   --_K.Gesture.deactivate(layer.{{myLName+') ;
 end
 --
-function _M:destroy()
+function _M:toDestroy(UI)
   _K.pageSwipe = nil
 end
 --

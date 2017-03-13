@@ -47,6 +47,13 @@ function _Class:_destroy(type, layer, custom)
   end
 end
 --
+function _Class:_resume(type, layer, custom)
+  self:setMod(layer, custom)
+  if self.mod.resume then
+    self.mod:resume(self)
+  end
+end
+--
 _Class.new = function()
   local layerUI = {}
 	return setmetatable(layerUI, {__index=_Class})

@@ -32,22 +32,30 @@ function M.new ()
             --
             if (event.actionType == "purchase") then
                 -- button.text.text="saving"
-                button.savingTxt.alpha = 1
-                downloadManager:startDownload(event.product)
+                if model.URL then
+                    button.savingTxt.alpha = 1
+                    downloadManager:startDownload(event.product)
+                else
+                   onDownloadComplete(event.product)
+                end
             elseif (event.actionType == "restore") then
                 -- restore
                 --button.text.text="press to download"
-                button.downloadBtn.alpha = 1
-                button.savedBtn.alpha = 0
-                if not button.downloadFunc then
-                    button.downloadFunc = function(event)
-                        local selectedPurchase = event.target.selectedPurchase
-                           downloadManager:startDownload(selectedPurchase)
-                                -- button.text.text="saving"
-                                button.savingTxt.alpha = 1
-                            return true
+                if model.URL then
+                    button.downloadBtn.alpha = 1
+                    button.savedBtn.alpha = 0
+                    if not button.downloadFunc then
+                        button.downloadFunc = function(event)
+                            local selectedPurchase = event.target.selectedPurchase
+                               downloadManager:startDownload(selectedPurchase)
+                                    -- button.text.text="saving"
+                                    button.savingTxt.alpha = 1
+                                return true
+                        end
+                        button.downloadBtn:addEventListener("tap", button.downloadFunc)
                     end
-                    button.downloadBtn:addEventListener("tap", button.downloadFunc)
+                else
+                    onDownloadComplete(event.product)
                 end
             end
         end
@@ -58,8 +66,10 @@ function M.new ()
         -- button.text.text=selectedPurchase.."(saved)"
         if button then
             button.savingTxt.alpha = 0
-            button.savedBtn.alpha = 1
-            button.downloadBtn.alpha = 0
+            if model.URL then
+                button.savedBtn.alpha = 1
+                button.downloadBtn.alpha = 0
+            end
             if button.downloadFunc then
                 button.downloadBtn:removeEventListener("tap", button.downloadFunc)
                 button.downloadFunc = nil

@@ -49,7 +49,9 @@ function M.new()
                 print(epsode.name .."(saved)")
                 button.savedBtn:addEventListener("tap", self.gotoScene)
                 button:addEventListener("tap", self.gotoScene)
-                button.savingTxt.alpha = 0
+                if model.URL then
+                    button.savingTxt.alpha = 0
+                end
                 button.savedBtn.alpha = 1
             else
                 print(epsode.name.."(saving)")
@@ -84,18 +86,18 @@ function M.new()
                 self.sceneGroup:insert(purchaseBtn)
                 button.purchaseBtn = purchaseBtn
                 print(purchaseBtn)
+                if model.URL then
+                    local downloadBtn = copyDisplayObject(layer.downloadBtn, button)
+                    downloadBtn.alpha = 0
+                    downloadBtn.selectedPurchase = epsode.name
+                    self.sceneGroup:insert(downloadBtn)
+                    button.downloadBtn = downloadBtn
 
-                local downloadBtn = copyDisplayObject(layer.downloadBtn, button)
-                downloadBtn.alpha = 0
-                downloadBtn.selectedPurchase = epsode.name
-                self.sceneGroup:insert(downloadBtn)
-                button.downloadBtn = downloadBtn
-
-                local savingTxt = copyDisplayObject(layer.savingTxt, button)
-                savingTxt.alpha = 0
-                self.sceneGroup:insert(savingTxt)
-                button.savingTxt = savingTxt
-
+                    local savingTxt = copyDisplayObject(layer.savingTxt, button)
+                    savingTxt.alpha = 0
+                    self.sceneGroup:insert(savingTxt)
+                    button.savingTxt = savingTxt
+                end
                 local savedBtn = copyDisplayObject(layer.savedBtn, button)
                 savedBtn.alpha = 0
                 savedBtn.selectedPurchase = epsode.name
@@ -129,8 +131,10 @@ function M.new()
             if button then
                 button.purchaseBtn.alpha      = 0
                 button.downloadBtn.alpha      = 0
-                button.savingTxt.alpha        = 0
-                button.savedBtn.alpha         = 0
+                if model.URL then
+                    button.savingTxt.alpha        = 0
+                    button.savedBtn.alpha         = 0
+                end
                 button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
                 button:removeEventListener("tap", self.showOverlay)
                 button.savedBtn:removeEventListener("tap", self.gotoScene)

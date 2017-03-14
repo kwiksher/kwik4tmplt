@@ -43,9 +43,8 @@ local function store_init(sceneGroup, layer)
     -- UI:createRestoreButton(_W/2, _H/2+100, 150, 50)
     cmd:startDownload()
     if layer.hideOverlayBtn then
-      layer.hideOverlayBtn:removeEventListener("tap", hideOverlay)
+      layer.hideOverlayBtn:addEventListener("tap", hideOverlay)
     end
-{{/inApp}}
 end
 {{/inApp}}
 --

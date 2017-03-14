@@ -19,6 +19,25 @@ function M.new ()
     end
     --
     local download
+     --
+    local function onDownloadComplete(selectedPurchase)
+        local button = CMD.downloadGroup[selectedPurchase]
+        -- button.text.text=selectedPurchase.."(saved)"
+        if button then
+            if model.URL then
+                button.savingTxt.alpha = 0
+                button.savedBtn.alpha = 1
+                button.downloadBtn.alpha = 0
+            end
+            if button.downloadFunc then
+                button.downloadBtn:removeEventListener("tap", button.downloadFunc)
+                button.downloadFunc = nil
+            end
+            button:addEventListener("tap",
+                CMD.gotoScene)
+        end
+    end
+
     -- it will be called from the purchaseListener and the restoreListener functions
     local function onPurchaseComplete(event)
         local selectedPurchase = event.product
@@ -58,24 +77,6 @@ function M.new ()
                     onDownloadComplete(event.product)
                 end
             end
-        end
-    end
-    --
-    local function onDownloadComplete(selectedPurchase)
-        local button = CMD.downloadGroup[selectedPurchase]
-        -- button.text.text=selectedPurchase.."(saved)"
-        if button then
-            button.savingTxt.alpha = 0
-            if model.URL then
-                button.savedBtn.alpha = 1
-                button.downloadBtn.alpha = 0
-            end
-            if button.downloadFunc then
-                button.downloadBtn:removeEventListener("tap", button.downloadFunc)
-                button.downloadFunc = nil
-            end
-            button:addEventListener("tap",
-                CMD.gotoScene)
         end
     end
     --

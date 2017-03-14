@@ -130,8 +130,8 @@ function M.new()
             local button = self.layer[epsode.name.."Icon"]
             if button then
                 button.purchaseBtn.alpha      = 0
-                button.downloadBtn.alpha      = 0
                 if model.URL then
+                    button.downloadBtn.alpha      = 0
                     button.savingTxt.alpha        = 0
                     button.savedBtn.alpha         = 0
                 end

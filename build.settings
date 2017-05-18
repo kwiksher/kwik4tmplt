@@ -1,8 +1,11 @@
 settings =
 {
-{{#plugins}}
   plugins  =
   {
+        ["plugin.zip"] =
+        {
+            publisherId = "com.coronalabs",
+        },
     {{#iAds}}
       ['CoronaProvider.ads.iads'] =
       {
@@ -25,7 +28,7 @@ settings =
       },
     {{/viewer}}
   },
-{{/plugins}}
+
   android  =
   {
   {{#expansion}}
@@ -80,7 +83,6 @@ settings =
         UIApplicationExitsOnSuspend = false,
       {{/suspend}}
       UIStatusBarHidden = true,
-      CFBundleIconFile="Icon.png",
       CFBundleIconFiles = {
         "Icon.png",
         "Icon@2x.png",

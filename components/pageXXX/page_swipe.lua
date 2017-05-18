@@ -175,10 +175,24 @@ function _M:allListeners(UI)
   -- layer.{{backLayer}}.alpha = 0
 end
 --
+<<<<<<< HEAD
 function _M:dispose()
 end
 --
 function _M:destroy()
+=======
+function _M:toDispose(UI)
+    local layer       = UI.layer
+    layer.{{backLayer}}:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
+    {{#infinity}}
+      layer.{{backLayer}}_2:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
+    {{/infinity}}
+  --_K.Gesture.deactivate(layer.{{myLName+') ;
+end
+--
+function _M:toDestroy(UI)
+  _K.pageSwipe = nil
+>>>>>>> master
 end
 --
 return _M

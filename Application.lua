@@ -2,6 +2,11 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
+require("extlib.Deferred")
+require("extlib.Callbacks")
+_W = display.contentWidth
+_H = display.contentHeight
+
 local AppContext  = require("contexts.ApplicationContext")
 local composer = require("composer")
 ------------------------------------------------------

@@ -21,14 +21,14 @@ function _M:allListeners(UI)
   layer.{{myLName}}:addEventListener( _K.Gesture.SWIPE_EVENT, _K.{{myLName}}Swipe )
 end
 --
-function _M:dispose(UI)
+function _M:toDispose(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   layer.{{myLName}}:removeEventListener ( _K.Gesture.SWIPE_EVENT, _K.{{myLName}}Swipe )
   --_K.Gesture.deactivate(layer.{{myLName+') ;
 end
 --
-function _M:destroy()
+function _M:toDestroy(UI)
   _K.{{myLName}}Swipe = nil
 end
 --

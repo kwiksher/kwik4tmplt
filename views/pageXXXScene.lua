@@ -29,6 +29,9 @@ end
 --
 function scene:hide( event )
    if event.phase == "will" then
+      if event.parent then
+         event.parent.pageUI:resume()
+      end
      self.pageUI:didHide(self, event.params)
    elseif event.phase == "did" then
    end

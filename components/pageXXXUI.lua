@@ -86,6 +86,12 @@ _Class.new = function(scene)
   function UI:touch(event)
       print("event.name: "..event.name)
   end
+  function UI:resume(params)
+    {{#components}}
+    self:_resume("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/components}}
+  end
+
   --
   return  UI
 end

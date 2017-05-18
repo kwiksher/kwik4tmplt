@@ -21,7 +21,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 local eloH = {{eloH}}/4
 local eloV = {{eloV}}/4
 local epadV ={{epadV}}/4
-local elFontSize = {{elFontSize}}/4
+local elFontSize = {{elFontSize}}
 {{/ultimate}}
 {{^ultimate}}
 local imageWidth = {{elW}}
@@ -62,7 +62,7 @@ function _M:localPos(UI)
     layer.{{myLName}}.originalH = imageHeight
     layer.{{myLName}}.originalW = imageWidth
     layer.{{myLName}}:setFillColor ({{elR}}, {{elG}}, {{elB}})
-
+    layer.{{myLName}}.x = layer.{{myLName}}.x + imageWidth/2
     {{#epadV}}
       layer.{{myLName}}.y = layer.{{myLName}}.y + epadV
     {{/epadV}}

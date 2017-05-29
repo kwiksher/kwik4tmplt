@@ -50,7 +50,7 @@ function _M:allListeners(UI)
           local kwkDelay = function()
         {{/adelay}}
           audio.setVolume({{avol}}, { channel={{achannel}} });
-          -- audio.play({{atype}}.kwk_readMeFile, { channel={{achannel}}, loops={{aloop}}{{tofade}} });
+          audio.play({{atype}}.kwk_readMeFile, { channel={{achannel}}, loops={{aloop}}{{tofade}} });
         {{#adelay}}
           end
           _K.timerStash.kwkDelay = timer.performWithDelay({{adelay}}, kwkDelay, 1)

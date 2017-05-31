@@ -5,7 +5,7 @@
 local Context = require "extlib.robotlegs.Context"
 local _Class = {}
 {{#pages}}
-local page0{{pageNum}}Context = require("{{custom}}contexts.page0{{pageNum}}Context")
+_Class.page0{{pageNum}}Context = require("{{custom}}contexts.page0{{pageNum}}Context")
 {{/pages}}
 
 --
@@ -17,7 +17,7 @@ function _Class:new()
 		------------------------------------------------------------
 		------------------------------------------------------------
 	{{#pages}}
-	    self.context0{{pageNum}} = page0{{pageNum}}Context:new(self)
+	    self.context0{{pageNum}} = _Class.page0{{pageNum}}Context:new(self)
 	    self.context0{{pageNum}}:init()
 	{{/pages}}
 

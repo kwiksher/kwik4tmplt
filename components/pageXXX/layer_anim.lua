@@ -224,6 +224,7 @@ local gtbh = {{gtbh}}
 --
 function _M:buildAnim(UI)
 	local layer = UI.layer
+	local sceneGroup = UI.scene.view
 	-- Wait request for '+gtName+'\r\n';
 	if {{gtLayer}} == nil then return end
 	{{gtLayer}}.xScale = {{gtLayer}}.oriXs

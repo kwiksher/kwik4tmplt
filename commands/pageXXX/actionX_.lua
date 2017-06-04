@@ -78,7 +78,7 @@ function ActionCommand:new()
 		{{/app.rateApp}}
 
 		{{#audio.recordAudio}}
-			_AC.Audio:recordAudio({{duration}}, {{mmFile}}, {{malfa}}, sceneGroup, {{audiotype}}.allAudios)
+			_AC.Audio:recordAudio({{duration}}, "{{mmFile}}", {{malfa}}, sceneGroup, {{audiotype}}.allAudios)
 		{{/audio.recordAudio}}
 
 		{{#audio.muteUnmute}}

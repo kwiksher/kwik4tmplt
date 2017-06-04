@@ -11,6 +11,24 @@ local _K   = require("Application")
 function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
+  {{#after}}
+  {{#vtype}}
+    {{#vtable}}
+        _K.{{vname}} = { {{vvalue}} }
+      {{/vtable}}
+      {{^vtable}}
+        _K.{{vname}} = {{vvalue}}
+      {{/vtable}}
+  {{/vtype}}
+  {{^vtype}}
+    {{#vtable}}
+        UI.{{vname}} = { {{vvalue}} }
+      {{/vtable}}
+      {{^vtable}}
+        UI.{{vname}} = {{vvalue}}
+      {{/vtable}}
+  {{/vtype}}
+  {{/after}}
 end
 --
 function _M:allListeners(UI)
@@ -44,6 +62,9 @@ function _M:toDispose(UI)
 end
 --
 function _M:localVars(UI)
+  local sceneGroup  = UI.scene.view
+  local layer       = UI.layer
+  {{#before}}
   {{#vtype}}
     {{#vtable}}
         _K.{{vname}} = { {{vvalue}} }
@@ -60,6 +81,7 @@ function _M:localVars(UI)
         UI.{{vname}} = {{vvalue}}
       {{/vtable}}
   {{/vtype}}
+  {{/before}}
 end
 --
 return _M

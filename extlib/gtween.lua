@@ -342,6 +342,9 @@ function new(target, duration, values, props)
 			return
 		end
 		self.isPlaying = true
+		for i=1, #crumbs do
+				crumbs[i].alpha = 1
+		end
 		if self.position == nil or self.repeatCount ~= 0 and self.position >= self.repeatCount * self.duration then
 			-- reached the end, reset.
 			self.inited = false
@@ -357,6 +360,9 @@ function new(target, duration, values, props)
 	function tween:pause()
 		if not self.isPlaying then
 			return
+		end
+		for i=1, #crumbs do
+				crumbs[i].alpha = 0
 		end
 		self.isPlaying = false
 		unregisterTween(self)

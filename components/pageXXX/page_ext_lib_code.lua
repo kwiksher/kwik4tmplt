@@ -22,15 +22,15 @@ end
 function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
+    {{#extCodeMid}}
+    {{ccode}}
+    {{arqCode}}
+    {{/extCodeMid}}
 end
 --
 function _M:allListeners(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
-    {{#extCodeMid}}
-    {{ccode}}
-    {{arqCode}}
-    {{/extCodeMid}}
 
     {{#extCodeBtm}}
     {{ccode}}

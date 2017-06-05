@@ -94,7 +94,7 @@ local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
         mY = endY  + (  layer.height )
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
-		mX = {{elW}} + math.random({{anim.randXStart}}, {{randXEnd}})
+		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
 	{{/randX}}
 	{{#randY}}
 		mY =  {{elH}} + math.random({{randYStart}}, {{randYEnd}})
@@ -155,7 +155,7 @@ local function getPos(layer, _endX, _endY)
       mY = layer.y + endY + layer.height - layer.y
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
-		mX = {{elW}} + math.random({{anim.randXStart}}, {{randXEnd}})
+		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
 	{{/randX}}
 	{{#randY}}
 		mY =  {{elH}} + math.random({{randYStart}}, {{randYEnd}})

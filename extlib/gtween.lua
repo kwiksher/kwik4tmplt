@@ -395,7 +395,6 @@ function new(target, duration, values, props)
 		self.calculatedPositionOld = self.calculatedPosition
 
 		local maxPosition = self.repeatCount * self.duration
-
 		local hasEnded = value >= maxPosition and self.repeatCount > 0
 		if hasEnded then
 
@@ -467,7 +466,7 @@ function new(target, duration, values, props)
 				  numCrumbs = numCrumbs+1
 
 
-				  if tween.breadcrumb then
+				  if tween.breadcrumb and value > 0 and value < maxPosition -1 then
 
 
 				    local xPos, yPos

@@ -6,13 +6,18 @@ local _M = {}
 --
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
+-----------------------------------------------
 -- local _BackgroundLayerName = "background.jpg"
+-----------------------------------------------
 local flip_audio = false
 local laserSound
+--
 if flip_audio then
   laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
 end
---
+------------------------------------------------
+local debug = false
+------------------------------------------------
 {{#ultimate}}
 local bgW, bgH = 1920/4, 1280/4                --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
 local pgX, pgY = _K.ultimatePosition(960, 640) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
@@ -23,6 +28,7 @@ local bgW, bgH = 2048, 1152
 local pgX, pgY = 1024, 768
 local curlWidth = 400
 {{/ultimate}}
+-----------------------------------------------
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
@@ -152,14 +158,16 @@ function _M:allListeners(UI)
     end
     timer.performWithDelay( 100, saveWithDelay )
     -- debug mode
-    --[[
-    local regions = back:GetGrabRegions()
-    for _, region in pairs(regions) do
-      local rect = display.newRoundedRect(back.parent, region.x, region.y, region.width, region.height, 12)
-      rect:setFillColor(.3, .3)
-      rect:setStrokeColor(.4, .5, .2)
-      rect.strokeWidth = 10
-      sceneGroup:insert(rect)
+    if debug then
+      ---[[
+      local regions = back:GetGrabRegions()
+      for _, region in pairs(regions) do
+        local rect = display.newRoundedRect(back.parent, region.x, region.y, region.width, region.height, 12)
+        rect:setFillColor(.3, .3)
+        rect:setStrokeColor(.4, .5, .2)
+        rect.strokeWidth = 10
+        sceneGroup:insert(rect)
+      end
     end
     --]]
   end

@@ -20,6 +20,7 @@ function _Command:new()
 			   if file then
 			      contents = file:read("*a")
 			      io.close(file)
+			      file = nil
 			   end
 			   return contents
 			end
@@ -30,6 +31,10 @@ function _Command:new()
 			   local file = io.open( path, "w+" )
 			   file:write("{{}}")
 			   io.close(file)
+			   file = nil
+			else
+				io.close(file)
+				file = nil
 			end
 			-- Loads vars
 			kwkVar = json.decode( jsonFile("kwkVars.json") )

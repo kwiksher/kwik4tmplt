@@ -32,6 +32,7 @@ function _M:localPos(UI)
 end
 --
 function _M:allListeners(UI)
+  {{#after}}
   {{#vtype}}
       {{#vsave}}
          -- Check if variable has a pre-saved content
@@ -48,6 +49,7 @@ function _M:allListeners(UI)
          end
       {{/vsave}}
   {{/vtype}}
+  {{/after}}
 end
 --
 function _M:toDispose(UI)
@@ -72,6 +74,12 @@ function _M:localVars(UI)
       {{^vtable}}
         _K.{{vname}} = {{vvalue}}
       {{/vtable}}
+      {{#vsave}}
+         -- Check if variable has a pre-saved content
+         if Var:kwkVarCheck("{{vname}}") ~= nil then
+            _K.{{vname}} = Var:kwkVarCheck("{{vname}}")
+         end
+      {{/vsave}}
   {{/vtype}}
   {{^vtype}}
     {{#vtable}}
@@ -80,6 +88,12 @@ function _M:localVars(UI)
       {{^vtable}}
         UI.{{vname}} = {{vvalue}}
       {{/vtable}}
+      {{#vsave}}
+         -- Check if variable has a pre-saved content
+         if Var:kwkVarCheck("{{vname}}") ~= nil then
+            UI.{{vname}} = Var:kwkVarCheck("{{vname}}")
+         end
+      {{/vsave}}
   {{/vtype}}
   {{/before}}
 end

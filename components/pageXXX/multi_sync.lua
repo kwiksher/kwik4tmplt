@@ -50,10 +50,12 @@ function _M:allListeners(UI)
     sceneGroup.{{myLName}} = {{myLName}}
 
     {{#elaudioKwk}}
+    {{#autoPlay}}
       _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}}, function()
         _K.syncSound.saySentence{sentence= UI.tSearch["{{dois}}"][4],line=UI.tSearch["{{dois}}"][5], button=layer.b_{{myLName}}
       }
       end)
+    {{/autoPlay}}
     {{/elaudioKwk}}
   {{/multLayers}}
 end

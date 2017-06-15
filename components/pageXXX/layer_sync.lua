@@ -32,7 +32,7 @@ function _M:localPos(UI)
   --
   {{#daTrigger}}
     _K.s{{trigger}} = function()
-      {{trigger}}()
+      UI.scene:dispatchEvent({name="action_{{trigger}}"})
     end
   {{/daTrigger}}
 
@@ -134,8 +134,9 @@ end
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  {{^multLayers}}
-    {{#elaudio}}
+{{^multLayers}}
+{{#elaudio}}
+{{#autoPlay}}
     local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
       _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}},
         function()
@@ -144,8 +145,9 @@ function _M:allListeners(UI)
           line=layer.{{myLName}}_txt,
           button=layer.b_{{myLName}} })
       end)
-    {{/elaudio}}
-  {{/multLayers}}
+{{/autoPlay}}
+{{/elaudio}}
+{{/multLayers}}
 end
 --
 function _M:toDispose()

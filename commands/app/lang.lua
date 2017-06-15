@@ -25,6 +25,9 @@ function _Command:new()
 			for k,v in pairs(langTable) do
 			    if defLang == v then _K.lang = v break end
 			end
+			if defLang == "pt-BR" then
+    			_K.lang = "pt"
+			end
 		end
 	end
 	return command

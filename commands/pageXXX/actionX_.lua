@@ -240,7 +240,7 @@ function ActionCommand:new()
 		{{/readme.readMe}}
 
 		{{#readme.playSync}}
-			_AC.Readme:playSync({{audioSent}}, layer.{{line}}, layer.{{button}})
+			_AC.Readme:playSync({{audiotype}}.{{audioSent}}, layer.{{line}}, layer.{{button}})
 		{{/readme.playSync}}
 
 		{{#screenshot.takeScreenShot}}

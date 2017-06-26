@@ -240,7 +240,12 @@ function ActionCommand:new()
 		{{/readme.readMe}}
 
 		{{#readme.playSync}}
+			{{^langSync}}
 			_AC.Readme:playSync({{audiotype}}.{{audioSent}}, layer.{{line}}, layer.{{button}})
+			{{/langSync}}
+			{{#langSync}}
+			_AC.Readme:playSync(UI.tSearch["slide"][4], UI.tSearch["slide"][5], layer.{{button}})
+			{{/langSync}}
 		{{/readme.playSync}}
 
 		{{#screenshot.takeScreenShot}}

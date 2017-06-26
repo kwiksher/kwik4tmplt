@@ -74,13 +74,13 @@ function _M:localPos(UI)
   {{/elshow}}
   {{^elshow}}
     layer.speak{{spe}}.alpha = 0
-    {{#um}}
-      --Not show if multilanguage
-      if (_K.lang ~= "{{um}}") then
-          layer.speak{{spe}}.alpha = 0
-      end
-    {{/um}}
   {{/elshow}}
+  {{#um}}
+    --Not show if multilanguage
+    if (_K.lang ~= "{{um}}") then
+        layer.speak{{spe}}.alpha = 0
+    end
+  {{/um}}
   sceneGroup:insert(layer.speak{{spe}})
   --
   {{#multLayers}}

@@ -20,20 +20,11 @@ function _M:localPos(UI)
      {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
     {{/alang}}
   end
+  local a = audio.getDuration( {{atype}}.kwk_readMeFile );
+  if a > UI.allAudios.kAutoPlay  then
+    UI.allAudios.kAutoPlay = a
+  end
 {{/areadme}}
-  -- #audio
-    {{#areadme}}
-      {{^temSync}}
-        {{#adelay}}
-        {{/adelay}}
-        local a = audio.getDuration( {{atype}}.kwk_readMeFile );
-        if a > UI.allAudios.kAutoPlay  then
-          UI.allAudios.kAutoPlay = a
-        end
-        {{#adelay}}
-        {{/adelay}}
-      {{/temSync}}
-    {{/areadme}}
   --  /audio
 end
 

@@ -168,7 +168,7 @@ Navigation.new = function( obj, params )
 	print("current page: "..cpage.." clicked: "..event.target.id)
 
 		if cpage  ~= event.target.id then -- director.getCurrBookPageNum() ~= event.target.id then
-			local togo = "views.page0"..event.target.id.."Scene"
+			local togo = _K.appName.."views.page0"..event.target.id.."Scene"
 
 			--variable to control disposal on runtime events for multipliers
 			_K.disposeMultiplier = 1

@@ -11,10 +11,10 @@ function _M:playReadMe(readMeFile, vchan)
 end
 --
 function _M:readMe(curPage)
-	  if nil~= composer.getScene("views.page0"..(curPage+1).."Scene" ) then
-	  	composer.removeScene("views.page0"..(curPage+1).."Scene" , true)
+	  if nil~= composer.getScene(_K.appName.."views.page0"..(curPage+1).."Scene" ) then
+	  	composer.removeScene(_K.appName.."views.page0"..(curPage+1).."Scene" , true)
 	  end
-	  composer.gotoScene("views.page0"..(curPage+1).."Scene" )
+	  composer.gotoScene(_K.appName.."views.page0"..(curPage+1).."Scene" )
 end
 --
 function _M:playSync(audioSent, line, button)

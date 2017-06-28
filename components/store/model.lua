@@ -44,17 +44,19 @@ M.getPageNum = function(epsode)
     return pNum
 end
 
+local _K = require("Application")
+
 M.getPageName = function (epsode)
     local pNum = M.epsodes[epsode].dir
     pNum = pNum:sub(16)
-    return "views.page0"..pNum.."Scene"
+    return _K.appName.."views.page0"..pNum.."Scene"
 end
 
 M.getPageInfo = function (epsode)
     local pNum = M.epsodes[epsode].info
     if string.len(pNum) > 0 then
         pNum = pNum:sub(2)
-        return "views.page0"..pNum.."Scene"
+        return _K.appName.."views.page0"..pNum.."Scene"
     else
         return false
     end

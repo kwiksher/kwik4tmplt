@@ -48,13 +48,13 @@ function _M:allListeners(UI)
     curl.alpha = 1
     if event.dir == "right" then
       if next == nil and curPage~=nextPage then
-        -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, _K.systemDir, bgW, bgH )
         -- next.x = pgX
         -- next.y = pgY
         -- sceneGroup:insert(next)
         -- next:toFront()
         local scene ={view=display.newGroup()}
-        local pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
+        local pageNextUI    = require(_K.appName.."components.page0"..nextPage.."UI").new(scene)
         pageNextUI:create()
         next = scene.view
         sceneGroup:insert(next)
@@ -63,13 +63,13 @@ function _M:allListeners(UI)
       end
     else
       if prev == nil and curPage ~= prevPage then
-        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, _K.systemDir,bgW, bgH )
         -- prev.x = pgX
         -- prev.y = pgY
         -- sceneGroup:insert(prev)
         -- prev:toFront()
         local scene ={view=display.newGroup()}
-        local pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
+        local pagePrevUI    = require(_K.appName.."components.page0"..prevPage.."UI").new(scene)
         pagePrevUI:create()
         prev = scene.view
         sceneGroup:insert(prev)
@@ -116,7 +116,7 @@ function _M:allListeners(UI)
           options = { effect = "fromLeft"}
        end
        if tonumber(wPage) ~= tonumber(curPage) then
-            _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+            _K.appInstance:showView(_K.appName.."views.page0"..wPage.."Scene", options)
          end
      end
 

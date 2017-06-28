@@ -28,7 +28,7 @@ local speakW, speakH = 60, 60
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
+  local allAudios = require(_K.appName.."components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
   --
   {{#daTrigger}}
     _K.s{{trigger}} = function()
@@ -58,11 +58,11 @@ function _M:localPos(UI)
   }
 
   {{#deviceH}}
-    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, speakW, speakH);
+    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, speakW, speakH);
   {{/deviceH}}
   {{^deviceH}}
-    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, 30, 30 );
-  {{/deviceH}}
+    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, 30, 30 );
+  {{/deviceH}}_K.systemDir,
 
   layer.speak{{spe}}.x = mX
   layer.speak{{spe}}.y = mY
@@ -137,7 +137,7 @@ function _M:allListeners(UI)
 {{^multLayers}}
 {{#elaudio}}
 {{#autoPlay}}
-    local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
+    local allAudios = require(_K.appName.."components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
       _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}},
         function()
         _K.syncSound.saySentence( {

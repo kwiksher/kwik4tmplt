@@ -3,12 +3,13 @@
 -- Project: {{ProjName}}
 --
 local _Class = {}
+local _K = require("Application")
 --
 function _Class:setMod(layer, custom)
   if custom then
-    self.mod = require("custom.components."..self.page.."."..layer)
+    self.mod = require(_K.appName.."custom.components."..self.page.."."..layer)
   else
-    self.mod = require("components."..self.page.."."..layer)
+    self.mod = require(_K.appName.."components."..self.page.."."..layer)
   end
 end
 --

@@ -36,7 +36,7 @@ function Application:new()
 	application.currentViewName = nil
 	--
 	function application:init()
-		self.context = AppContext:new()
+		self.context = AppContext:new(Application.appName)
 		self.context:init()
 		--
     Runtime:dispatchEvent({name="app.variables", event="init"})

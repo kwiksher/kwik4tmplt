@@ -5,6 +5,7 @@
 local sceneName = ...
 local composer  = require( "composer" )
 local scene     = composer.newScene(sceneName)
+local _K = require("Application")
 scene._composerFileName = nil
 scene.classType = "{{classType}}"
 scene.pageUI    = require("{{custom}}{{pageUI}}").new(scene)
@@ -22,7 +23,7 @@ function scene:show( event )
      self.pageUI:didShow(self, event.params)
     {{#scrnSave}}
       local _AC = require("commands.kwik.actionCommand")
-      _AC.Screenshot:saveToFile({{delay}}, sceneGroup, "page0{{pageNum}}",  {{numFrames}} )
+      _AC.Screenshot:saveToFile({{delay}}, sceneGroup, _K.appName.."page0{{pageNum}}",  {{numFrames}} )
     {{/scrnSave}}
   end
 end

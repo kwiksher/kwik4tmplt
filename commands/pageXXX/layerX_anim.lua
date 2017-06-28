@@ -3,7 +3,8 @@
 -- Project: {{ProjName}}, published on {{today}}
 --
 local AnimationCommand = {}
-local anim = require("components.page0{{page}}.{{myLName}}_{{layerType}}_{{triggerName}}")
+local _K = require("Application")
+local anim = require(_K.appName.."components.page0{{page}}.{{myLName}}_{{layerType}}_{{triggerName}}")
 -----------------------------
 -----------------------------
 function AnimationCommand:new()

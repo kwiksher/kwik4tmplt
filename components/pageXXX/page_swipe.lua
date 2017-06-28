@@ -61,7 +61,7 @@ function _M:allListeners(UI)
           {{#navigation}}
             Navigation.hide()
           {{/navigation}}
-          _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+          _K.appInstance:showView(_K.appName.."views.page0"..wPage.."Scene", options)
          end
       end
     end

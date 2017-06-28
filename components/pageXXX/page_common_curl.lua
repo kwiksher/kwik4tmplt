@@ -42,11 +42,11 @@ function _M:allListeners(UI)
      if (tonumber(_K.kAutoPlay) > 0) then
        local function act_autoPlay(event)
          if(curPage < numPages) then
-            if nil~= composer.getScene( "views.page0"..(curPage+1).."Scene") then composer.removeScene( "views.page0"..(curPage+1).."Scene", true) end
+            if nil~= composer.getScene( _K.appName.."views.page0"..(curPage+1).."Scene") then composer.removeScene( _K.appName.."views.page0"..(curPage+1).."Scene", true) end
             if(_K.kBidi == false) then
-              composer.gotoScene( "views.page0"..(curPage+1).."Scene" )
+              composer.gotoScene( _K.appName.."views.page0"..(curPage+1).."Scene" )
             else
-              composer.gotoScene( "views.page0"..(curPage-1).."Scene" )
+              composer.gotoScene( _K.appName.."views.page0"..(curPage-1).."Scene" )
             end
          end
        end
@@ -69,7 +69,7 @@ function _M:allListeners(UI)
     --[[
       if not _K.exportCurrent then
        _K.timerStash.timer_pl = timer.performWithDelay( 5000, function()
-          composer.loadScene( "views.page0{{nextScene}}Scene")
+          composer.loadScene( _K.appName.."views.page0{{nextScene}}Scene")
        end)
        end
     --]]

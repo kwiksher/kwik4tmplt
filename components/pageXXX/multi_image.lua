@@ -44,7 +44,7 @@ function _M:localPos(UI)
   local layer       = UI.layer
   if UI.tSearch["{{bn}}"] == nil then return end
   {{#multLayers}}
-    layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{bn}}"][1], UI.tSearch["{{bn}}"][2], UI.tSearch["{{bn}}"][3] );
+    layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{bn}}"][1], _K.systemDir, UI.tSearch["{{bn}}"][2], UI.tSearch["{{bn}}"][3] );
     layer.{{myLName}}.x        = UI.tSearch["{{bn}}"][4]
     layer.{{myLName}}.y        = UI.tSearch["{{bn}}"][5]
     layer.{{myLName}}.alpha    = UI.tSearch["{{bn}}"][6]

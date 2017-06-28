@@ -23,6 +23,7 @@ local function startThisMug()
 		_K.thumbDir    = "assets/thumbnails/"
 		{{/use.expDir}}
 		_K.particleDir = "assets/particles/"
+		_K.systemDir   = system.ResourceDirectory
 		_K.trans       = {}
 		_K.gt          = {}
 		_K.timerStash   = {}

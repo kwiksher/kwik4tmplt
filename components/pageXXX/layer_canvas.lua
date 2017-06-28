@@ -132,7 +132,7 @@ function _M:allListeners(UI)
          sceneGroup:insert(layer.{{myLName}}_asf)
          sceneGroup:insert(layer.{{myLName}})
         {{#outline}}
-            layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.canvas.imagePath, w, h );
+            layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.canvas.imagePath, _K.systemDir, w, h );
             layer.{{myLName}}.x = x
             layer.{{myLName}}.y = y
             layer.{{myLName}}.alpha = a

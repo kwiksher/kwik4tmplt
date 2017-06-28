@@ -36,7 +36,7 @@ function M.new()
     end
     --
     local function copyDisplayObject(src, dst)
-        local obj = display.newImageRect( _K.imgDir..src.imagePath, src.width, src.height)
+        local obj = display.newImageRect( _K.imgDir..src.imagePath, _K.systemDir, src.width, src.height)
             obj.x = dst.x + src.x - _W/2
             obj.y = dst.y + src.y - _H/2
             src.alpha = 0

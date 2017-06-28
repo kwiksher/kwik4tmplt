@@ -58,6 +58,7 @@ local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
 {{/bn}}
 
 function _M:localVars (UI)
+   mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath)
   self:buttonVars(UI)
 end
 --

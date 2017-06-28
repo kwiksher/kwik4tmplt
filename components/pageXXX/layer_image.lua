@@ -95,6 +95,7 @@ local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
 {{/kwk}}
 --
 function _M:localVars(UI)
+   mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath)
   {{#multLayers}}
     UI.tab{{um}}["{{dois}}"] = {imagePath, imageWidth, imageHeight, mX, mY, oriAlpha}
   {{/multLayers}}

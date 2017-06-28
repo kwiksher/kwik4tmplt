@@ -16,6 +16,9 @@ local pSpa =  {{pSpa}}/4
 {{^ultimate}}
 local pSpa  = {{pSpa}}
 {{/ultimate}}
+
+local ui  = require("components.store.UI")
+
 --
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
@@ -32,37 +35,25 @@ function _M:allListeners(UI)
   _K.pageSwap = function (event )
     local options
     if event.phase == "ended" and event.direction ~= nil then
-       local wPage = curPage
-
+       local wPage = ui.currentPage
        if event.direction == "left" and _K.kBidi == false then
-          wPage = curPage + 1
-          if wPage > numPages then wPage = curPage end
-          options = { effect = "fromRight"}
+          wPage = ui.currentPage + 1
+          if wPage > ui.numPages then return end
+          ui.gotoNextScene()
        elseif event.direction == "left" and _K.kBidi == true then
-          wPage = curPage - 1
-          if wPage < 1 then wPage = 1 end
-          options = { effect = "fromLeft"}
+          wPage = ui.currentPage - 1
+          if wPage < 0 then return end
+          ui.gotoPreviousScene()
        elseif event.direction == "right" and _K.kBidi == true then
-          wPage = curPage + 1
-          if wPage > numPages then wPage = curPage end
-          options = { effect = "fromRight"}
+          wPage = ui.currentPage + 1
+          if wPage > numPages then return end
+          ui.gotoNextScene()
        elseif event.direction == "right" and _K.kBidi == false then
-          wPage = curPage - 1
-          if wPage < 1 then wPage = 1 end
+          wPage = ui.currentPage - 1
+          if wPage < 0 then return end
+          ui.gotoPreviousScene()
           options = { effect = "fromLeft"}
        end
-       if tonumber(wPage) ~= tonumber(curPage) then
-          {{#hasShake}}
-          Runtime:removeEventListener("accelerometer", _K.shakeMe);
-          {{/hasShake}}
-          {{#invert}}
-          Runtime:removeEventListener("orientation", _K.kOrientation_act);
-          {{/invert}}
-          {{#navigation}}
-            Navigation.hide()
-          {{/navigation}}
-          _K.appInstance:showView(_K.appName.."views.page0"..wPage.."Scene", options)
-         end
       end
     end
     layer.{{backLayer}}:addEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )

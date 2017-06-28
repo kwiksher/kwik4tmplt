@@ -28,7 +28,12 @@ _Class.new = function(scene)
       UI.tSearch   = nil
     {{/language}}
     UI.numPages = {{numPages}}   -- number of pages in the project
-
+    {{#lockPage}}
+    --_K.systemDir = system.ApplicationSupportDirectory
+    {{/}}
+    {{^lockPage}}
+    _K.systemDir = system.ResourceDirectory
+    {{/lockPage}}
   function UI:setLanguge()
       {{#language}}
       if _K.lang == "" then _K.lang = "en" end

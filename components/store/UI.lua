@@ -5,8 +5,64 @@ local IAP             = require("components.store.IAP")
 local downloadManager = require("components.store.downloadManager")
 local model           = require("components.store.model")
 local _K       = require("Application")
---
+local json   = require("json")
 
+--
+local useBookShelf = true -- Bookshelf Template version
+local currentBookModel = nil
+M.currentPage      = 2
+M.numPages         = 1 -- referneced from page_swipe.lua
+--
+local function readPageJson(currentEpsode)
+    local jsonFile = function(filename )
+       local path = system.pathForFile(filename, system.ApplicationSupportDirectory)
+       local contents
+       local file = io.open( path, "r" )
+       if file then
+          contents = file:read("*a")
+          io.close(file)
+          file = nil
+       end
+       return contents
+    end
+    currentBookModel =  json.decode( jsonFile(currentEpsode.."/model.json") )
+    for k, v in pairs(currentBookModel) do print(k, v) end
+    M.numPages = #currentBookModel
+end
+--
+_K.getModel = function(layerName, imagePath)
+    local page = currentBookModel[M.currentPage]
+    local layer = page[layerName]
+    if layer == nil then layer = {x=0, y=0, width=0, height=0} end
+    local i = string.find(imagePath, "/")
+    local _x, _y = _K.ultimatePosition(layer.x, layer.y)
+    return _x, _y, layer.width/4, layer.height/4, "p"..M.currentPage..string.sub(imagePath, i)
+end
+--
+M.gotoNextScene = function()
+    local prevAlias = currentBookModel[M.currentPage].alias
+    local nextAlias = currentBookModel[M.currentPage+1].alias
+    M.currentPage = M.currentPage + 1
+    _K.systemDir = system.ApplicationSupportDirectory
+    if prevAlias == nextAlias then
+        composer.gotoScene("extlib.page_reload")
+    else
+        composer.gotoScene("views.page0"..currentBookModel[M.currentPage].alias.."Scene")
+    end
+end
+--
+M.gotoPreviousScene = function()
+    local prevAlias = currentBookModel[M.currentPage].alias
+    local nextAlias = currentBookModel[M.currentPage-1].alias
+    M.currentPage = M.currentPage -1
+    _K.systemDir = system.ApplicationSupportDirectory
+    if prevAlias == nextAlias then
+        composer.gotoScene("extlib.page_reload")
+    else
+        composer.gotoScene("views.page0"..currentBookModel[M.currentPage].alias.."Scene")
+    end
+end
+--
 function M.new()
     local UI = {}
     --
@@ -15,7 +71,15 @@ function M.new()
     --
     function UI.gotoScene(event)
         local epsode =  event.target.selectedPurchase
-        composer.gotoScene(model.getPageName(epsode) , {effect=model.gotoSceneEffect})
+        print("UI.gotoScene ".. model.getPageName(epsode))
+        if useBookShelf then
+            readPageJson(epsode)
+            _K.imgDir = epsode.."/images/"
+            _K.systemDir = system.ApplicationSupportDirectory
+            composer.gotoScene("views.page0"..currentBookModel[1].alias.."Scene")
+        else
+            composer.gotoScene(model.getPageName(epsode) , {effect=model.gotoSceneEffect})
+        end
         return true
     end
     --
@@ -107,6 +171,10 @@ function M.new()
                 self:addEventListener(button, epsode)
                 --
                 self.downloadGroup[epsode.name] = button
+                --
+                -- button image
+                --
+                downloadManager.setButtonImage(button, epsode.name)
              end
         end
         --

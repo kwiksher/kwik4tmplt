@@ -137,4 +137,34 @@ function M:startDownload(epsode)
     end
 end
 
+--
+M.setButtonImage = function (button, epsode)
+    local params = {}
+    params.progress = true
+    --
+    local function buttonImageListener( event )
+        if ( event.isError ) then
+            print( "Network error - download failed: ", event.response )
+        elseif ( event.phase == "began" ) then
+            print( "Progress Phase: began" )
+        elseif ( event.phase == "ended" ) then
+            print( "Displaying response image file" )
+            button.fill = {
+                type = "image",
+                filename = button.name..".png",
+                baseDir = system.TemporaryDirectory
+            }
+        end
+    end
+    --
+    network.download(
+        URL..epsode.."/bg.png",
+        "GET",
+        buttonImageListener,
+        params,
+        button.name..".png",
+        system.TemporaryDirectory
+    )
+end
+
 return M

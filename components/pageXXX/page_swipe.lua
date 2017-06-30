@@ -50,9 +50,13 @@ function _M:allListeners(UI)
           ui.gotoNextScene()
        elseif event.direction == "right" and _K.kBidi == false then
           wPage = ui.currentPage - 1
-          if wPage < 0 then return end
-          ui.gotoPreviousScene()
-          options = { effect = "fromLeft"}
+          if wPage == 0 then
+            _K.systemDir = system.ResourceDirectory
+            _K.imgDir = "assets/images/"
+            composer.gotoScene("views.page01Scene")
+          else
+            ui.gotoPreviousScene()
+          end
        end
       end
     end

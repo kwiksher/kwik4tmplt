@@ -10,10 +10,11 @@ local json   = require("json")
 --
 local useBookShelf = true -- Bookshelf Template version
 local currentBookModel = nil
-M.currentPage      = 2
-M.numPages         = 1 -- referneced from page_swipe.lua
+local currentBook    = nil
+M.currentPage          = 1
+M.numPages             = 1 -- referneced from page_swipe.lua
 --
-local function readPageJson(currentEpsode)
+local function readPageJson(epsode)
     local jsonFile = function(filename )
        local path = system.pathForFile(filename, system.ApplicationSupportDirectory)
        local contents
@@ -25,7 +26,8 @@ local function readPageJson(currentEpsode)
        end
        return contents
     end
-    currentBookModel =  json.decode( jsonFile(currentEpsode.."/model.json") )
+    currentBook = epsode
+    currentBookModel =  json.decode( jsonFile(epsode.."/model.json") )
     for k, v in pairs(currentBookModel) do print(k, v) end
     M.numPages = #currentBookModel
 end
@@ -62,6 +64,42 @@ M.gotoPreviousScene = function()
         composer.gotoScene("views.page0"..currentBookModel[M.currentPage].alias.."Scene")
     end
 end
+
+M.gotoSceneBook = function(epsode, page)
+    print("gotoSceneBook ".. model.getPageName(epsode))
+    M.currentPage = page
+    readPageJson(epsode)
+    _K.imgDir = epsode.."/images/"
+    _K.systemDir = system.ApplicationSupportDirectory
+    composer.gotoScene("views.page0"..currentBookModel[page].alias.."Scene")
+end
+
+M.gotoSceneNextBook = function()
+    local bookname = nil
+    for i=1, #model.epsodes -1 do
+        if currentBook == model.epsodes[i].name then
+            bookname = model.epsodes[i+1].name
+            break
+        end
+    end
+    if bookname then
+        M.gotoSceneBook = function(bookname, 1)
+    end
+end
+
+M.gotoScenePreviousBook = function()
+    local bookname = nil
+    for i=2, #model.epsodes do
+        if currentBook == model.epsodes[i].name then
+            bookname = model.epsodes[i-1].name
+            break
+        end
+    end
+    if bookname then
+    end
+end
+
+
 --
 function M.new()
     local UI = {}

@@ -22,9 +22,9 @@ local function zipListener( event, deferred , selectedPurchase)
         print( "event.name:" .. event.name )
         print( "event.type:" .. event.type )
         if ( event.response and type(event.response) == "table" ) then
-            for i = 1, #event.response do
-                print( event.response[i] )
-            end
+            -- for i = 1, #event.response do
+            --     print( event.response[i] )
+            -- end
             -- local selectedPurchase = event.response[1]
             -- selectedPurchase = selectedPurchase:sub(1, selectedPurchase:len()-1)
             print("zipListener:"..selectedPurchase)
@@ -69,6 +69,7 @@ end
 local function _startDownload(selectedPurchase)
     local deferred = Deferred()
     local path = system.pathForFile(selectedPurchase..".zip", system.TemporaryDirectory)
+    print(path)
     local fh, reason = io.open( path, "r" )
     if fh then
         io.close( fh )
@@ -83,7 +84,9 @@ local function _startDownload(selectedPurchase)
         zip.uncompress(options)
     else
         local url = URL ..selectedPurchase..filename
+        print("---------------------")
         print(url)
+        print("---------------------")
         local params    = {}
         params.progress = true
         network.download( url, "GET", function(event)
@@ -148,7 +151,7 @@ M.setButtonImage = function (button, epsode)
         elseif ( event.phase == "began" ) then
             print( "Progress Phase: began" )
         elseif ( event.phase == "ended" ) then
-            print( "Displaying response image file" )
+            print( "Displaying response image file with " ..button.name ..".png")
             button.fill = {
                 type = "image",
                 filename = button.name..".png",
@@ -156,6 +159,8 @@ M.setButtonImage = function (button, epsode)
             }
         end
     end
+    --
+    print(URL..epsode.."/bg.png")
     --
     network.download(
         URL..epsode.."/bg.png",

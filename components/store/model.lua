@@ -3,7 +3,7 @@ local M = {}
 local IAP             = require("components.store.IAP")
 --
 local YourHost = "http://localhost:4000/daily"
-M.URL          = YourHost.."/downlodable/"
+M.URL          = YourHost.."/LibraryParent/"
 -- M.URL = nil means simple IAP store without network download like Kwik3 IAP
 -- downloadBtn, savingTxt won'T be used. You don't need to create them.
 --

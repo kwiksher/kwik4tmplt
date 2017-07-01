@@ -53,6 +53,10 @@ _Class.new = function(scene)
   end
   --
   function UI:create()
+   {{#isTmplt}}
+    _K.systemDir = system.ResourceDirectory
+    _K.imgDir = "assets/images/"
+   {{/isTmplt}}
     self:_create("common",  const.page_common, {{custom}})
     self:setVars()
     self:setLanguge()

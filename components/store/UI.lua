@@ -6,6 +6,7 @@ local downloadManager = require("components.store.downloadManager")
 local model           = require("components.store.model")
 local _K       = require("Application")
 local json   = require("json")
+local master = require("model")
 
 --
 local useBookShelf = true -- Bookshelf Template version
@@ -14,13 +15,26 @@ local currentBook    = nil
 M.currentPage          = 1
 M.numPages             = 1 -- referneced from page_swipe.lua
 --
+local function getPageNum(num)
+    local pageName = currentBookModel[num].alias
+    print (pageName)
+    for i=1, #master do
+        if master[i].alias == pageName then
+            return i
+        end
+    end
+    return 1
+end
+--
 local function readPageJson(epsode)
     local jsonFile = function(filename )
        local path = system.pathForFile(filename, system.ApplicationSupportDirectory)
+       print(path)
        local contents
        local file = io.open( path, "r" )
        if file then
           contents = file:read("*a")
+          print (contents)
           io.close(file)
           file = nil
        end
@@ -28,7 +42,9 @@ local function readPageJson(epsode)
     end
     currentBook = epsode
     currentBookModel =  json.decode( jsonFile(epsode.."/model.json") )
-    for k, v in pairs(currentBookModel) do print(k, v) end
+    for k, v in pairs(currentBookModel) do
+        for l, m in pairs(v) do print(l, m) end
+    end
     M.numPages = #currentBookModel
 end
 --
@@ -42,26 +58,26 @@ _K.getModel = function(layerName, imagePath)
 end
 --
 M.gotoNextScene = function()
-    local prevAlias = currentBookModel[M.currentPage].alias
-    local nextAlias = currentBookModel[M.currentPage+1].alias
+    local prevAlias = getPageNum(M.currentPage)
+    local nextAlias = getPageNum(M.currentPage+1)
     M.currentPage = M.currentPage + 1
     _K.systemDir = system.ApplicationSupportDirectory
     if prevAlias == nextAlias then
         composer.gotoScene("extlib.page_reload")
     else
-        composer.gotoScene("views.page0"..currentBookModel[M.currentPage].alias.."Scene")
+        composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene")
     end
 end
 --
 M.gotoPreviousScene = function()
-    local prevAlias = currentBookModel[M.currentPage].alias
-    local nextAlias = currentBookModel[M.currentPage-1].alias
+    local prevAlias = getPageNum(M.currentPage)
+    local nextAlias = getPageNum(M.currentPage-1)
     M.currentPage = M.currentPage -1
     _K.systemDir = system.ApplicationSupportDirectory
     if prevAlias == nextAlias then
         composer.gotoScene("extlib.page_reload")
     else
-        composer.gotoScene("views.page0"..currentBookModel[M.currentPage].alias.."Scene")
+        composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene")
     end
 end
 
@@ -71,31 +87,48 @@ M.gotoSceneBook = function(epsode, page)
     readPageJson(epsode)
     _K.imgDir = epsode.."/images/"
     _K.systemDir = system.ApplicationSupportDirectory
-    composer.gotoScene("views.page0"..currentBookModel[page].alias.."Scene")
+    composer.gotoScene("views.page0"..getPageNum(page).."Scene")
 end
 
 M.gotoSceneNextBook = function()
-    local bookname = nil
-    for i=1, #model.epsodes -1 do
-        if currentBook == model.epsodes[i].name then
-            bookname = model.epsodes[i+1].name
+    print("gotoSceneNextBook")
+    print("currentbook:"..currentBook)
+    local k, v, prev = nil, nil, nil
+
+    while true do
+        prev = k
+        k, v = next(model.epsodes, k)
+        print(k, v.name)
+        if k==nil or currentBook == v.name then
+            if k==nil then
+                prev = nil
+            end
             break
         end
     end
-    if bookname then
-        M.gotoSceneBook = function(bookname, 1)
+    if prev then
+        M.gotoSceneBook(model.epsodes[prev].name, 1)
     end
 end
 
 M.gotoScenePreviousBook = function()
-    local bookname = nil
-    for i=2, #model.epsodes do
-        if currentBook == model.epsodes[i].name then
-            bookname = model.epsodes[i-1].name
+    print("gotoScenePreviousBook")
+    local k, v, prev = nil, nil, nil
+
+    while true do
+     k, v = next(model.epsodes, k)
+        print(k, v.name)
+        if k==nil or currentBook == v.name then
+            if k~=nil then
+                k, v = next(model.epsodes, k)
+                print(k)
+            end
             break
         end
     end
-    if bookname then
+    if k then
+        print(v.name)
+        M.gotoSceneBook(v.name, 1)
     end
 end
 
@@ -109,12 +142,14 @@ function M.new()
     --
     function UI.gotoScene(event)
         local epsode =  event.target.selectedPurchase
-        print("UI.gotoScene ".. model.getPageName(epsode))
+        print("UI.gotoScene ".. epsode)
         if useBookShelf then
             readPageJson(epsode)
             _K.imgDir = epsode.."/images/"
             _K.systemDir = system.ApplicationSupportDirectory
-            composer.gotoScene("views.page0"..currentBookModel[1].alias.."Scene")
+            M.currentPage = 1
+            print("views.page0"..getPageNum(1).."Scene")
+            composer.gotoScene("views.page0"..getPageNum(1).."Scene")
         else
             composer.gotoScene(model.getPageName(epsode) , {effect=model.gotoSceneEffect})
         end

@@ -57,6 +57,13 @@ function _M:localPos(UI)
   {{/daArr}}
   }
 
+  {{#isTmplt}}
+  if _K.systemDir == system.ApplicationSupportDirectory then
+    local ui = require("components.store.UI")
+    ui.replaceTimeCodes(layer.Text1_txt, "p"..ui.currentPage.."_".."Text1")
+  end
+  {{/isTmplt}}
+
   {{#deviceH}}
     layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, speakW, speakH);
   {{/deviceH}}
@@ -154,6 +161,9 @@ function _M:toDispose()
 end
 --
 function _M:localVars()
+  {{#isTmplt}}
+   mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath)
+  {{/isTmplt}}
 end
 --
 return _M

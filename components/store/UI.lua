@@ -86,6 +86,7 @@ M.gotoSceneBook = function(epsode, page)
     M.currentPage = page
     readPageJson(epsode)
     _K.imgDir = epsode.."/images/"
+    _K.audioDir = epsode.."/audios/p".._M.currentPage.."_"
     _K.systemDir = system.ApplicationSupportDirectory
     composer.gotoScene("views.page0"..getPageNum(page).."Scene")
 end
@@ -132,7 +133,33 @@ M.gotoScenePreviousBook = function()
     end
 end
 
+local audacityFile = function(filename )
+  local timecodes = {}
+  local path = system.pathForFile(M.currentBook.."/audios/"..filename, system.ApplicationSupportDirectory)
+   -- local path = system.pathForFile(filename, system.ResouceDirectory)
+   -- print(path)
+   local contents
+   local file = io.open( path, "r" )
+   if file then
+      for i in file:lines() do
+      table.insert(timecodes, {i:sub(1, 8), i:sub(10, 17), i:sub(19)})
+      -- print(timecodes[#timecodes][1], timecodes[#timecodes][2], timecodes[#timecodes][3] )
+      end
+      io.close(file)
+      file = nil
+   end
+   return timecodes
+end
 
+M.replaceTimeCodes = function(syncLayer, filename)
+    local timecodes = audacityFile(filename)
+    for i=1, #syncLayer do
+        -- print(syncLayer[i].start, timecodes[i][1])
+        syncLayer[i].start = timecodes[i][1]
+        syncLayer[i].out = timecodes[i][2]
+        syncLayer[i].name = timecodes[i][3]
+    end
+end
 --
 function M.new()
     local UI = {}
@@ -146,6 +173,7 @@ function M.new()
         if useBookShelf then
             readPageJson(epsode)
             _K.imgDir = epsode.."/images/"
+            _K.audioDir = epsode.."/audios/p".._M.currentPage.."_"
             _K.systemDir = system.ApplicationSupportDirectory
             M.currentPage = 1
             print("views.page0"..getPageNum(1).."Scene")

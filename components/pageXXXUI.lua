@@ -56,6 +56,7 @@ _Class.new = function(scene)
    {{#isTmplt}}
     _K.systemDir = system.ResourceDirectory
     _K.imgDir = "assets/images/"
+    _K.audioDir = "assets/audios/"
    {{/isTmplt}}
     self:_create("common",  const.page_common, {{custom}})
     self:setVars()

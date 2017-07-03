@@ -14,10 +14,10 @@ function _M:localPos(UI)
 {{#areadme}}
   if {{atype}}.kwk_readMeFile == nil then
     {{#alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" , _K.systemDir)
     {{/alang}}
     {{^alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}", _K.systemDir )
     {{/alang}}
   end
 {{/areadme}}
@@ -97,10 +97,10 @@ function _M:getAudio(UI)
 {{#areadme}}
   if {{atype}}.kwk_readMeFile == nil then
     {{#alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}", _K.systemDir )
     {{/alang}}
     {{^alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" , _K.systemDir)
     {{/alang}}
   end
 {{/areadme}}

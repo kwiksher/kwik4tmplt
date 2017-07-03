@@ -60,16 +60,16 @@ function _M:localPos(UI)
   {{#isTmplt}}
   if _K.systemDir == system.ApplicationSupportDirectory then
     local ui = require("components.store.UI")
-    ui.replaceTimeCodes(layer.Text1_txt, "p"..ui.currentPage.."_".."Text1")
+    ui.replaceTimeCodes(layer.Text1_txt, "p"..ui.currentPage.."_{{myLName}}.txt")
   end
   {{/isTmplt}}
 
   {{#deviceH}}
-    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, speakW, speakH);
+    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, _K.systemDir, speakW, speakH);
   {{/deviceH}}
   {{^deviceH}}
     layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, 30, 30 );
-  {{/deviceH}}_K.systemDir,
+  {{/deviceH}}
 
   layer.speak{{spe}}.x = mX
   layer.speak{{spe}}.y = mY

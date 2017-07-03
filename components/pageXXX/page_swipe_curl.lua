@@ -13,7 +13,7 @@ local flip_audio = false
 local laserSound
 --
 if flip_audio then
-  laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
+  laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav", _K.systemDir)
 end
 ------------------------------------------------
 local debug = false

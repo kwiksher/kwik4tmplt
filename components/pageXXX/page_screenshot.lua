@@ -8,7 +8,7 @@ _K.screenshot = _M
 ---------------------
 function _M:localPos(UI)
 	if _K.allAudios.cam_shutter == nil then
-	  _K.allAudios.cam_shutter = audio.loadSound(_K.audioDir.."shutter.mp3" )
+	  _K.allAudios.cam_shutter = audio.loadSound(_K.audioDir.."shutter.mp3", _K.systemDir )
 	end
 end
 --

@@ -9,3 +9,5 @@ local pages = {
 },
 {{/pages}}
 }
+
+return pages

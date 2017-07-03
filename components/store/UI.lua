@@ -52,9 +52,13 @@ _K.getModel = function(layerName, imagePath)
     local page = currentBookModel[M.currentPage]
     local layer = page[layerName]
     if layer == nil then layer = {x=0, y=0, width=0, height=0} end
-    local i = string.find(imagePath, "/")
     local _x, _y = _K.ultimatePosition(layer.x, layer.y)
-    return _x, _y, layer.width/4, layer.height/4, "p"..M.currentPage..string.sub(imagePath, i)
+    local path = nil
+    if imagePath then
+        local i = string.find(imagePath, "/")
+       path = "p"..M.currentPage..string.sub(imagePath, i)
+   end
+    return _x, _y, layer.width/4, layer.height/4, path
 end
 --
 M.gotoNextScene = function()
@@ -62,6 +66,8 @@ M.gotoNextScene = function()
     local nextAlias = getPageNum(M.currentPage+1)
     M.currentPage = M.currentPage + 1
     _K.systemDir = system.ApplicationSupportDirectory
+    _K.audioDir = currentBook.."/audios/p"..M.currentPage.."_"
+
     if prevAlias == nextAlias then
         composer.gotoScene("extlib.page_reload")
     else
@@ -74,6 +80,7 @@ M.gotoPreviousScene = function()
     local nextAlias = getPageNum(M.currentPage-1)
     M.currentPage = M.currentPage -1
     _K.systemDir = system.ApplicationSupportDirectory
+    _K.audioDir = currentBook.."/audios/p"..M.currentPage.."_"
     if prevAlias == nextAlias then
         composer.gotoScene("extlib.page_reload")
     else
@@ -86,7 +93,7 @@ M.gotoSceneBook = function(epsode, page)
     M.currentPage = page
     readPageJson(epsode)
     _K.imgDir = epsode.."/images/"
-    _K.audioDir = epsode.."/audios/p".._M.currentPage.."_"
+    _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
     _K.systemDir = system.ApplicationSupportDirectory
     composer.gotoScene("views.page0"..getPageNum(page).."Scene")
 end
@@ -135,10 +142,9 @@ end
 
 local audacityFile = function(filename )
   local timecodes = {}
-  local path = system.pathForFile(M.currentBook.."/audios/"..filename, system.ApplicationSupportDirectory)
+  local path = system.pathForFile(currentBook.."/audios/"..filename, system.ApplicationSupportDirectory)
    -- local path = system.pathForFile(filename, system.ResouceDirectory)
-   -- print(path)
-   local contents
+    print(path)
    local file = io.open( path, "r" )
    if file then
       for i in file:lines() do
@@ -153,11 +159,14 @@ end
 
 M.replaceTimeCodes = function(syncLayer, filename)
     local timecodes = audacityFile(filename)
+    print(filename)
     for i=1, #syncLayer do
         -- print(syncLayer[i].start, timecodes[i][1])
-        syncLayer[i].start = timecodes[i][1]
-        syncLayer[i].out = timecodes[i][2]
-        syncLayer[i].name = timecodes[i][3]
+        if timecodes[i] then
+            syncLayer[i].start = timecodes[i][1]
+            syncLayer[i].out = timecodes[i][2]
+            syncLayer[i].name = timecodes[i][3]
+        end
     end
 end
 --
@@ -173,7 +182,7 @@ function M.new()
         if useBookShelf then
             readPageJson(epsode)
             _K.imgDir = epsode.."/images/"
-            _K.audioDir = epsode.."/audios/p".._M.currentPage.."_"
+            _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
             _K.systemDir = system.ApplicationSupportDirectory
             M.currentPage = 1
             print("views.page0"..getPageNum(1).."Scene")

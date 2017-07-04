@@ -163,8 +163,8 @@ M.replaceTimeCodes = function(syncLayer, filename)
     for i=1, #syncLayer do
         -- print(syncLayer[i].start, timecodes[i][1])
         if timecodes[i] then
-            syncLayer[i].start = timecodes[i][1]
-            syncLayer[i].out = timecodes[i][2]
+            syncLayer[i].start = timecodes[i][1]*1000
+            syncLayer[i].out = timecodes[i][2]*1000
             syncLayer[i].name = timecodes[i][3]
         end
     end

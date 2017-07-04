@@ -9,7 +9,7 @@ M.URL          = YourHost.."/LibraryParent/"
 --
 M.epsodes = {
     {{#body}}
-        {{product}}  ={name = "{{product}}", dir = "assets/images/p{{page}}", numOfPages = {{numOfPages}}, info = "p{{info}}"},
+        {{product}}  ={name = "{{product}}", dir = "{{product}}", numOfPages = {{numOfPages}}, info = "p{{info}}"},
     {{/body}}
 }
 
@@ -54,7 +54,7 @@ end
 
 M.getPageInfo = function (epsode)
     local pNum = M.epsodes[epsode].info
-    if string.len(pNum) > 0 then
+    if string.len(pNum) > 1 then
         pNum = pNum:sub(2)
         return _K.appName.."views.page0"..pNum.."Scene"
     else

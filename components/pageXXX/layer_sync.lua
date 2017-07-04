@@ -65,7 +65,7 @@ function _M:localPos(UI)
   {{/isTmplt}}
 
   {{#deviceH}}
-    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, _K.systemDir, speakW, speakH);
+    layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, speakW, speakH);
   {{/deviceH}}
   {{^deviceH}}
     layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, 30, 30 );

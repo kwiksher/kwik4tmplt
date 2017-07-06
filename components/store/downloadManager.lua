@@ -12,6 +12,7 @@ local downloadQueue
 --
 local URL       = model.URL
 local filename = "/assets.zip"
+local backgroundImg = "bg.png"
 --
 local function zipListener( event, deferred , selectedPurchase)
     if ( event.isError ) then
@@ -160,10 +161,10 @@ M.setButtonImage = function (button, epsode)
         end
     end
     --
-    print(URL..epsode.."/bg.png")
+    print(URL..epsode.."/"..backgroundImg)
     --
     network.download(
-        URL..epsode.."/bg.png",
+        URL..epsode.."/"..backgroundImg,
         "GET",
         buttonImageListener,
         params,

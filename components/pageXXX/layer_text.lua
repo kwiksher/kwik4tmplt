@@ -21,7 +21,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 local eloH = {{eloH}}/4
 local eloV = {{eloV}}/4
 local epadV ={{epadV}}/4
-local elFontSize = {{elFontSize}}
+local elFontSize = {{elFontSize}}/4
 {{/ultimate}}
 {{^ultimate}}
 local imageWidth = {{elW}}

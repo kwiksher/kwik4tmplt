@@ -201,9 +201,10 @@ function M.new()
             time = 400,
             params = {}
         }
-        local page = model.getPageInfo(epsode)
+        local page = "views.page02Scene" -- INFO
         if page then
             print(page)
+            model.currentEpsode = {name=epsode}
             composer.showOverlay(page, options)
         end
         return true
@@ -244,48 +245,65 @@ function M.new()
     end
 
     --
-    function UI:create()
+    function UI:create(_epsode)
         local layer = self.layer
         local overlay = self.overlay
         print("ui create")
-        for k, epsode in pairs( model.epsodes) do
-            -- print(epsode.name)
-            local button = layer[epsode.name.."Icon"]
-            if button then
-                button.selectedPurchase = epsode.name
-                --If the user has purchased the epsode before, change the button
-                local purchaseBtn = copyDisplayObject(layer.purchaseBtn, button)
-                purchaseBtn.alpha = 0
-                purchaseBtn.selectedPurchase = epsode.name
-                self.sceneGroup:insert(purchaseBtn)
-                button.purchaseBtn = purchaseBtn
-                print(purchaseBtn)
-                if model.URL then
-                    local downloadBtn = copyDisplayObject(layer.downloadBtn, button)
-                    downloadBtn.alpha = 0
-                    downloadBtn.selectedPurchase = epsode.name
-                    self.sceneGroup:insert(downloadBtn)
-                    button.downloadBtn = downloadBtn
+        function setButton(layer, button, epsode)
+            button.selectedPurchase = epsode.name
+            --If the user has purchased the epsode before, change the button
+            local purchaseBtn = copyDisplayObject(layer.purchaseBtn, button)
+            purchaseBtn.alpha = 0
+            purchaseBtn.selectedPurchase = epsode.name
+            self.sceneGroup:insert(purchaseBtn)
+            button.purchaseBtn = purchaseBtn
+            print(purchaseBtn)
+            if model.URL then
+                local downloadBtn = copyDisplayObject(layer.downloadBtn, button)
+                downloadBtn.alpha = 0
+                downloadBtn.selectedPurchase = epsode.name
+                self.sceneGroup:insert(downloadBtn)
+                button.downloadBtn = downloadBtn
 
-                    local savingTxt = copyDisplayObject(layer.savingTxt, button)
-                    savingTxt.alpha = 0
-                    self.sceneGroup:insert(savingTxt)
-                    button.savingTxt = savingTxt
+                local savingTxt = copyDisplayObject(layer.savingTxt, button)
+                savingTxt.alpha = 0
+                self.sceneGroup:insert(savingTxt)
+                button.savingTxt = savingTxt
+            end
+            local savedBtn = copyDisplayObject(layer.savedBtn, button)
+            savedBtn.alpha = 0
+            savedBtn.selectedPurchase = epsode.name
+            self.sceneGroup:insert(savedBtn)
+            button.savedBtn = savedBtn
+
+            self:addEventListener(button, epsode)
+            --
+            self.downloadGroup[epsode.name] = button
+            --
+            -- button image
+            --
+            downloadManager.setButtonImage(button, epsode.name)
+        end
+        if _epsode then -- infoPage
+            if layer["bookXXIcon"] then
+                setButton(layer, layer["bookXXIcon"], _epsode)
+                if layer.hideOverlayBtn then
+                    layer.hideOverlayBtn:addEventListener("tap", function ()
+                        composer.hideOverlay("fade", 400 )
+                        end)
                 end
-                local savedBtn = copyDisplayObject(layer.savedBtn, button)
-                savedBtn.alpha = 0
-                savedBtn.selectedPurchase = epsode.name
-                self.sceneGroup:insert(savedBtn)
-                button.savedBtn = savedBtn
-
-                self:addEventListener(button, epsode)
-                --
-                self.downloadGroup[epsode.name] = button
-                --
-                -- button image
-                --
-                downloadManager.setButtonImage(button, epsode.name)
-             end
+                if layer.infoTxt then
+                    layer.infoTxt.text = model.epsodes[_epsode.name].info
+                end
+            end
+        else -- TOC
+            for k, epsode in pairs( model.epsodes) do
+                -- print(epsode.name)
+                local button = layer[epsode.name.."Icon"]
+                if button then
+                    setButton(layer, button, epsode)
+                end
+            end
         end
         --
         if layer.restoreBtn then
@@ -299,7 +317,6 @@ function M.new()
                     IAP.restorePurchases(event)
                 end)
         end
-
     end
     --
     function UI:refresh()
@@ -350,7 +367,7 @@ function M.new()
             else
                 buyText.text="saving"
                 Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = epsode})
-    		end
+            end
         else
             --Otherwise add a tap listener to the button that unlocks the epsode
             button:addEventListener("tap", IAP.buyEpsode)
@@ -361,25 +378,25 @@ function M.new()
     end
 
     function UI:createRestoreButton()
-    		--Draw "restore" button
-    	--Create button background
-    	local restoreBackground = display.newRect(_W/2, _H/2+100, 180, 50)
-    	restoreBackground.stroke = { 0.5, 0.5, 0.5 }
-    	restoreBackground.strokeWidth = 2
-    	--Create "buy IAP" text object
-    	local restoreText = display.newText("Restore purchases", restoreBackground.x, restoreBackground.y, native.systemFont, 18)
-    	restoreText:setFillColor(0,0,0)
-    	--Add event listener
-    	restoreText:addEventListener("tap",
+            --Draw "restore" button
+        --Create button background
+        local restoreBackground = display.newRect(_W/2, _H/2+100, 180, 50)
+        restoreBackground.stroke = { 0.5, 0.5, 0.5 }
+        restoreBackground.strokeWidth = 2
+        --Create "buy IAP" text object
+        local restoreText = display.newText("Restore purchases", restoreBackground.x, restoreBackground.y, native.systemFont, 18)
+        restoreText:setFillColor(0,0,0)
+        --Add event listener
+        restoreText:addEventListener("tap",
             function(event)
                 self.downloadGroup[model.epsode02]:removeEventListener("tap", self.gotoScene)
                 self.downloadGroup[model.epsode03]:removeEventListener("tap", self.gotoScene)
                 IAP.restorePurchases(event)
             end)
-    	local group = display.newGroup()
-    	group:insert(restoreBackground)
-    	group:insert(restoreText)
-    	self.sceneGroup:insert(group)
+        local group = display.newGroup()
+        group:insert(restoreBackground)
+        group:insert(restoreText)
+        self.sceneGroup:insert(group)
     end
 --]]
 

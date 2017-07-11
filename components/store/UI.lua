@@ -4,9 +4,9 @@ local composer        = require("composer")
 local IAP             = require("components.store.IAP")
 local downloadManager = require("components.store.downloadManager")
 local model           = require("components.store.model")
-local _K       = require("Application")
-local json   = require("json")
-local master = require("model")
+local _K              = require("Application")
+local json            = require("json")
+local master          = require("model")
 
 --
 local useBookShelf = true -- Bookshelf Template version
@@ -16,25 +16,25 @@ M.currentPage          = 1
 M.numPages             = 1 -- referneced from page_swipe.lua
 --
 local function getPageNum(num)
+    if master.isEmbedded then return num end
     local pageName = currentBookModel[num].alias
-    print (pageName)
     for i=1, #master do
         if master[i].alias == pageName then
             return i
         end
     end
-    return 1
+    return num
 end
 --
 local function readPageJson(epsode)
     local jsonFile = function(filename )
        local path = system.pathForFile(filename, system.ApplicationSupportDirectory)
-       print(path)
+       --print(path)
        local contents
        local file = io.open( path, "r" )
        if file then
           contents = file:read("*a")
-          print (contents)
+          --print (contents)
           io.close(file)
           file = nil
        end
@@ -42,9 +42,9 @@ local function readPageJson(epsode)
     end
     currentBook = epsode
     currentBookModel =  json.decode( jsonFile(epsode.."/model.json") )
-    for k, v in pairs(currentBookModel) do
-        for l, m in pairs(v) do print(l, m) end
-    end
+    -- for k, v in pairs(currentBookModel) do
+    --     for l, m in pairs(v) do print(l, m) end
+    -- end
     M.numPages = #currentBookModel
 end
 --
@@ -62,6 +62,10 @@ _K.getModel = function(layerName, imagePath)
 end
 --
 M.gotoNextScene = function()
+    if master.isEmbedded then
+        print("Warning From Kwik, KwikShelf Embedded not suppport gotoNextScene in component.store.UI")
+        return
+    end
     local prevAlias = getPageNum(M.currentPage)
     local nextAlias = getPageNum(M.currentPage+1)
     M.currentPage = M.currentPage + 1
@@ -76,6 +80,10 @@ M.gotoNextScene = function()
 end
 --
 M.gotoPreviousScene = function()
+    if master.isEmbedded then
+        print("Warning From Kwik, KwikShelf Embedded not suppport gotoPreviousScene in component.store.UI")
+        return
+    end
     local prevAlias = getPageNum(M.currentPage)
     local nextAlias = getPageNum(M.currentPage-1)
     M.currentPage = M.currentPage -1
@@ -89,23 +97,34 @@ M.gotoPreviousScene = function()
 end
 
 M.gotoSceneBook = function(epsode, page)
-    print("gotoSceneBook ".. model.getPageName(epsode))
-    M.currentPage = page
-    readPageJson(epsode)
-    _K.imgDir = epsode.."/images/"
-    _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
-    _K.systemDir = system.ApplicationSupportDirectory
-    composer.gotoScene("views.page0"..getPageNum(page).."Scene")
+    if master.isEmbedded then
+        Runtime:dispatchEvent({name="changeThisMug", appName=epsode, page=page})
+    else
+        print("gotoSceneBook ".. model.getPageName(epsode))
+        M.currentPage = page
+        readPageJson(epsode)
+        _K.imgDir = epsode.."/images/"
+        _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
+        _K.systemDir = system.ApplicationSupportDirectory
+        composer.gotoScene("views.page0"..getPageNum(page).."Scene")
+    end
 end
 
 M.gotoSceneNextBook = function()
     print("gotoSceneNextBook")
-    print("currentbook:"..currentBook)
+    local store_model
+    if master.isEmbedded then
+        currentBook = _G.appName
+        store_model = require("App.TOC.components.store.model")
+    else
+        store_model = model
+        print("currentbook:"..currentBook)
+    end
     local k, v, prev = nil, nil, nil
 
     while true do
         prev = k
-        k, v = next(model.epsodes, k)
+        k, v = next(store_model.epsodes, k)
         print(k, v.name)
         if k==nil or currentBook == v.name then
             if k==nil then
@@ -115,20 +134,32 @@ M.gotoSceneNextBook = function()
         end
     end
     if prev then
-        M.gotoSceneBook(model.epsodes[prev].name, 1)
+        if master.isEmbedded then
+            Runtime:dispatchEvent({name="changeThisMug", appName=store_model.epsodes[prev].name})
+        else
+            M.gotoSceneBook(store_model.epsodes[prev].name, 1)
+        end
     end
 end
 
 M.gotoScenePreviousBook = function()
     print("gotoScenePreviousBook")
+    local store_model
+    if master.isEmbedded then
+        currentBook = _G.appName
+        store_model = require("App.TOC.components.store.model")
+    else
+        store_model = model
+        print("currentbook:"..currentBook)
+    end
     local k, v, prev = nil, nil, nil
 
     while true do
-     k, v = next(model.epsodes, k)
+     k, v = next(store_model.epsodes, k)
         print(k, v.name)
         if k==nil or currentBook == v.name then
             if k~=nil then
-                k, v = next(model.epsodes, k)
+                k, v = next(store_model.epsodes, k)
                 print(k)
             end
             break
@@ -136,7 +167,11 @@ M.gotoScenePreviousBook = function()
     end
     if k then
         print(v.name)
-        M.gotoSceneBook(v.name, 1)
+        if master.isEmbedded then
+            Runtime:dispatchEvent({name="changeThisMug", appName=v.name})
+        else
+            M.gotoSceneBook(v.name, 1)
+        end
     end
 end
 
@@ -179,7 +214,9 @@ function M.new()
     function UI.gotoScene(event)
         local epsode =  event.target.selectedPurchase
         print("UI.gotoScene ".. epsode)
-        if useBookShelf then
+        if master.isEmbedded then
+            Runtime:dispatchEvent({name="changeThisMug", appName=epsode})
+        elseif useBookShelf then
             readPageJson(epsode)
             _K.imgDir = epsode.."/images/"
             _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
@@ -204,6 +241,7 @@ function M.new()
         local page = "views.page02Scene" -- INFO
         if page then
             print(page)
+            package.loaded[page] = require("plugin.KwikShelf."..page)
             model.currentEpsode = {name=epsode}
             composer.showOverlay(page, options)
         end
@@ -237,7 +275,11 @@ function M.new()
             print(epsode.name.."(not purchased)")
             --Otherwise add a tap listener to the button that unlocks the epsode
             button.purchaseBtn.alpha = 1
-            button.purchaseBtn:addEventListener("tap", IAP.buyEpsode)
+            button.purchaseBtn:addEventListener("tap", function(e)
+                print("puchaseBtn", self)
+                IAP.buyEpsode(e)
+                return true
+                end)
             if self.overlay then
                 button:addEventListener("tap", self.showOverlay)
             end
@@ -248,7 +290,7 @@ function M.new()
     function UI:create(_epsode)
         local layer = self.layer
         local overlay = self.overlay
-        print("ui create")
+        print("--- ui create ---")
         function setButton(layer, button, epsode)
             button.selectedPurchase = epsode.name
             --If the user has purchased the epsode before, change the button
@@ -278,6 +320,7 @@ function M.new()
 
             self:addEventListener(button, epsode)
             --
+            print("---- SetButton --- ", self, button)
             self.downloadGroup[epsode.name] = button
             --
             -- button image
@@ -319,11 +362,26 @@ function M.new()
         end
     end
     --
-    function UI:refresh()
-        print("-------- refresh ---------")
+    function UI:destroy()
         for k, epsode in pairs( model.epsodes) do
             local button = self.layer[epsode.name.."Icon"]
             if button then
+                button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
+                button:removeEventListener("tap", self.showOverlay)
+                button.savedBtn:removeEventListener("tap", self.gotoScene)
+                button:removeEventListener("tap", self.gotoScene)
+             end
+        end
+
+    end
+    --
+    function UI:refresh()
+        UI.cmd:init(self)
+        for k, epsode in pairs( model.epsodes) do
+            local button = self.layer[epsode.name.."Icon"]
+            if button then
+                print("-------- refresh ---------", self,  button)
+                self.downloadGroup[epsode.name] = button
                 button.purchaseBtn.alpha      = 0
                 if model.URL then
                     button.downloadBtn.alpha      = 0

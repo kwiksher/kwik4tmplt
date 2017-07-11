@@ -8,6 +8,7 @@ local function startThisMug()
 	local function bootstrap()
 		display.setStatusBar(display.HiddenStatusBar)
 		_K.appName     = "{{appName}}"
+		_K.appDir      = "{{appName}}"
 		{{#use.expDir}}
 		_K.imgDir      = "assets/images/"
 		_K.spriteDir   = "assets/sprites/"
@@ -39,7 +40,7 @@ local function startThisMug()
 		_K.lang        ="{{use.lang}}"
 		-- _K.stage       = display.getCurrentStage()
 		system.activate("multitouch")
-		_K.appInstance = _K:new()
+		_K.appInstance = _K:new(_K.appDir)
 		_K.randomAction  = {}
 		_K.randomAnim  = {}
 		_K.kwikDir      = "{{kwikDir}}"

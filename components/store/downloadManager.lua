@@ -1,7 +1,7 @@
 local M = {}
 --
 local zip = require( "plugin.zip" )
-local spinner = require("components.store.spinner").new("download server")
+local spinner = require("extlib.spinner").new("download server")
 local queue = require("extlib.queue")
 local model = require("components.store.model")
 --
@@ -74,15 +74,23 @@ local function _startDownload(selectedPurchase)
     local fh, reason = io.open( path, "r" )
     if fh then
         io.close( fh )
-        local options = {
-            zipFile = selectedPurchase..".zip",
-            zipBaseDir = system.TemporaryDirectory,
-            -- dstBaseDir = system.DocumentsDirectory,
-            dstBaseDir = system.ApplicationSupportDirectory,
-            listener = function(event) zipListener(event, deferred, selectedPurchase) end,
-        }
-        spinner:show()
-        zip.uncompress(options)
+        if M.hasDownloaded(selectedPurchase) then
+            local epsode = selectedPurchase
+            timer.performWithDelay(50, function()
+                onDownloadComplete(epsode)
+                deferred:resolve()
+                end )
+        else
+            local options = {
+                zipFile = selectedPurchase..".zip",
+                zipBaseDir = system.TemporaryDirectory,
+                -- dstBaseDir = system.DocumentsDirectory,
+                dstBaseDir = system.ApplicationSupportDirectory,
+                listener = function(event) zipListener(event, deferred, selectedPurchase) end,
+            }
+            spinner:show()
+            zip.uncompress(options)
+        end
     else
         local url = URL ..selectedPurchase..filename
         print("---------------------")
@@ -142,13 +150,27 @@ function M:startDownload(epsode)
 end
 
 --
-M.setButtonImage = function (button, epsode)
+M.setButtonImage = function (_button, epsode)
     local params = {}
+    local button = _button
     params.progress = true
     --
     local function buttonImageListener( event )
         if ( event.isError ) then
             print( "Network error - download failed: ", event.response )
+            local path = system.pathForFile( button.name..".png", system.TemporaryDirectory)
+            local fhd = io.open( path )
+            -- Determine if file exists
+            if fhd then
+                button.fill = {
+                    type = "image",
+                    filename = button.name..".png",
+                    baseDir = system.TemporaryDirectory
+                }
+               fhd:close()
+            else
+                print( "File does not exist!" )
+            end
         elseif ( event.phase == "began" ) then
             print( "Progress Phase: began" )
         elseif ( event.phase == "ended" ) then

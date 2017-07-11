@@ -6,9 +6,9 @@ local _M = {}
 local _K = require("Application")
 local composer = require("composer")
 local Navigation = require("extlib.kNavi")
-local ui = require("components.store.UI")
 --
 function _M:autoPlay(curPage)
+  local ui = require("components.store.UI")
   ui.currentPage = curPage
     if nil~= composer.getScene(_K.appName.."views.page0"..(curPage+1).."Scene" ) then
     	composer.removeScene(_K.appName.. "views.page0"..(curPage+1).."Scene"  , true)
@@ -32,6 +32,7 @@ function _M:reloadPage(canvas)
 end
 --
 function _M:gotoPage(pnum, ptrans, delay)
+  local ui = require("components.store.UI")
   ui.currentPage = pnum-1
   local myClosure_switch= function()
       if nil~= composer.getScene(_K.appName.."views.page0"..pnum.."Scene") then

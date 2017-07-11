@@ -6,8 +6,10 @@ local model           = require("components.store.model")
 
 function M.new ()
     local CMD = {}
+    print("commands.new", CMD)
     --
     CMD.downloadGroup = nil
+    CMD.buttons = {}
     --
     local purchaseAlert = function()
         native.showAlert("Info", model.purchaseAlertMessage, {"Okay"})
@@ -19,9 +21,11 @@ function M.new ()
     end
     --
     local download
-     --
-    local function onDownloadComplete(selectedPurchase)
-        local button = CMD.downloadGroup[selectedPurchase]
+     --)
+
+    function CMD.onDownloadComplete(selectedPurchase)
+       local button = CMD.downloadGroup[selectedPurchase]
+        print("CMD.onDownloadComplete",  CMD)
         -- button.text.text=selectedPurchase.."(saved)"
         if button then
             if model.URL then
@@ -35,14 +39,14 @@ function M.new ()
             end
             button:addEventListener("tap",
                 CMD.gotoScene)
+            table.insert(CMD.buttons, button)
         end
     end
 
     -- it will be called from the purchaseListener and the restoreListener functions
-    local function onPurchaseComplete(event)
+    function CMD.onPurchaseComplete(event)
         local selectedPurchase = event.product
         local button = CMD.downloadGroup[selectedPurchase]
-        print("onPurchaseComplete -- "..selectedPurchase)
         print(button.purchaseBtn)
         --
         if button then
@@ -55,7 +59,7 @@ function M.new ()
                     button.savingTxt.alpha = 1
                     downloadManager:startDownload(event.product)
                 else
-                   onDownloadComplete(event.product)
+                   self.onDownloadComplete(event.product)
                 end
             elseif (event.actionType == "restore") then
                 -- restore
@@ -74,7 +78,7 @@ function M.new ()
                         button.downloadBtn:addEventListener("tap", button.downloadFunc)
                     end
                 else
-                    onDownloadComplete(event.product)
+                    self.onDownloadComplete(event.product)
                 end
             end
         end
@@ -87,10 +91,12 @@ function M.new ()
 
     function CMD:init(UI)
         self.downloadGroup = UI.downloadGroup
+        print("CMD:init ", UI)
+        UI.cmd = self
         self.gotoScene     = UI.gotoScene
     	IAP:init(model.catalogue, restoreAlert, purchaseAlert)
-    	downloadManager:init(onDownloadComplete, onDownloadError)
-        Runtime:addEventListener("command:purchaseCompleted", onPurchaseComplete)
+    	downloadManager:init(self.onDownloadComplete, onDownloadError)
+        Runtime:addEventListener("command:purchaseCompleted", self.onPurchaseComplete)
 
     end
     -- Called when the scene's view does not exist:
@@ -100,8 +106,12 @@ function M.new ()
     end
 
     function CMD:dispose()
-        print("CMD:dispose")
-        Runtime:removeEventListener("command:purchaseCompleted", onPurchaseComplete)
+        print("------------------CMD:dispose")
+        Runtime:removeEventListener("command:purchaseCompleted", self.onPurchaseComplete)
+        for i=1, #CMD.buttons do
+            CMD.buttons[i]:removeEventListener("tap", CMD.gotoScene)
+        end
+        CMD.buttons = {}
     end
 
     return CMD

@@ -14,8 +14,9 @@ function _Class:new(super)
 		self:mapMediator("{{view}}", "{{custom}}{{mediator}}")
 		{{/mediators}}
 		--
+        _K = require("Application")
 		{{#commands}}
-		self:mapCommand("{{event}}", "{{custom}}{{command}}")
+		self:mapCommand("{{event}}", _K.appDir.."{{custom}}{{command}}")
 		{{/commands}}
 		--
 	end

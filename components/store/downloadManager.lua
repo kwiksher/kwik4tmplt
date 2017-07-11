@@ -12,7 +12,7 @@ local downloadQueue
 --
 local URL       = model.URL
 local filename = "/assets.zip"
-local backgroundImg = "bg.png"
+local backgroundImg = model.backgroundImg
 --
 local function zipListener( event, deferred , selectedPurchase)
     if ( event.isError ) then

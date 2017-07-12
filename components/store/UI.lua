@@ -101,12 +101,20 @@ M.gotoSceneBook = function(epsode, page)
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode, page=page})
     else
         print("gotoSceneBook ".. model.getPageName(epsode))
-        M.currentPage = page
-        readPageJson(epsode)
-        _K.imgDir = epsode.."/images/"
-        _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
-        _K.systemDir = system.ApplicationSupportDirectory
-        composer.gotoScene("views.page0"..getPageNum(page).."Scene")
+        if epsode == "TOC" then
+            M.currentPage = 1
+            _K.systemDir = system.ResourceDirectory
+            _K.imgDir = "assets/images/"
+            _K.audioDir = "assets/audios/"
+            composer.gotoScene("views.page01Scene")
+        else
+            M.currentPage = page
+            readPageJson(epsode)
+            _K.imgDir = epsode.."/images/"
+            _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
+            _K.systemDir = system.ApplicationSupportDirectory
+            composer.gotoScene("views.page0"..getPageNum(page).."Scene")
+        end
     end
 end
 
@@ -134,10 +142,20 @@ M.gotoSceneNextBook = function()
         end
     end
     if prev then
+        local epname = store_model.epsodes[prev].name
+        if not downloadManager.hasDownloaded(epname) then
+            epname ="TOC"
+        end
         if master.isEmbedded then
-            Runtime:dispatchEvent({name="changeThisMug", appName=store_model.epsodes[prev].name})
+            Runtime:dispatchEvent({name="changeThisMug", appName=epname})
         else
-            M.gotoSceneBook(store_model.epsodes[prev].name, 1)
+            M.gotoSceneBook(epname, 1)
+        end
+    else
+        if master.isEmbedded then
+            Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
+        else
+            M.gotoSceneBook("TOC", 1)
         end
     end
 end
@@ -166,11 +184,20 @@ M.gotoScenePreviousBook = function()
         end
     end
     if k then
-        print(v.name)
+        local epname = v.name
+        if not downloadManager.hasDownloaded(epname) then
+            epname ="TOC"
+        end
         if master.isEmbedded then
-            Runtime:dispatchEvent({name="changeThisMug", appName=v.name})
+            Runtime:dispatchEvent({name="changeThisMug", appName=epname})
         else
-            M.gotoSceneBook(v.name, 1)
+            M.gotoSceneBook(epname, 1)
+        end
+    else
+        if master.isEmbedded then
+            Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
+        else
+            M.gotoSceneBook("TOC", 1)
         end
     end
 end
@@ -240,8 +267,9 @@ function M.new()
         }
         local page = "views.page02Scene" -- INFO
         if page then
-            print(page)
-            package.loaded[page] = require("plugin.KwikShelf."..page)
+            if master.isEmbedded then
+                package.loaded[page] = require("plugin.KwikShelf."..page)
+            end
             model.currentEpsode = {name=epsode}
             composer.showOverlay(page, options)
         end

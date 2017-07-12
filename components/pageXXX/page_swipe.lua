@@ -56,6 +56,7 @@ function _M:allListeners(UI)
           if wPage == 0 then
             _K.systemDir = system.ResourceDirectory
             _K.imgDir = "assets/images/"
+            _K.audioDir = "assets/audios/"
             composer.gotoScene("views.page01Scene")
           else
             ui.gotoPreviousScene()

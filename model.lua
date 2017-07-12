@@ -10,7 +10,7 @@ local pages = {
 },
 {{/pages}}
 }
-]]--
+--]]
 
 local pages = {isDownloadable = false, pageNum={{pageNum}} }
 

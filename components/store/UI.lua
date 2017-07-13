@@ -6,10 +6,12 @@ local downloadManager = require("components.store.downloadManager")
 local model           = require("components.store.model")
 local _K              = require("Application")
 local json            = require("json")
-local master          = require("model")
-
+local master          = require("model") -- case tmplt, it returns the pages table. case embedded, it is overwritten as {isEmbedded = true} at the runtime by Kwikshelf plugin
 --
-local useBookShelf = true -- Bookshelf Template version
+local type={pages = 0, embedded = 1, tmplt=2}
+local bookShelfType = 1 -- please set one of them
+---------------------------------------------------
+--
 local currentBookModel = nil
 local currentBook    = nil
 M.currentPage          = 1
@@ -60,7 +62,97 @@ _K.getModel = function(layerName, imagePath)
    end
     return _x, _y, layer.width/4, layer.height/4, path
 end
+----------------------------------
+local setSystemDir = {}
 --
+setSystemDir[type.pages] = function (epname)
+    if epname then
+        local isDL = downloadManager.hasDownloaded(epname)
+        if isDL then
+            _K.systemDir = system.ApplicationSupportDirectory
+            _K.imgDir = "assets/images/"
+            _K.audioDir = "assets/audios/"
+        end
+        return isDL
+    else
+        _K.systemDir = system.ResourceDirectory
+        _K.imgDir = "assets/images/"
+        _K.audioDir = "assets/audios/"
+    end
+    return true
+end
+---
+-- setSystemDir[type.embedded] = function (isDL)
+--     if  isDL then
+--         _K.systemDir = system.ApplicationSupportDirectory
+--         _K.imgDir = currentBook.."/images/"
+--         _K.audioDir = currentBook.."/audios/"
+--     else
+--         _K.systemDir = system.ResourceDirectory
+--         _K.imgDir = "assets/images/"
+--         _K.audioDir = "assets/audios/"
+--     end
+-- end
+---
+setSystemDir[type.tmplt] = function (isDL)
+    if isDL then
+        _K.systemDir = system.ApplicationSupportDirectory
+        _K.imgDir = currentBook.."/images/"
+        _K.audioDir = currentBook.."/audios/p"..M.currentPage.."_"
+    else
+        _K.systemDir = system.ResourceDirectory
+        _K.imgDir = "assets/images/"
+        _K.audioDir = "assets/audios/"
+    end
+end
+--
+M.setDir = function(pageNum)
+    if bookShelfType == type.pages then
+        if #model.epsodes == 0 or model.URL == nil then return true end
+        --
+        local epname = model.isIAP(pageNum)
+        local isDL   = setSystemDir[type.pages](epname)
+        if not isDL then
+            local infoPage = model.epsodes[epname].info:sub(2)
+            if string.len(infoPage) > 0 then
+                _K.systemDir = system.ResourceDirectory
+                _K.imgDir = "assets/images/"
+                _K.audioDir = "assets/audios/"
+                composer.gotoScene("views.page0"..model.epsodes[epname].info:sub(2).."Scene")
+            else
+                local infoString = "The page is not found."
+                local function onComplete( event )
+                    if "clicked" == event.action then
+                     end
+                end
+                local alert = native.showAlert("Restricted Content", infoString,{ "OK" }, onComplete)
+            end
+        end
+        return isDL
+    end
+    return true
+end
+--
+-- only type.pages
+--
+M.gotoPage = function(pageNum)
+   if setSystemDir[type.pages](model.isIAP(pageNum)) then
+    composer.gotoScene("views.page0"..pageNum.."Scene")
+    end
+end
+-- only type.pages
+M.gotoNextPage = function(curPage)
+    if setSystemDir[type.pages](model.isIAP(curPage+1)) then
+        composer.gotoScene("views.page0"..(curPage+1).."Scene")
+    end
+end
+-- only type.pages
+M.gotoPreviousPage = function(curPage)
+    if setSystemDir[type.pages](model.isIAP(curPage-1)) then
+        composer.gotoScene("views.page0"..(curPage-1).."Scene")
+    end
+end
+-- type.embedded and type.tmplt
 M.gotoNextScene = function()
     if master.isEmbedded then
         print("Warning From Kwik, KwikShelf Embedded not suppport gotoNextScene in component.store.UI")
@@ -69,16 +161,15 @@ M.gotoNextScene = function()
     local prevAlias = getPageNum(M.currentPage)
     local nextAlias = getPageNum(M.currentPage+1)
     M.currentPage = M.currentPage + 1
-    _K.systemDir = system.ApplicationSupportDirectory
-    _K.audioDir = currentBook.."/audios/p"..M.currentPage.."_"
-
     if prevAlias == nextAlias then
+        setSystemDir[type.tmplt](false)
         composer.gotoScene("extlib.page_reload")
     else
+        setSystemDir[type.tmplt](true)
         composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene")
     end
 end
---
+-- type.embedded and type.tmplt
 M.gotoPreviousScene = function()
     if master.isEmbedded then
         print("Warning From Kwik, KwikShelf Embedded not suppport gotoPreviousScene in component.store.UI")
@@ -87,15 +178,15 @@ M.gotoPreviousScene = function()
     local prevAlias = getPageNum(M.currentPage)
     local nextAlias = getPageNum(M.currentPage-1)
     M.currentPage = M.currentPage -1
-    _K.systemDir = system.ApplicationSupportDirectory
-    _K.audioDir = currentBook.."/audios/p"..M.currentPage.."_"
     if prevAlias == nextAlias then
+        setSystemDir[type.tmplt](false)
         composer.gotoScene("extlib.page_reload")
     else
+        setSystemDir[type.tmplt](true)
         composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene")
     end
 end
-
+-- type.embedded and type.tmplt
 M.gotoSceneBook = function(epsode, page)
     if master.isEmbedded then
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode, page=page})
@@ -103,21 +194,17 @@ M.gotoSceneBook = function(epsode, page)
         print("gotoSceneBook ".. model.getPageName(epsode))
         if epsode == "TOC" then
             M.currentPage = 1
-            _K.systemDir = system.ResourceDirectory
-            _K.imgDir = "assets/images/"
-            _K.audioDir = "assets/audios/"
+            setSystemDir[type.tmplt](false)
             composer.gotoScene("views.page01Scene")
         else
             M.currentPage = page
             readPageJson(epsode)
-            _K.imgDir = epsode.."/images/"
-            _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
-            _K.systemDir = system.ApplicationSupportDirectory
+            setSystemDir[type.tmplt](true)
             composer.gotoScene("views.page0"..getPageNum(page).."Scene")
         end
     end
 end
-
+-- type.embedded and type.tmplt
 M.gotoSceneNextBook = function()
     print("gotoSceneNextBook")
     local store_model
@@ -159,7 +246,7 @@ M.gotoSceneNextBook = function()
         end
     end
 end
-
+-- type.embedded and type.tmplt
 M.gotoScenePreviousBook = function()
     print("gotoScenePreviousBook")
     local store_model
@@ -201,7 +288,7 @@ M.gotoScenePreviousBook = function()
         end
     end
 end
-
+-- type.tmplt
 local audacityFile = function(filename )
   local timecodes = {}
   local path = system.pathForFile(currentBook.."/audios/"..filename, system.ApplicationSupportDirectory)
@@ -218,7 +305,7 @@ local audacityFile = function(filename )
    end
    return timecodes
 end
-
+-- type.tmplt
 M.replaceTimeCodes = function(syncLayer, filename)
     local timecodes = audacityFile(filename)
     print(filename)
@@ -243,15 +330,14 @@ function M.new()
         print("UI.gotoScene ".. epsode)
         if master.isEmbedded then
             Runtime:dispatchEvent({name="changeThisMug", appName=epsode})
-        elseif useBookShelf then
+        elseif bookShelfType == type.tmplt then
             readPageJson(epsode)
-            _K.imgDir = epsode.."/images/"
-            _K.audioDir = epsode.."/audios/p"..M.currentPage.."_"
-            _K.systemDir = system.ApplicationSupportDirectory
+            setSystemDir[type.tmplt](true)
             M.currentPage = 1
             print("views.page0"..getPageNum(1).."Scene")
             composer.gotoScene("views.page0"..getPageNum(1).."Scene")
         else
+            setSystemDir[type.pages](epsode)
             composer.gotoScene(model.getPageName(epsode) , {effect=model.gotoSceneEffect})
         end
         return true
@@ -266,6 +352,9 @@ function M.new()
             params = {}
         }
         local page = "views.page02Scene" -- INFO
+        if  bookShelfType == type.tmplt then
+             page = model.getPageInfo(epsode)
+        end
         if page then
             if master.isEmbedded then
                 package.loaded[page] = require("plugin.KwikShelf."..page)

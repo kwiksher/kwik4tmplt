@@ -99,7 +99,10 @@ function _M:allListeners(UI)
           options = { effect = "fromLeft"}
        end
        if tonumber(wPage) ~= tonumber(curPage) then
-          _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+          local ui           = require("components.store.UI")
+          if ui.setDir(wPage) then
+              _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+          end
          end
       end
     end

@@ -168,7 +168,7 @@ Navigation.new = function( obj, params )
 	print("current page: "..cpage.." clicked: "..event.target.id)
 
 		if cpage  ~= event.target.id then -- director.getCurrBookPageNum() ~= event.target.id then
-			local togo = _K.appName.."views.page0"..event.target.id.."Scene"
+			local togo = "views.page0"..event.target.id.."Scene"
 
 			--variable to control disposal on runtime events for multipliers
 			_K.disposeMultiplier = 1
@@ -206,9 +206,9 @@ Navigation.new = function( obj, params )
     local menuTab = {}
     for i=1, table.maxn( pageList ) do
     	-- print(pageList[i][1])
-			local path = system.pathForFile( pageList[i][1], system.ResourceDirectory )
+			local path = system.pathForFile( pageList[i][1],  _K.systemDir )
 			if path then
-	 		   menuTab[i] = display.newImage( pageList[i][1])
+	 		   menuTab[i] = display.newImage( pageList[i][1], _K.systemDir)
 			else
 			   print(pageList[i][1].. " does not exist!" )
 	 		   menuTab[i] = display.newRect(0,0,100,100 )

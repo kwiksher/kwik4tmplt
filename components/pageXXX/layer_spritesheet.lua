@@ -52,7 +52,7 @@ local oriAlpha = {{oriAlpha}}
             sheetContentHeight = {{sheetHeight}}
         }
     {{/arq}}
-    _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", {{myLName}}_options )
+    _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", _K.systemDir, {{myLName}}_options )
 {{/newImageSheet}}
 --
 {{#frameCount}}

@@ -2,6 +2,8 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
+local _K              = require("Application")
+
 local _M = {}
 --
 {{#ultimate}}
@@ -41,7 +43,7 @@ function _M:allListeners(UI)
     layer.{{myLName}} = native.newWebView( UI.tSearch["{{bn}}"][4], UI.tSearch["{{bn}}"][5], UI.tSearch["{{bn}}"][2], UI.tSearch["{{bn}}"][3] )
     {{#elLocal}}
       -- Loads web pages
-      layer.{{myLName}}:request( UI.tSearch["{{bn}}"][6], system.ResourceDirectory )
+      layer.{{myLName}}:request( UI.tSearch["{{bn}}"][6], _K.systemDir )
     {{/elLocal}}
     {{^elLocal}}
       -- Loads web pages

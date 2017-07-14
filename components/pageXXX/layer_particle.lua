@@ -31,7 +31,7 @@ function _M:localPos (UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   {{^multLayers}}
-    layer.{{myLName}} = particleDesigner.newEmitter( _K.particleDir.. "{{elURL}}" )
+    layer.{{myLName}} = particleDesigner.newEmitter( _K.particleDir.. "{{elURL}}", _K.systemDir)
     {{^elPlay}}
         layer.{{myLName}}:pause();
     {{/elPlay}}

@@ -4,9 +4,10 @@
 --
 local _Class = {}
 local json   = require("json")
+local _K              = require("Application")
 --
 -- Variable saving function
-local path = system.pathForFile( "kwkVars.json", system.DocumentsDirectory )
+local path = system.pathForFile( _K.appName.."kwkVars.json", system.DocumentsDirectory )
 local file = io.open( path, "r" )
 if file then
     io.close(file)
@@ -30,10 +31,10 @@ local jsonFile = function(filename )
    return contents
 end
 --
-local kwkVar = json.decode( jsonFile("kwkVars.json") )
+local kwkVar = json.decode( jsonFile(_K.appName.."kwkVars.json") )
 -- Check for saved variables
 function _Class:kwkVarCheck(variable)
-   kwkVar = json.decode( jsonFile("kwkVars.json") )
+   kwkVar = json.decode( jsonFile(_K.appName.."kwkVars.json") )
    local found = nil
    if kwkVar ~= nil then
       for i = 1, #kwkVar do
@@ -46,7 +47,7 @@ function _Class:kwkVarCheck(variable)
 end
 --save all permanent variables
 function _Class:zeroesKwikVars() --restart the file to save variable content
-	local path = system.pathForFile( "kwkVars.json", system.DocumentsDirectory )
+	local path = system.pathForFile(_K.appName.. "kwkVars.json", system.DocumentsDirectory )
 	local contents
 	local file = io.open( path, "w+b" )
 	if file then
@@ -63,7 +64,7 @@ function _Class:saveKwikVars(toSave) --toSave is a table with contents
 	local jsonString
 
 	--checks if current file is empty or not
-	local path = system.pathForFile( "kwkVars.json", system.DocumentsDirectory )
+	local path = system.pathForFile(_K.appName.. "kwkVars.json", system.DocumentsDirectory )
 	local contents
 	--check if file exists
 	local file = io.open( path, "r" )
@@ -104,7 +105,7 @@ function _Class:saveKwikVars(toSave) --toSave is a table with contents
 		--re-creation scenario
 		_Class.zeroesKwikVars()
 	end
-	kwkVar = json.decode( jsonFile( "kwkVars.json" ) )
+	kwkVar = json.decode( jsonFile(_K.appName.. "kwkVars.json" ) )
 end
 
 return _Class

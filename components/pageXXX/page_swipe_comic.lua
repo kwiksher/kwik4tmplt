@@ -50,7 +50,7 @@ function _M:allListeners(UI)
         -- sceneGroup:insert(next)
         -- next:toFront()
         local scene ={view=display.newGroup()}
-        local pageNextUI    = require(_K.appName.."components.page0"..nextPage.."UI").new(scene)
+        local pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
         pageNextUI:create()
         next = scene.view
         sceneGroup:insert(next)
@@ -64,7 +64,7 @@ function _M:allListeners(UI)
         -- sceneGroup:insert(prev)
         -- prev:toFront()
         local scene ={view=display.newGroup()}
-        local pagePrevUI    = require(_K.appName.."components.page0"..prevPage.."UI").new(scene)
+        local pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
         pagePrevUI:create()
         prev = scene.view
         sceneGroup:insert(prev)
@@ -109,7 +109,7 @@ function _M:allListeners(UI)
           options = { effect = "fromLeft"}
        end
        if tonumber(wPage) ~= tonumber(curPage) then
-            _K.appInstance:showView(_K.appName.."views.page0"..wPage.."Scene", options)
+            _K.appInstance:showView("views.page0"..wPage.."Scene", options)
          end
      end
 

@@ -16,7 +16,7 @@ function _Command:new()
 			-- Bookmark function
 	    if bookmark  then
 	        _K.kBookmark = 1
-					local path = system.pathForFile( "book.txt", system.DocumentsDirectory )
+					local path = system.pathForFile(_K.appName.. "book.txt", system.DocumentsDirectory )
 					local file = io.open( path, "r" )
 					if file then
 					   _K.goPage = file:read("*l")
@@ -30,7 +30,7 @@ function _Command:new()
 					end
 	    else
 	        _K.kBookmark = 0
-					local path = system.pathForFile( "book.txt", system.DocumentsDirectory )
+					local path = system.pathForFile(_K.appName.. "book.txt", system.DocumentsDirectory )
 					local file = io.open( path, "r" )
 					if file then
 					   io.close(file)

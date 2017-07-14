@@ -37,7 +37,7 @@ function Application:new(appDir)
     application.appDir          = appDir
 	--
 	function application:init()
-		self.context = AppContext:new(Application.appName)
+		self.context = AppContext:new()
 		self.context:init()
 		--
     Runtime:dispatchEvent({name="app.variables", event="init"})

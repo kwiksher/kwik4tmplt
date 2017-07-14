@@ -10,10 +10,10 @@ local Navigation = require("extlib.kNavi")
 function _M:autoPlay(curPage)
   local ui = require("components.store.UI")
   ui.currentPage = curPage
-    if nil~= composer.getScene(_K.appName.."views.page0"..(curPage+1).."Scene" ) then
-    	composer.removeScene(_K.appName.. "views.page0"..(curPage+1).."Scene"  , true)
+    if nil~= composer.getScene("views.page0"..(curPage+1).."Scene" ) then
+    	composer.removeScene( "views.page0"..(curPage+1).."Scene"  , true)
     end
-   composer.gotoScene(_K.appName.. "views.page0"..(curPage+1).."Scene"  )
+   composer.gotoScene( "views.page0"..(curPage+1).."Scene"  )
 end
 --
 function _M:showHideNavigation()
@@ -35,13 +35,13 @@ function _M:gotoPage(pnum, ptrans, delay)
   local ui = require("components.store.UI")
   ui.currentPage = pnum-1
   local myClosure_switch= function()
-      if nil~= composer.getScene(_K.appName.."views.page0"..pnum.."Scene") then
-      	composer.removeScene(_K.appName.."views.page0"..pnum.."Scene", true)
+      if nil~= composer.getScene("views.page0"..pnum.."Scene") then
+      	composer.removeScene("views.page0"..pnum.."Scene", true)
       end
 		if ptrans and ptrans ~="" then
-       composer.gotoScene(_K.appName.. "views.page0"..pnum.."Scene", { effect = ptrans} )
+       composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans} )
 		else
-       composer.gotoScene(_K.appName.. "views.page0"..pnum.."Scene" )
+       composer.gotoScene( "views.page0"..pnum.."Scene" )
 		end
   end
   _K.timerStash.pageAction = timer.performWithDelay(delay, myClosure_switch, 1)

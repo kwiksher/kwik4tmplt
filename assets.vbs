@@ -1,6 +1,8 @@
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 
-zipfile = ".\assets.zip"
+objFSO.CopyFile "..\copyright.txt", "..\build4\assets\copyright.txt"
+
+zipfile = "..\assets.zip"
 
 objFSO.OpenTextFile(zipfile, 2, True).Write "PK" & Chr(5) & Chr(6) _
   & String(18, Chr(0))
@@ -8,11 +10,11 @@ objFSO.OpenTextFile(zipfile, 2, True).Write "PK" & Chr(5) & Chr(6) _
 Set ShellApp = CreateObject("Shell.Application")
 Set zip = ShellApp.NameSpace(objFSO.GetAbsolutePathName(zipfile))
 
-zip.CopyHere objFSO.GetAbsolutePathName(".\build4\model.json")
+zip.CopyHere objFSO.GetAbsolutePathName("..\build4\model.json")
 WScript.Sleep 500
-zip.CopyHere objFSO.GetAbsolutePathName(".\build4\assets\audios")
+zip.CopyHere objFSO.GetAbsolutePathName("..\build4\assets\audios")
 WScript.Sleep 1000
-zip.CopyHere objFSO.GetAbsolutePathName(".\build4\assets\images")
+zip.CopyHere objFSO.GetAbsolutePathName("..\build4\assets\images")
 WScript.Sleep 5000
 
 'dim folder

@@ -9,7 +9,7 @@ local json            = require("json")
 local master          = require("model") -- case tmplt, it returns the pages table. case embedded, it is overwritten as {isEmbedded = true} at the runtime by Kwikshelf plugin
 --
 local type={pages = 0, embedded = 1, tmplt=2}
-local bookShelfType = 1 -- please set one of them
+local bookShelfType = model.bookShelfType -- please set one of them
 ---------------------------------------------------
 --
 local currentBookModel = nil

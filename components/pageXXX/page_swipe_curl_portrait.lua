@@ -9,6 +9,7 @@ local page_curl  = require("extlib.page_curl")
 -- local _BackgroundLayerName = "background.jpg"
 local flip_audio = false
 local laserSound
+local laserChannel
 if flip_audio then
   laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav", _K.systemDir)
 end
@@ -179,8 +180,7 @@ end
 --
 function _M:toDispose()
   if laserSound then
-    audio.dispose( laserSound )
-    laserSound = nil
+    audio.stop( laserChannel )
   end
 end
 --

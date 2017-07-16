@@ -11,6 +11,7 @@ local page_curl  = require("extlib.page_curl")
 -----------------------------------------------
 local flip_audio = false
 local laserSound
+local laserChannel
 --
 if flip_audio then
   laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav", _K.systemDir)
@@ -124,7 +125,7 @@ function _M:allListeners(UI)
       if curl.edge_x < .45 then
         passed_threshold = true
         if flip_audio then
-          local laserChannel = audio.play( laserSound )
+          laserChannel = audio.play( laserSound )
         end
         transition.to(curl, {edge_x=0, time=100, transition=easing.inOutSine, onComplete = GoNext})
       end
@@ -132,7 +133,7 @@ function _M:allListeners(UI)
       if curl.edge_x > .55 and not passed_threshold then
         passed_threshold = true
         if flip_audio then
-          local laserChannel = audio.play( laserSound )
+          laserChannel = audio.play( laserSound )
         end
         transition.to(curl, {edge_x=1, time=100, transition=easing.inOutSine, onComplete = GoNext})
       end
@@ -179,7 +180,7 @@ function _M:allListeners(UI)
       back.edge_x, back.edge_y =  0.9, 0.5
       Grabbed({target=back, dir="right"})
       if flip_audio then
-          local laserChannel = audio.play( laserSound )
+          laserChannel = audio.play( laserSound )
        end
       transition.to(back, {edge_x=0, time=1000, transition=easing.inOutSine, onComplete = act_autoPlay})
     end
@@ -189,8 +190,7 @@ end
 --
 function _M:toDispose()
   if laserSound then
-    audio.dispose( laserSound )
-    laserSound = nil
+    audio.stop( laserChannel )
   end
 end
 --

@@ -40,9 +40,12 @@ end
 function _M:toDispose(UI)
 	if _K.allAudios.cam_shutter then
 		audio.stop(31)
+	end
+end
+--
+function _M:toDestroy(UI)
 		audio.dispose(_K.allAudios.cam_shutter)
 		_K.allAudios.cam_shutter = nil
-	end
 end
 --
 function _M:willHide(UI)

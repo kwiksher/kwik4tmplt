@@ -109,6 +109,12 @@ function _M:toDispose(UI)
     if audio.isChannelActive ( {{achannel}} ) then
       audio.stop({{achannel}})
     end
+  {{/akeep}}
+--/audio
+end
+--
+function _M:toDestroy(UI)
+{{^akeep}}
     {{#areadme}}
       if ({{atype}}.kwk_readMeFile ~= 0) then
         audio.dispose({{atype}}.kwk_readMeFile)
@@ -130,8 +136,7 @@ function _M:toDispose(UI)
         {{/allowRepeat}}
     {{/areadme}}
   {{/akeep}}
---/audio
-end
+--end
 
 -- function audioDisposal(UI)
   -- audio

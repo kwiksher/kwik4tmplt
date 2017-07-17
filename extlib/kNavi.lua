@@ -206,9 +206,9 @@ Navigation.new = function( obj, params )
     local menuTab = {}
     for i=1, table.maxn( pageList ) do
     	-- print(pageList[i][1])
-			local path = system.pathForFile( pageList[i][1], system.ResourceDirectory )
+			local path = system.pathForFile( pageList[i][1],  _K.systemDir )
 			if path then
-	 		   menuTab[i] = display.newImage( pageList[i][1])
+	 		   menuTab[i] = display.newImage( pageList[i][1], _K.systemDir)
 			else
 			   print(pageList[i][1].. " does not exist!" )
 	 		   menuTab[i] = display.newRect(0,0,100,100 )

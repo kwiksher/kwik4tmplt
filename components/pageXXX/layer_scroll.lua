@@ -97,6 +97,7 @@ function _M:allListeners(UI)
     height       = _height,
     scrollWidth  = _scrollWidth,
     scrollHeight = _scrollHeight,
+    baseDir      = _K.systemDir,
   {{#gHide}}
      hideScrollBar = true,
   {{/gHide}}
@@ -164,6 +165,7 @@ function _M:allListeners(UI)
     height       = _height,
     scrollWidth  = _scrollWidth,
     scrollHeight = _scrollHeight,
+    baseDir      = _K.systemDir,
   {{#gHide}}
      hideScrollBar = true,
   {{/gHide}}

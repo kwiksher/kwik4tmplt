@@ -1,7 +1,7 @@
 local M = {}
 --
 local zip = require( "plugin.zip" )
-local spinner = require("components.store.spinner").new("download server")
+local spinner = require("extlib.spinner").new("download server")
 local queue = require("extlib.queue")
 local model = require("components.store.model")
 --
@@ -12,6 +12,7 @@ local downloadQueue
 --
 local URL       = model.URL
 local filename = "/assets.zip"
+local backgroundImg = model.backgroundImg
 --
 local function zipListener( event, deferred , selectedPurchase)
     if ( event.isError ) then
@@ -22,9 +23,9 @@ local function zipListener( event, deferred , selectedPurchase)
         print( "event.name:" .. event.name )
         print( "event.type:" .. event.type )
         if ( event.response and type(event.response) == "table" ) then
-            for i = 1, #event.response do
-                print( event.response[i] )
-            end
+            -- for i = 1, #event.response do
+            --     print( event.response[i] )
+            -- end
             -- local selectedPurchase = event.response[1]
             -- selectedPurchase = selectedPurchase:sub(1, selectedPurchase:len()-1)
             print("zipListener:"..selectedPurchase)
@@ -69,21 +70,32 @@ end
 local function _startDownload(selectedPurchase)
     local deferred = Deferred()
     local path = system.pathForFile(selectedPurchase..".zip", system.TemporaryDirectory)
+    print(path)
     local fh, reason = io.open( path, "r" )
     if fh then
         io.close( fh )
-        local options = {
-            zipFile = selectedPurchase..".zip",
-            zipBaseDir = system.TemporaryDirectory,
-            -- dstBaseDir = system.DocumentsDirectory,
-            dstBaseDir = system.ApplicationSupportDirectory,
-            listener = function(event) zipListener(event, deferred, selectedPurchase) end,
-        }
-        spinner:show()
-        zip.uncompress(options)
+        if M.hasDownloaded(selectedPurchase) then
+            local epsode = selectedPurchase
+            timer.performWithDelay(50, function()
+                onDownloadComplete(epsode)
+                deferred:resolve()
+                end )
+        else
+            local options = {
+                zipFile = selectedPurchase..".zip",
+                zipBaseDir = system.TemporaryDirectory,
+                -- dstBaseDir = system.DocumentsDirectory,
+                dstBaseDir = system.ApplicationSupportDirectory,
+                listener = function(event) zipListener(event, deferred, selectedPurchase) end,
+            }
+            spinner:show()
+            zip.uncompress(options)
+        end
     else
         local url = URL ..selectedPurchase..filename
+        print("---------------------")
         print(url)
+        print("---------------------")
         local params    = {}
         params.progress = true
         network.download( url, "GET", function(event)
@@ -135,6 +147,52 @@ function M:startDownload(epsode)
             :always(function()
                 end)
     end
+end
+
+--
+M.setButtonImage = function (_button, epsode)
+    local params = {}
+    local button = _button
+    params.progress = true
+    --
+    local function buttonImageListener( event )
+        if ( event.isError ) then
+            print( "Network error - download failed: ", event.response )
+            local path = system.pathForFile( button.name..".png", system.TemporaryDirectory)
+            local fhd = io.open( path )
+            -- Determine if file exists
+            if fhd then
+                button.fill = {
+                    type = "image",
+                    filename = button.name..".png",
+                    baseDir = system.TemporaryDirectory
+                }
+               fhd:close()
+            else
+                print( "File does not exist!" )
+            end
+        elseif ( event.phase == "began" ) then
+            print( "Progress Phase: began" )
+        elseif ( event.phase == "ended" ) then
+            print( "Displaying response image file with " ..button.name ..".png")
+            button.fill = {
+                type = "image",
+                filename = button.name..".png",
+                baseDir = system.TemporaryDirectory
+            }
+        end
+    end
+    --
+    print(URL..epsode.."/"..backgroundImg)
+    --
+    network.download(
+        URL..epsode.."/"..backgroundImg,
+        "GET",
+        buttonImageListener,
+        params,
+        button.name..".png",
+        system.TemporaryDirectory
+    )
 end
 
 return M

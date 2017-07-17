@@ -63,7 +63,7 @@ function _M:allListeners(UI)
     layer.{{myLName}}.alpha = UI.tSearch["{{bn}}"][7]
     layer.{{myLName}}.oldAlpha = UI.tSearch["{{bn}}"][7]
     {{#elLocal}}
-      layer.{{myLName}}:load( _K.videoDir..UI.tSearch["{{bn}}"][6], system.ResourceDirectory )
+      layer.{{myLName}}:load( _K.videoDir..UI.tSearch["{{bn}}"][6], _K.systemDir )
     {{/elLocal}}
     {{^elLocal}}
       layer.{{myLName}}:load( UI.tSearch["{{bn}}"][6], media.RemoteSource )

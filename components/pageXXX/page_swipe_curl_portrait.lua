@@ -9,8 +9,9 @@ local page_curl  = require("extlib.page_curl")
 -- local _BackgroundLayerName = "background.jpg"
 local flip_audio = false
 local laserSound
+local laserChannel
 if flip_audio then
-  laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav")
+  laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav", _K.systemDir)
 end
 --
 {{#ultimate}}
@@ -43,7 +44,7 @@ function _M:allListeners(UI)
     curl.alpha = 1
     if event.dir == "right" then
       if next == nil and curPage~=nextPage then
-        -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, _K.systemDir,bgW, bgH )
         -- next.x = pgX
         -- next.y = pgY
         -- sceneGroup:insert(next)
@@ -57,7 +58,7 @@ function _M:allListeners(UI)
       end
     else
       if prev == nil and curPage ~= prevPage then
-        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, bgW, bgH )
+        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, _K.systemDir,bgW, bgH )
         -- prev.x = pgX
         -- prev.y = pgY
         -- sceneGroup:insert(prev)
@@ -179,8 +180,7 @@ end
 --
 function _M:toDispose()
   if laserSound then
-    audio.dispose( laserSound )
-    laserSound = nil
+    audio.stop( laserChannel )
   end
 end
 --

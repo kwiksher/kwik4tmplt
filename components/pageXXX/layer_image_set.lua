@@ -129,7 +129,7 @@ end
 --
 --[[
 local info     = require ("assets.sprites.".."page{{docNum}}")
-local sheet    = graphics.newImageSheet ( _K.spriteDir.."page{{docNum}}.png", info:getSheet() )
+local sheet    = graphics.newImageSheet ( _K.spriteDir.."page{{docNum}}.png", _K.systemDir, info:getSheet() )
 local sequence = {start=1, count= #info:getSheet().frames }
 function newImageRect(name, width, height)
   local image
@@ -139,7 +139,7 @@ function newImageRect(name, width, height)
       image:setFrame (info:getFrameIndex (name))
       image.width, image.height = width, height
       else
-       image = display.newImageRect(_K.imgDir..name.."."..{{fExt}}, width, height)
+       image = display.newImageRect(_K.imgDir..name.."."..{{fExt}}, _K.systemDir, width, height)
       end
    return image
 end
@@ -171,11 +171,11 @@ function _M:localPos(UI)
     -- print(target.width/4, target.height/4)
   end
   layer.{{mySet}} = display.newGroup()
-  local sheet = graphics.newImageSheet(_K.imgDir..imagePath, options )
+  local sheet = graphics.newImageSheet(_K.imgDir..imagePath, _K.systemDir, options )
   for i=1, #layerSet_{{mySet}} do
     local target = layerSet_{{mySet}}[i]
     local frame = options.frames[i]
-    local frame1 = display.newImageRect( sheet, i, frame.width, frame.height )
+    local frame1 = display.newImageRect( sheet, i, frame.width, _K.systemDir, frame.height )
     frame1.x, frame1.y = _K.ultimatePosition(target.x, target.y)
     frame1.name = target.myLName
     frame1.oriX              = frame1.x
@@ -214,7 +214,7 @@ function _M:localPos(UI)
 {{/mySet}}
 {{^mySet}}
   {{^multLayers}}
-    layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, imageWidth, imageHeight)
+    layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
     -- layer.{{myLName}} = newImageRect({{bn}}, imageWidth, imageHeight )
     layer.{{myLName}}.imagePath = imagePath
     layer.{{myLName}}.x = mX
@@ -251,7 +251,7 @@ function _M:localPos(UI)
     {{/layerAsBg}}
     --
     {{#infinity}}
-      layer.{{myLName}}_2 = display.newImageRect( _K.imgDir..imagePath, imageWidth, imageHeight)
+      layer.{{myLName}}_2 = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
         -- layer.{{myLName}}_2 = newImageRect({{bn}}, imageWidth, imageHeight )
       layer.{{myLName}}_2.blendMode = "{{bmode}}"
 

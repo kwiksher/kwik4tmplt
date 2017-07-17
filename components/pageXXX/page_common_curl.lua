@@ -32,7 +32,7 @@ function _M:allListeners(UI)
     end
       -- Check for previous bookmarks
      if (tonumber(_K.kBookmark) == 1) then
-        local path = system.pathForFile( "book.txt", system.DocumentsDirectory )
+        local path = system.pathForFile(_K.appName.. "book.txt", system.DocumentsDirectory )
         local file = io.open( path, "w+" )
         file:write ( curPage.."\n1" )
         io.close( file )

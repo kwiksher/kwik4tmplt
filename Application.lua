@@ -29,11 +29,12 @@ Application.repositionAnchor = function( object, newAnchorX, newAnchorY )
 end
 
 --
-function Application:new()
+function Application:new(appDir)
 	local application = display.newGroup()
 	application.classType       = "Application"
 	application.currentView     = nil
 	application.currentViewName = nil
+    application.appDir          = appDir
 	--
 	function application:init()
 		self.context = AppContext:new()
@@ -99,9 +100,13 @@ function Application:new()
 			-- return true
 		end
 		self.currentViewName = name
-		composer.gotoScene(name, {params = params})
-	end
-	--
+        composer.gotoScene(self.appDir..name, {params = params})
+    end
+    --
+    function application:destroy()
+        self.context:destroy()
+    end
+    	--
 	function application:trigger(url, params)
 		self.currentViewName = self.context.Router[url]
 		if self.currentViewName == nil then

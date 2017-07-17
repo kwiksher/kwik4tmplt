@@ -28,7 +28,12 @@ _Class.new = function(scene)
       UI.tSearch   = nil
     {{/language}}
     UI.numPages = {{numPages}}   -- number of pages in the project
-
+    {{#lockPage}}
+    --K.systemDir = system.ApplicationSupportDirectory
+    {{/}}
+    {{^lockPage}}
+    --_K.systemDir = system.ResourceDirectory
+    {{/lockPage}}
   function UI:setLanguge()
       {{#language}}
       if _K.lang == "" then _K.lang = "en" end
@@ -48,6 +53,11 @@ _Class.new = function(scene)
   end
   --
   function UI:create()
+   {{#isTmplt}}
+    _K.systemDir = system.ResourceDirectory
+    _K.imgDir = "assets/images/"
+    _K.audioDir = "assets/audios/"
+   {{/isTmplt}}
     self:_create("common",  const.page_common, {{custom}})
     self:setVars()
     self:setLanguge()

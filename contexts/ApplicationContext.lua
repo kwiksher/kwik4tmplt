@@ -4,14 +4,14 @@
 --
 local Context = require "extlib.robotlegs.Context"
 local _Class = {}
-{{#pages}}
-_Class.page0{{pageNum}}Context = require("{{custom}}contexts.page0{{pageNum}}Context")
-{{/pages}}
 
 --
 function _Class:new()
 	local context = Context:new()
 	context.Router = {}
+{{#pages}}
+	_Class.page0{{pageNum}}Context = require("{{custom}}contexts.page0{{pageNum}}Context")
+{{/pages}}
 	--
 	function context:init()
 		------------------------------------------------------------

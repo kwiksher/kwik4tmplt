@@ -8,7 +8,7 @@ _K.screenshot = _M
 ---------------------
 function _M:localPos(UI)
 	if _K.allAudios.cam_shutter == nil then
-	  _K.allAudios.cam_shutter = audio.loadSound(_K.audioDir.."shutter.mp3" )
+	  _K.allAudios.cam_shutter = audio.loadSound(_K.audioDir.."shutter.mp3", _K.systemDir )
 	end
 end
 --
@@ -40,9 +40,12 @@ end
 function _M:toDispose(UI)
 	if _K.allAudios.cam_shutter then
 		audio.stop(31)
+	end
+end
+--
+function _M:toDestroy(UI)
 		audio.dispose(_K.allAudios.cam_shutter)
 		_K.allAudios.cam_shutter = nil
-	end
 end
 --
 function _M:willHide(UI)

@@ -16,7 +16,7 @@ function particleDesigner.newEmitter( fileName, baseDir )
 
    local emitterParams = json.decode( fileData )
    emitterParams.textureFileName = _K.particleDir .. emitterParams.textureFileName
-   local emitter = display.newEmitter( emitterParams )
+   local emitter = display.newEmitter( emitterParams , baseDir)
 
    return emitter
 end

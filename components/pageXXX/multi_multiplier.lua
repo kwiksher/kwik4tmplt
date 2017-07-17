@@ -24,7 +24,7 @@ function _M:allListeners()
       physics.setGravity(math.random(tSearch["{{bn}}"][9]*-1, tSearch["{{bn}}"[9])/10, 4);
     {{/elwind}}
 
-    layer.{{myLName}} = display.newImageRect( _K.imgDir.. tSearch["{{bn}}"][1], tSearch["{{bn}}"][2], tSearch["{{bn}}"][3] );
+    layer.{{myLName}} = display.newImageRect( _K.imgDir.. tSearch["{{bn}}"][1], _K.systemDir, tSearch["{{bn}}"][2], tSearch["{{bn}}"][3] );
 
     {{#elDistance}}
          layer.{{myLName}}[counter].x = math.random(tSearch["{{bn}}"][10], tSearch["{{bn}}"][11])

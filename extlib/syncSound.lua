@@ -90,9 +90,9 @@ local function displayText(params)
 		if (name=="" or name==nil) then
 		else
 		  if (lang=="") then
-		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3")
+		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3", _K.systemDir)
 		  else
-		  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3")
+		  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3", _K.systemDir)
 		  end
 		  words[i].id = i
 		  --  calculate the duration of each word

@@ -245,11 +245,11 @@ function _M:allListeners(UI)
   ---------------
   -- create panels out of layer.background and layerSet_panels
   ---------------
-  local sheet = graphics.newImageSheet(_K.imgDir..layer.background.imagePath, options )
+  local sheet = graphics.newImageSheet(_K.imgDir..layer.background.imagePath, _K.systemDir, options )
   for i=1, #panels do
     local target             = panels[i]
     local frame              = options.frames[i]
-    local frame1             = display.newImageRect( sheet, i, frame.width, frame.height )
+    local frame1             = display.newImageRect( sheet, i, _K.systemDir, frame.width, fram e.height )
     frame1.x, frame1.y       = _K.ultimatePosition(target.x, target.y)
     frame1.oriX              = frame1.x
     frame1.oriY              = frame1.y

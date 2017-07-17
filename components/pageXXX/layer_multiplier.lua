@@ -62,7 +62,7 @@ function _M:allListeners(UI)
       --
     {{/elwind}}
     --
-    layer.{{myLName}}[counter] = display.newImageRect( _K.imgDir.. imagePath, imageWidth, imageHeight );
+    layer.{{myLName}}[counter] = display.newImageRect( _K.imgDir.. imagePath, _K.systemDir, imageWidth, imageHeight );
     --
     {{#elDistance}}
       layer.{{myLName}}[counter].x = math.random(elStartX,elEndX)

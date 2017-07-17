@@ -51,8 +51,8 @@ function _M:localPos(UI)
     {{#compositeLight}}
       local compositePaint = {
           type="composite",
-          paint1={ type="image", filename=_K.imgDir.."{{paint1}}" },
-          paint2={ type="image", filename=_K.imgDir.."{{paint2}}" }
+          paint1={ type="image", filename=_K.imgDir.."{{paint1}}", baseDir=_K.systemDir },
+          paint2={ type="image", filename=_K.imgDir.."{{paint2}}", baseDir=_K.systemDir }
       }
       object.fill = compositePaint
       object.fill.effect = "{{effect}}"
@@ -62,8 +62,8 @@ function _M:localPos(UI)
       {{#composite}}
         local compositePaint = {
             type="composite",
-            paint1={ type="image", filename=_K.imgDir.."{{paint1}}" },
-            paint2={ type="image", filename=_K.imgDir.."{{paint2}}" }
+            paint1={ type="image", filename=_K.imgDir.."{{paint1}}", baseDir=_K.systemDir },
+            paint2={ type="image", filename=_K.imgDir.."{{paint2}}"m baseDir=_K.systemDir }
         }
         object.fill = compositePaint
         object.fill.effect = "{{effect}}"
@@ -97,8 +97,8 @@ function _M:allListeners(UI)
   {{#compositeLight}}
     local compositePaint = {
         type="composite",
-        paint1={ type="image", filename=_K.imgDir.."{{paint1}}" },
-        paint2={ type="image", filename=_K.imgDir.."{{paint2}}" }
+        paint1={ type="image", filename=_K.imgDir.."{{paint1}}", baseDir=_K.systemDir },
+        paint2={ type="image", filename=_K.imgDir.."{{paint2}}", baseDir=_K.systemDir }
     }
     object.fill = compositePaint
     object.fill.effect = "{{effect}}"
@@ -112,8 +112,8 @@ function _M:allListeners(UI)
     {{#composite}}
       local compositePaint = {
           type="composite",
-          paint1={ type="image", filename=_K.imgDir.."{{paint1}}" },
-          paint2={ type="image", filename=_K.imgDir.."{{paint2}}" }
+          paint1={ type="image", filename=_K.imgDir.."{{paint1}}", baseDir=_K.systemDir },
+          paint2={ type="image", filename=_K.imgDir.."{{paint2}}", baseDir=_K.systemDir }
       }
       object.fill = compositePaint
       object.fill.effect = "{{effect}}"

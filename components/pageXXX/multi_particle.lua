@@ -22,7 +22,7 @@ function _M:allListeners(UI)
   local layer       = UI.layer
   if UI.tSearch["{{bn}}"] == nil then return end
   {{#multLayers}}
-    layer.{{myLName}} = particleDesigner.newEmitter( UI.tSearch["{{bn}}"][6] )
+    layer.{{myLName}} = particleDesigner.newEmitter( UI.tSearch["{{bn}}"][6] , _K.systemDir)
     {{^elPlay}}
         layer.{{myLName}}:pause();
     {{/elPlay}}

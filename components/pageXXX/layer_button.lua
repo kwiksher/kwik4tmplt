@@ -58,6 +58,9 @@ local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
 {{/bn}}
 
 function _M:localVars (UI)
+   {{#isTmplt}}
+   mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath)
+   {{/isTmplt}}
   self:buttonVars(UI)
 end
 --
@@ -115,7 +118,7 @@ function _M:buttonLocal(UI)
 {{#bn}}
   {{^multLayers}}
     {{^Press}}
-      layer.{{myLName}} = display.newImageRect( _K.imgDir.. imagePath, imageWidth, imageHeight )
+      layer.{{myLName}} = display.newImageRect( _K.imgDir.. imagePath, _K.systemDir, imageWidth, imageHeight )
       layer.{{myLName}}.x        = mX
       layer.{{myLName}}.y        = mY
       layer.{{myLName}}.alpha    = oriAlpha
@@ -157,7 +160,8 @@ function _M:buttonLocal(UI)
            overFile    = _K.imgDir.."{{bOver}}.{{rExt}}",
            width       = imageWidth,
            height      = imageHeight,
-           onRelease   = on{{myLName}}Event
+           onRelease   = on{{myLName}}Event,
+           baseDir     = _K.systemDir
         }
         layer.{{myLName}}.x        = mX
         layer.{{myLName}}.y        = mY

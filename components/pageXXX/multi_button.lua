@@ -52,10 +52,10 @@ function _M:allListeners(UI)
   if UI.tSearch["{{dois}}"] == nil then return end
     {{^Press}}
       {{^kwik}}
-        layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{dois}}"][1],  UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][3] )
+        layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{dois}}"][1], _K.systemDir, UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][3] )
       {{/kwik}}
       {{#kwik}}
-        layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{dois}}"][1], UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][3]  )
+        layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{dois}}"][1], _K.systemDir, UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][3]  )
       {{/kwik}}
       layer.{{myLName}}.x        = UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][4]
       layer.{{myLName}}.y        = UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][5]
@@ -98,8 +98,9 @@ function _M:allListeners(UI)
        defaultFile = _K.imgDir.. UI.tSearch["{{dois}}"][1],
        overFile    = _K.imgDir.. UI.tSearch["{{dois}}"][6],
        width       = UI.tSearch["{{dois}}"][2],
-       height = UI.tSearch["{{dois}}"][3],
-       onRelease   =  on{{myLName}}Event -- UI.tSearch["{{dois}}"][7]
+       height      = UI.tSearch["{{dois}}"][3],
+       onRelease   = on{{myLName}}Event, -- UI.tSearch["{{dois}}"][7
+       baseDir     = _K.systemDir
     }
     layer.{{myLName}}.x        = UI.tSearch["{{dois}}"][4]
     layer.{{myLName}}.y        = UI.tSearch["{{dois}}"][5]

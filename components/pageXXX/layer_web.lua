@@ -2,6 +2,8 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
+local _K              = require("Application")
+
 local _M = {}
 --
 function _M:localVars(UI)
@@ -52,7 +54,7 @@ function _M:allListeners(UI)
 
     {{#elLocal}}
       -- Loads web pages
-      layer.{{myLName}}:request( "{{elURL}}", system.ResourceDirectory )
+      layer.{{myLName}}:request( "{{elURL}}", _K.systemDir )
     {{/elLocal}}
     {{^elLocal}}
       -- Loads web pages

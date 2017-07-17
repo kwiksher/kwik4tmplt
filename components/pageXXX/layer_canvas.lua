@@ -118,13 +118,13 @@ function _M:allListeners(UI)
   {{#autoSave}}
       -- Auto load previous paint in the canvas
       _K.reloadCanvas = 1
-      local path = system.pathForFile("canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory )
+      local path = system.pathForFile(_K.appName.."canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory )
       local fhd = io.open(path)
       if fhd then --file exists
          fhd:close()
          local x,y,w,h,a = layer.{{myLName}}.x, layer.{{myLName}}.y, layer.{{myLName}}.width, layer.{{myLName}}.height, layer.{{myLName}}.alpha
          display.remove(layer.{{myLName}})
-         layer.{{myLName}}_asf = display.newImageRect ("canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory, w, h)
+         layer.{{myLName}}_asf = display.newImageRect (_K.appName.."canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory, w, h)
          layer.{{myLName}}_asf.x = x
          layer.{{myLName}}_asf.y = y
          layer.{{myLName}}_asf.alpha = a
@@ -132,7 +132,7 @@ function _M:allListeners(UI)
          sceneGroup:insert(layer.{{myLName}}_asf)
          sceneGroup:insert(layer.{{myLName}})
         {{#outline}}
-            layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.canvas.imagePath, w, h );
+            layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.canvas.imagePath, _K.systemDir, w, h );
             layer.{{myLName}}.x = x
             layer.{{myLName}}.y = y
             layer.{{myLName}}.alpha = a
@@ -164,11 +164,11 @@ function _M:toDispose(UI)
     local myCaptureImage = display.captureBounds(layer.{{myLName}}.contentBounds)
     myCaptureImage.x     = display.contentWidth * 0.5
     myCaptureImage.y     = display.contentHeight * 0.5
-    display.save(myCaptureImage, "canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory )
+    display.save(myCaptureImage, _K.appName.."canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory )
     myCaptureImage:removeSelf()
     myCaptureImage = nil
   else
-    os.remove(system.pathForFile( "canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory ))
+    os.remove(system.pathForFile( _K.appName.."canvas_p"..UI.curPage..".jpg", system.TemporaryDirectory ))
   end
 end
 --

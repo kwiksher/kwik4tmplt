@@ -3,6 +3,7 @@
 -- Project: {{ProjName}}, published on {{today}}
 --
 local AnimationCommand = {}
+local _K = require("Application")
 local anim = require("components.page0{{page}}.{{myLName}}_{{layerType}}_{{triggerName}}")
 -----------------------------
 -----------------------------

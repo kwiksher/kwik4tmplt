@@ -3,6 +3,7 @@
 -- Project: {{ProjName}}, published on {{today}}
 --
 local ActionCommand = {}
+local _K            = require "Application"
 --
 function ActionCommand:new()
 	local command = {}

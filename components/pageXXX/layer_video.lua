@@ -75,7 +75,7 @@ function _M:allListeners(UI)
     layer.{{myLName}}.alpha = oriAlpha
     layer.{{myLName}}.oldAlpha = oriAlpha
     {{#elLocal}}
-      layer.{{myLName}}:load( _K.videoDir.."{{elURL}}", system.ResourceDirectory )
+      layer.{{myLName}}:load( _K.videoDir.."{{elURL}}", _K.systemDir )
     {{/elLocal}}
     {{^elLocal}}
       layer.{{myLName}}:load( "{{elURL}}", media.RemoteSource )

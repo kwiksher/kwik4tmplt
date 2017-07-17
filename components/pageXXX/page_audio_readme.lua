@@ -14,26 +14,17 @@ function _M:localPos(UI)
 {{#areadme}}
   if {{atype}}.kwk_readMeFile == nil then
     {{#alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" , _K.systemDir)
     {{/alang}}
     {{^alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}", _K.systemDir )
     {{/alang}}
   end
+  local a = audio.getDuration( {{atype}}.kwk_readMeFile );
+  if a > UI.allAudios.kAutoPlay  then
+    UI.allAudios.kAutoPlay = a
+  end
 {{/areadme}}
-  -- #audio
-    {{#areadme}}
-      {{^temSync}}
-        {{#adelay}}
-        {{/adelay}}
-        local a = audio.getDuration( {{atype}}.kwk_readMeFile );
-        if a > UI.allAudios.kAutoPlay  then
-          UI.allAudios.kAutoPlay = a
-        end
-        {{#adelay}}
-        {{/adelay}}
-      {{/temSync}}
-    {{/areadme}}
   --  /audio
 end
 
@@ -67,6 +58,12 @@ function _M:toDispose(UI)
     if audio.isChannelActive ( {{achannel}} ) then
       audio.stop({{achannel}})
     end
+  {{/akeep}}
+--/audio
+end
+--
+function _M:toDestroy(UI)
+  {{^akeep}}
     {{#areadme}}
       if ({{atype}}.kwk_readMeFile ~= 0) then
         audio.dispose({{atype}}.kwk_readMeFile)
@@ -88,19 +85,17 @@ function _M:toDispose(UI)
         {{/allowRepeat}}
     {{/areadme}}
   {{/akeep}}
---/audio
 end
-
 --
 function _M:getAudio(UI)
   --UI.allAudios or _K.allAudios
 {{#areadme}}
   if {{atype}}.kwk_readMeFile == nil then
     {{#alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}", _K.systemDir )
     {{/alang}}
     {{^alang}}
-     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" )
+     {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" , _K.systemDir)
     {{/alang}}
   end
 {{/areadme}}

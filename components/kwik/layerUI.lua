@@ -3,6 +3,7 @@
 -- Project: {{ProjName}}
 --
 local _Class = {}
+local _K = require("Application")
 --
 function _Class:setMod(layer, custom)
   if custom then

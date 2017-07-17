@@ -1,7 +1,7 @@
 local M = {}
 --
-local iap = require("components.store.iap_badger")
-local spinner = require("components.store.spinner").new()
+local iap = require("extlib.iap_badger")
+local spinner = require("extlib.spinner").new()
 --
 --Called when any purchase fails
 local function failedListener()

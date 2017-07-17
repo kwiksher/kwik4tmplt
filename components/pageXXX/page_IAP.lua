@@ -92,6 +92,7 @@ function _M:toDispose(UI)
     UI.layer.hideOverlayBtn:removeEventListener("tap", hideOverlay)
   end
   cmd:dispose()
+  ui:destroy()
 {{/inApp}}
 end
 --

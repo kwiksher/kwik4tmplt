@@ -6,15 +6,19 @@ local _M = {}
 --
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
+-----------------------------------------------
 -- local _BackgroundLayerName = "background.jpg"
+-----------------------------------------------
 local flip_audio = false
 local laserSound
 local laserChannel
-
+--
 if flip_audio then
   laserSound = audio.loadSound(_K.audioDir.."page-flip-02.wav", _K.systemDir)
 end
---
+------------------------------------------------
+local debug = false
+------------------------------------------------
 {{#ultimate}}
 -- local bgW, bgH = 1280/4, 1920/4                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
 local bgW, bgH = display.contentWidth, display.contentHeight
@@ -26,7 +30,7 @@ local bgW, bgH = 1152, 2048
 local pgX, pgY = 768,  1024
 local curlWidth = 400
 {{/ultimate}}
---
+-----------------------------------------------
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
@@ -57,10 +61,11 @@ function _M:allListeners(UI)
         next = scene.view
         sceneGroup:insert(next)
         next:toFront()
+
       end
     else
       if prev == nil and curPage ~= prevPage then
-        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, _K.systemDir, bgW, bgH )
+        -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, _K.systemDir,bgW, bgH )
         -- prev.x = pgX
         -- prev.y = pgY
         -- sceneGroup:insert(prev)
@@ -88,6 +93,8 @@ function _M:allListeners(UI)
       prev = nil
     end
   end
+  --
+  local passed_threshold = false
   --
   local function Moved (event)
     local curl = event.target
@@ -153,7 +160,8 @@ function _M:allListeners(UI)
     end
     timer.performWithDelay( 100, saveWithDelay )
     -- debug mode
-    --[[
+    if debug then
+      ---[[
     local regions = back:GetGrabRegions()
     for _, region in pairs(regions) do
       local rect = display.newRoundedRect(back.parent, region.x, region.y, region.width, region.height, 12)
@@ -161,6 +169,7 @@ function _M:allListeners(UI)
       rect:setStrokeColor(.4, .5, .2)
       rect.strokeWidth = 10
       sceneGroup:insert(rect)
+    end
     end
     --]]
   end
@@ -177,7 +186,7 @@ function _M:allListeners(UI)
       transition.to(back, {edge_x=0, time=1000, transition=easing.inOutSine, onComplete = act_autoPlay})
     end
   end
-  -- layer.{{backLayer}}.alpha = 0
+  -- layer.{{backLayer}}.alpha = 1
 end
 --
 function _M:toDispose()

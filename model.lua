@@ -1,5 +1,5 @@
  -- {{book}}
---[[
+{{#BookTmplt}}
 local pages = {
 {{#pages}}
 {
@@ -10,8 +10,10 @@ local pages = {
 },
 {{/pages}}
 }
---]]
+{{/BookTmplt}}
 
-local pages = {isDownloadable = false, pageNum={{pageNum}} }
+{{#BookEmbedded}}
+local pages = {isDownloadable = {{isDownloadable}}, pageNum={{pageNum}} }
+{{/BookEmbedded}}
 
 return pages

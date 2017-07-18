@@ -42,24 +42,24 @@ function _M:allListeners(UI)
        if event.direction == "left" and _K.kBidi == false then
           wPage = ui.currentPage + 1
           if wPage > ui.numPages then return end
-          ui.gotoNextScene()
+          ui.gotoNextScene({ effect = "fromRight"})
        elseif event.direction == "left" and _K.kBidi == true then
           wPage = ui.currentPage - 1
           if wPage < 0 then return end
-          ui.gotoPreviousScene()
+          ui.gotoPreviousScene({ effect = "fromLeft"})
        elseif event.direction == "right" and _K.kBidi == true then
           wPage = ui.currentPage + 1
           if wPage > numPages then return end
-          ui.gotoNextScene()
+          ui.gotoNextScene({ effect = "fromRight"})
        elseif event.direction == "right" and _K.kBidi == false then
           wPage = ui.currentPage - 1
           if wPage == 0 then
             _K.systemDir = system.ResourceDirectory
             _K.imgDir = "assets/images/"
             _K.audioDir = "assets/audios/"
-            composer.gotoScene("views.page01Scene")
+            composer.gotoScene("views.page01Scene", {params = { effect = "fromLeft"}})
           else
-            ui.gotoPreviousScene()
+            ui.gotoPreviousScene({ effect = "fromLeft"})
           end
        end
       -- if tonumber(wPage) ~= tonumber(curPage) then
@@ -126,7 +126,7 @@ function _M:toDispose(UI)
 end
 --
 function _M:toDestroy(UI)
-  _K.pageSwipe = nil
+  _K.pageSwap = nil
 end
 --
 return _M

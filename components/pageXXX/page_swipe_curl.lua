@@ -19,6 +19,7 @@ end
 ------------------------------------------------
 local debug = false
 ------------------------------------------------
+{{#landscape}}
 {{#ultimate}}
 local bgW, bgH = 1920/4, 1280/4                --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
 local pgX, pgY = _K.ultimatePosition(960, 640) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
@@ -29,6 +30,24 @@ local bgW, bgH = 2048, 1152
 local pgX, pgY = 1024, 768
 local curlWidth = 400
 {{/ultimate}}
+{{/landscape}}
+--
+{{#portrait}}
+{{#ultimate}}
+local bgW, bgH = 1280/4, 1920/4                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
+local pgX, pgY = _K.ultimatePosition(640, 960) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
+local curlWidth = 400/4
+{{/ultimate}}
+{{^ultimate}}
+local bgW, bgH = 1152, 2048
+local pgX, pgY = 768,  1024
+local curlWidth = 400
+{{/ultimate}}
+{{/portrait}}
+
+{{#isTmplt}}
+local ui  = require("components.store.UI")
+{{/isTmplt}}
 -----------------------------------------------
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
@@ -98,6 +117,35 @@ function _M:allListeners(UI)
   local function Moved (event)
     local curl = event.target
     --
+{{#isTmplt}}
+    local function GoNext()
+       local wPage = ui.currentPage
+       if event.dir == "right" and _K.kBidi == false then
+          wPage = ui.currentPage + 1
+          if wPage > ui.numPages then return end
+          ui.gotoNextScene({ effect = "fromRight"})
+       elseif event.dir == "right" and _K.kBidi == true then
+          wPage = ui.currentPage - 1
+          if wPage < 1 then wPage = 1 end
+          ui.gotoPreviousScene({ effect = "fromLeft"})
+       elseif event.dir == "left" and _K.kBidi == true then
+          wPage = ui.currentPage + 1
+          if wPage > ui.numPages then return end
+          ui.gotoNextScene({ effect = "fromRight"})
+       elseif event.dir == "left" and _K.kBidi == false then
+          wPage = ui.currentPage - 1
+          if wPage == 0 then
+            _K.systemDir = system.ResourceDirectory
+            _K.imgDir = "assets/images/"
+            _K.audioDir = "assets/audios/"
+            composer.gotoScene("views.page01Scene", {params = { effect = "fromLeft"}})
+          else
+            ui.gotoPreviousScene({ effect = "fromLeft"})
+          end
+       end
+    end
+{{/isTmplt}}
+{{^isTmplt}}
     local function GoNext()
        if event.dir == "right" and _K.kBidi == false then
           wPage = curPage + 1
@@ -118,9 +166,9 @@ function _M:allListeners(UI)
        end
        if tonumber(wPage) ~= tonumber(curPage) then
             _K.appInstance:showView("views.page0"..wPage.."Scene", options)
-         end
-     end
-
+        end
+    end
+{{/isTmplt}}
     if event.dir == "right" and not passed_threshold then
       if curl.edge_x < .45 then
         passed_threshold = true
@@ -189,12 +237,12 @@ function _M:allListeners(UI)
 end
 --
 function _M:toDispose()
-  if laserSound then
-    audio.stop( laserChannel )
+  if laserSound and laserChannel then
+    audio.stop( laserChannel)
   end
 end
 --
-function _M:destroy()
+function _M:toDestroy(UI)
 end
 --
 return _M

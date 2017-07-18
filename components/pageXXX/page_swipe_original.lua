@@ -81,7 +81,7 @@ function _M:toDispose(UI)
 end
 --
 function _M:toDestroy()
-  _K.pageSwipe = nil
+  _K.pageSwap = nil
 end
 --
 return _M

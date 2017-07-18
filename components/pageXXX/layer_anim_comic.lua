@@ -94,7 +94,7 @@ local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
         mY = endY  + (  layer.height )
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
-		mX = {{elW}} + math.random({{anim.randXStart}}, {{randXEnd}})
+		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
 	{{/randX}}
 	{{#randY}}
 		mY =  {{elH}} + math.random({{randYStart}}, {{randYEnd}})
@@ -155,7 +155,7 @@ local function getPos(layer, _endX, _endY)
       mY = layer.y + endY + layer.height - layer.y
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
-		mX = {{elW}} + math.random({{anim.randXStart}}, {{randXEnd}})
+		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
 	{{/randX}}
 	{{#randY}}
 		mY =  {{elH}} + math.random({{randYStart}}, {{randYEnd}})
@@ -224,6 +224,7 @@ local gtbh = {{gtbh}}
 --
 function _M:buildAnim(UI)
 	local layer = UI.layer
+	local sceneGroup = UI.scene.view
 	-- Wait request for '+gtName+'\r\n';
 	if {{gtLayer}} == nil then return end
 	{{gtLayer}}.xScale = {{gtLayer}}.oriXs
@@ -328,12 +329,12 @@ function _M:buildAnim(UI)
 						{{#rotation}}
 						rotation={{rotation}},
 						{{/rotation}}
-						{{#scaleW}}
+						{{#scalW}}
 						xScale={{scalW}},
-						{{/scaleW}}
-						{{#scaleH}}
+						{{/scalW}}
+						{{#scalH}}
 						yScale={{scalH}},
-						{{/scaleH}}
+						{{/scalH}}
 					},
 					{{/Linear}}
 					{

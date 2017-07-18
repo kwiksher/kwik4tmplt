@@ -11,11 +11,20 @@ M.bookShelfType  = 1 --{pages = 0, embedded = 1, tmplt=2}
 -- M.URL = nil means simple IAP store without network download like Kwik3 IAP
 -- downloadBtn, savingTxt won'T be used. You don't need to create them.
 --
+{{#BookPages}}
+M.epsodes = {
+    {{#body}}
+        {{product}}  ={name = "{{product}}", dir = "assets/images/p{{page}}", numOfPages = {{numOfPages}}, info = "p{{info}}"},
+    {{/body}}
+}
+{{/BookPages}}
+{{^BookPages}}
 M.epsodes = {
     {{#body}}
         {{product}}  ={name = "{{product}}", dir = "{{product}}", numOfPages = {{numOfPages}}, info = "{{info}}"},
     {{/body}}
 }
+{{/BookPages}}
 --
 M.catalogue = {
     products = {

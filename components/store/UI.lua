@@ -135,25 +135,25 @@ end
 --
 -- only type.pages
 --
-M.gotoPage = function(pageNum)
+M.gotoPage = function(pageNum, params)
    if setSystemDir[type.pages](model.isIAP(pageNum)) then
-    composer.gotoScene("views.page0"..pageNum.."Scene")
+    composer.gotoScene("views.page0"..pageNum.."Scene", {params = params})
     end
 end
 -- only type.pages
-M.gotoNextPage = function(curPage)
+M.gotoNextPage = function(curPage, params)
     if setSystemDir[type.pages](model.isIAP(curPage+1)) then
-        composer.gotoScene("views.page0"..(curPage+1).."Scene")
+        composer.gotoScene("views.page0"..(curPage+1).."Scene", {params = params})
     end
 end
 -- only type.pages
-M.gotoPreviousPage = function(curPage)
+M.gotoPreviousPage = function(curPage, params)
     if setSystemDir[type.pages](model.isIAP(curPage-1)) then
-        composer.gotoScene("views.page0"..(curPage-1).."Scene")
+        composer.gotoScene("views.page0"..(curPage-1).."Scene", {params = params})
     end
 end
 -- type.embedded and type.tmplt
-M.gotoNextScene = function()
+M.gotoNextScene = function(params)
     if master.isEmbedded then
         print("Warning From Kwik, KwikShelf Embedded not suppport gotoNextScene in component.store.UI")
         return
@@ -166,11 +166,11 @@ M.gotoNextScene = function()
         composer.gotoScene("extlib.page_reload")
     else
         setSystemDir[type.tmplt](true)
-        composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene")
+        composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene", {params = params})
     end
 end
 -- type.embedded and type.tmplt
-M.gotoPreviousScene = function()
+M.gotoPreviousScene = function(params)
     if master.isEmbedded then
         print("Warning From Kwik, KwikShelf Embedded not suppport gotoPreviousScene in component.store.UI")
         return
@@ -183,11 +183,11 @@ M.gotoPreviousScene = function()
         composer.gotoScene("extlib.page_reload")
     else
         setSystemDir[type.tmplt](true)
-        composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene")
+        composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene", {params = params})
     end
 end
 -- type.embedded and type.tmplt
-M.gotoSceneBook = function(epsode, page)
+M.gotoSceneBook = function(epsode, page, params)
     if master.isEmbedded then
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode, page=page})
     else
@@ -195,12 +195,12 @@ M.gotoSceneBook = function(epsode, page)
         if epsode == "TOC" then
             M.currentPage = 1
             setSystemDir[type.tmplt](false)
-            composer.gotoScene("views.page01Scene")
+            composer.gotoScene("views.page01Scene", {params = params})
         else
             M.currentPage = page
             readPageJson(epsode)
             setSystemDir[type.tmplt](true)
-            composer.gotoScene("views.page0"..getPageNum(page).."Scene")
+            composer.gotoScene("views.page0"..getPageNum(page).."Scene", {params = params})
         end
     end
 end

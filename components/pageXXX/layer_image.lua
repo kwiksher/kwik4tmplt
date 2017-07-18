@@ -5,6 +5,32 @@
 local _M = {}
 --
 local _K = require "Application"
+{{#isComic}}
+{{#mySet}}
+local layerSet_{{mySet}} = {
+  {{#layerSet}}
+    {
+      myLName = "{{myLName}}",
+      x       = {{mX}},
+      y       = {{mY}},
+      width   = {{elW}},
+      height  = {{elH}},
+      frameSet = {
+      {{#frameSet}}
+      {
+        myLName = "{{myLName}}",
+        x       = {{mX}},
+        y       = {{mY}},
+        width   = {{elW}},
+        height  = {{elH}},
+      },
+      {{/frameSet}}
+      }
+    },
+  {{/layerSet}}
+  }
+{{/mySet}}
+{{/isComic}}
 {{#infinity}}
 -- Infinity background animation
 local function infinityBack(self, event)
@@ -127,6 +153,7 @@ function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   {{^multLayers}}
+  local function myNewImage()
     layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
     -- layer.{{myLName}} = newImageRect({{bn}}, imageWidth, imageHeight )
     layer.{{myLName}}.imagePath = imagePath
@@ -257,7 +284,81 @@ function _M:localPos(UI)
           layer.{{myLName}}_2.direction = "{{idir}}"
       {{/left}}
     {{/infinity}}
+   end
   {{/multLayers}}
+
+{{#isComic}}
+  {{#mySet}}
+  local options = {
+   frames ={},
+    sheetContentWidth = imageWidth,
+    sheetContentHeight = imageHeight
+  }
+  local widthDiff = options.sheetContentWidth - 681/2
+  local heightDiff = options.sheetContentHeight - 964/2
+  --
+  for i=1, #layerSet_{{mySet}} do
+    local target = layerSet_{{mySet}}[i]
+    local _x = (target.x - target.width/2)/4 + widthDiff/2
+    local _y = (target.y - target.height/2)/4 + heightDiff/2
+    -- print(_x, _y)
+    options.frames[i] = {
+      x = _x,
+      y = _y,
+      width = target.width/4,
+      height = target.height/4
+    }
+    -- print(target.width/4, target.height/4)
+  end
+  layer.{{mySet}} = display.newGroup()
+  local sheet = graphics.newImageSheet(_K.imgDir..imagePath, _K.systemDir, options )
+  for i=1, #layerSet_{{mySet}} do
+    local target = layerSet_{{mySet}}[i]
+    local frame = options.frames[i]
+    local frame1 = display.newImageRect( sheet, i, frame.width, _K.systemDir, frame.height )
+    frame1.x, frame1.y = _K.ultimatePosition(target.x, target.y)
+    frame1.name = target.myLName
+    frame1.oriX              = frame1.x
+    frame1.oriY              = frame1.y
+    frame1.oriXs             = 1
+    frame1.oriYs             = 1
+    frame1.oldAlpha          = 1
+    frame1.anim              = {}
+    target.panel = frame1
+    UI.layer[target.myLName] = frame1
+    layer.{{mySet}}:insert(frame1)
+  end
+  --
+  layer.{{myLName}}.imagePath = imagePath
+  -- layer.{{myLName}}.x = mX
+  -- layer.{{myLName}}.y = mY
+  layer.{{myLName}}.alpha = oriAlpha
+  layer.{{myLName}}.oldAlpha = oriAlpha
+  layer.{{myLName}}.blendMode = "{{bmode}}"
+  {{#scaleW}}
+    layer.{{myLName}}.xScale = {{scaleW}}
+  {{/scaleW}}
+  {{#scaleH}}
+    layer.{{myLName}}.yScale = {{scaleH}}
+  {{/scaleH}}
+  {{#rotate}}
+    layer.{{myLName}}:rotate( {{rotate}} )
+  {{/rotate}}
+  layer.{{myLName}}.oriX = layer.{{myLName}}.x
+  layer.{{myLName}}.oriY = layer.{{myLName}}.y
+  layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
+  layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
+  layer.{{myLName}}.name = "{{myLName}}"
+  sceneGroup.{{myLName}} = layer.{{myLName}}
+  sceneGroup:insert( layer.{{myLName}})
+{{/mySet}}
+{{^mySet}}
+  myNewImage()
+{{/mySet}}
+{{#isComic}}
+{{^isComic}}
+  myNewImage()
+{{/isComic}}
 end
 --
 function _M:allListeners(UI)

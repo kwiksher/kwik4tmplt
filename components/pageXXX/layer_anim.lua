@@ -246,13 +246,19 @@ function _M:buildAnim(UI)
 		{{^gtRestart}}
 		local _restart = false
 		{{/gtRestart}}
+			{{#isComic}}
+			local deltaX = 0
+			local deltaY = 0
+			{{/isComic}}
 			local onEnd_{{gtComplete}} = function()
 				if _restart then
 						{{#getTypeShake}}
 						{{gtLayer}}.rotation = 0
 						{{/getTypeShake}}
+						{{^isComic}}
 						{{gtLayer}}.x				 = {{gtLayer}}.oriX
 						{{gtLayer}}.y				 = {{gtLayer}}.oriY
+						{{/isComic}}
 						{{gtLayer}}.alpha		 = {{gtLayer}}.oldAlpha
 						{{gtLayer}}.rotation	= 0
 						{{gtLayer}}.isVisible = true
@@ -285,6 +291,11 @@ function _M:buildAnim(UI)
 			{{#endX}}
 				{{^groupAndPage}}
 				local mX, mY = getPos({{gtLayer}}, {{endX}}, {{endY}})
+				{{#isComic}}
+				deltaX = {{gtLayer}}.oriX -mX
+				deltaY = {{gtLayer}}.oriY -mY
+				mX, mY = display.contentCenterX - deltaX, display.contentCenterY - deltaY
+				{{/isComic}}
 				{{/groupAndPage}}
 	   		{{#groupAndPage}}
 				local mX, mY = getPosGroupAndPage({{gtLayer}}, {{endX}}, {{endY}}, {{isSceneGroup}})
@@ -405,6 +416,9 @@ function _M:buildAnim(UI)
 			{{/gtTypePath}}
 			_K.gt.{{gtName}}:pause()
   		_K.gt.{{gtName}}:toBeginning()
+  		{{#isComic}}
+  		{{gtLayer}}.anim["{{gtName}}"] = _K.gt.{{gtName}}
+  		{{/isComic}}
 		{{/gtDissolve}}
 	--
 	-- {{gtName}}()

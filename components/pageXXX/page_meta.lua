@@ -252,7 +252,7 @@ function _M:allListeners(UI)
   for i=1, #panels do
     local target             = panels[i]
     local frame              = options.frames[i]
-    local frame1             = display.newImageRect( sheet, i, _K.systemDir, frame.width, fram e.height )
+    local frame1             = display.newImageRect( sheet, i, frame.width, frame.height )
     frame1.x, frame1.y       = _K.ultimatePosition(target.x, target.y)
     frame1.oriX              = frame1.x
     frame1.oriY              = frame1.y

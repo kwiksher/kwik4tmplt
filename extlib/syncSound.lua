@@ -90,9 +90,9 @@ local function displayText(params)
 		if (name=="" or name==nil) then
 		else
 		  if (lang=="") then
-		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3", _K.systemDir)
+		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3")
 		  else
-		  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3", _K.systemDir)
+		  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3")
 		  end
 		  words[i].id = i
 		  --  calculate the duration of each word
@@ -123,68 +123,88 @@ local function displayButton(params)
 	rect:setFillColor(color[1],color[2],color[3])
 	return rect
 end
-
-
+--
+local activeRead2me = {}
+--
+function pauseRead2Me ()
+		audio.pause(channel)
+		for k, v in pairs(activeRead2me.buttons) do
+				v:pause()
+		end
+		for k, v in pairs(activeRead2me.texts) do
+				v:pause()
+		end
+		for k, v in pairs(activeRead2me.syncSoundTrigger) do
+				v:pause()
+		end
+end
+--
+function resumeRead2Me()
+		audio.resume(channel)
+		for k, v in pairs(activeRead2me.buttons) do
+				v:resume()
+		end
+		for k, v in pairs(activeRead2me.texts) do
+				v:resume()
+		end
+		for k, v in pairs(activeRead2me.syncSoundTrigger) do
+				v:resume()
+		end
+end
+--
 local talkButton_oriAlpha
-
+--
 function saySentence( params )
---print("step 3 - plays the audio")
-    if (_K.kwk_readMe==0) then
-        return
-    else
-        local button = params.button
-        local text = button.text
-        local sentence, line, delay1, delay2, trans1, trans2 = params.sentence, params.line, 0,0,fadeInDur,fadeOutDur
-
-        local transOut = button.transOut
-        local transIn = button.transIn
-
- 	--print("saySentence channel",channel)
-        local isChannelPlaying = audio.isChannelPlaying(channel)
-        if isChannelPlaying then
-            --nothing
-        else
-        	if (sentence) then
-            	local syncClosure = function()
-						audio.rewind(sentence)
-						--audio.rewind(channel)
-						audio.setVolume(_volume, {channel=channel})
-						audio.play(sentence, {channel=channel})
-       			-- fade button so it's not touchable
-                    transition.to(button, { time=trans2, delay=0, alpha=.01 } )
-                    transition.to(button, { time=trans2, delay=line.soundLength+trans1, alpha=talkButton_oriAlpha } )
-
-                    local loops = math.floor(line.soundLength/1000*3.4)
-                    if button.animation then
-                        button:setSpeed(.2)			-- use .4 if we're running at 30fps
-                        button:play{startFrame=2, endFrame=button.numChildren, loop=loops}
-                    end
-                    for i = 1,#line do
-                        -- start transition early so it's full red by the time the word is spoken
-                        delay1 = line[i].start - trans1
-                        if delay1 <0 then delay1 = 0 end
-                        -- add extra time at the end so we never finish before the fade is complete
-                        delay2 = line[i].out + trans2
-
-                        -- rather than using dissolve, which looks choppy, let's just fade in the highlight
-                        -- text that's sitting on top of the black text.
-                        transition.to(text[i].activeText, { delay = delay1, alpha = 1, time=trans1 } )
-                        transition.to(text[i].activeText, { delay = delay2, alpha = 0, time=trans2 } )
-                --		transOut[i]=transition.dissolve(text[i],text[i].activeText,trans1,delay1)
-                --		transIn[i]=transition.dissolve(text[i].activeText,text[i],trans2,delay2)
-
-                 		--run trigger action
-                		if text[i].trigger ~= nil then
-                			_K.timerStash['syncSoundTrigger'..i] = timer.performWithDelay( line[i].start, text[i].trigger)
-                		end
-
-                    end
-   	      		end --syncClosure
-    	  	    _K.timerStash.syncTimer = timer.performWithDelay(_wait, syncClosure)
-        end --sentence
-
-		end  -- isChannelPlaying
-    end --if kwkReadme
+		activeRead2me = {buttons ={}, texts = {}, syncSoundTrigger={}}
+		--print("step 3 - plays the audio")
+		if (_K.kwk_readMe==0) then return end
+		if not params.sentence  then return end
+		local isChannelPlaying = audio.isChannelPlaying(channel)
+		if isChannelPlaying then
+				print("Warning syncSound channel is already using")      --nothing
+				return
+		end
+		--
+		local button   = params.button
+		local text     = button.text
+		local transOut = button.transOut
+		local transIn  = button.transIn
+		local sentence, line, delay1, delay2, trans1, trans2 = params.sentence, params.line, 0,0,fadeInDur,fadeOutDur
+		--print("saySentence channel",channel)
+		local syncClosure = function()
+				audio.rewind(sentence)
+				--audio.rewind(channel)
+				audio.setVolume(_volume, {channel=channel})
+				audio.play(sentence, {channel=channel})
+				-- fade button so it's not touchable
+				table.insert(activeRead2me.buttons, transition.to(button, { time=trans2, delay=0, alpha=.01 } ))
+				table.insert(activeRead2me.buttons, transition.to(button, { time=trans2, delay=line.soundLength+trans1, alpha=talkButton_oriAlpha } ))
+				local loops = math.floor(line.soundLength/1000*3.4)
+				if button.animation then
+						button:setSpeed(.2)			-- use .4 if we're running at 30fps
+						button:play{startFrame=2, endFrame=button.numChildren, loop=loops}
+				end
+				for i = 1,#line do
+						-- start transition early so it's full red by the time the word is spoken
+						delay1 = line[i].start - trans1
+						if delay1 <0 then delay1 = 0 end
+						-- add extra time at the end so we never finish before the fade is complete
+						delay2 = line[i].out + trans2
+						-- rather than using dissolve, which looks choppy, let's just fade in the highlight
+						-- text that's sitting on top of the black text.
+						table.insert(activeRead2me.texts, transition.to(text[i].activeText, { delay = delay1, alpha = 1, time=trans1 } ))
+						table.insert(activeRead2me.texts, transition.to(text[i].activeText, { delay = delay2, alpha = 0, time=trans2 } ))
+						--		transOut[i]=transition.dissolve(text[i],text[i].activeText,trans1,delay1)
+						--		transIn[i]=transition.dissolve(text[i].activeText,text[i],trans2,delay2)
+						--run trigger action
+						if text[i].trigger ~= nil then
+								_K.timerStash['syncSoundTrigger'..i] = timer.performWithDelay( line[i].start, text[i].trigger)
+								table.insert(activeRead2me.syncSoundTrigger, _K.timerStash['syncSoundTrigger'..i])
+						end
+				end
+		end --syncClosure
+		--
+		_K.timerStash.syncTimer = timer.performWithDelay(_wait, syncClosure)
 end --saySentence
 
 -- The button was pressed, so start talking. Highlight each word as it's spoken.

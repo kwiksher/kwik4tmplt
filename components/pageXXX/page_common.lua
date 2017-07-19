@@ -43,21 +43,47 @@ function _M:allListeners(UI)
        local function act_autoPlay(event)
          if(curPage < numPages) then
             if nil~= composer.getScene( "views.page0"..(curPage+1).."Scene") then composer.removeScene( "views.page0"..(curPage+1).."Scene", true) end
+            {{^pageCurl}}
             if(_K.kBidi == false) then
               composer.gotoScene( "views.page0"..(curPage+1).."Scene", { effect = "fromRight"} )
             else
               composer.gotoScene( "views.page0"..(curPage-1).."Scene", { effect = "fromLeft"} )
             end
+            {{/pageCurl}}
+            {{#pageCurl}}
+            if(_K.kBidi == false) then
+              composer.gotoScene( "views.page0"..(curPage+1).."Scene" )
+            else
+              composer.gotoScene( "views.page0"..(curPage-1).."Scene" )
+            end
+            {{/pageCurl}}
          end
        end
+       {{^pageCurl}}
        if (UI.allAudios.kAutoPlay > _K.kAutoPlay*1000) then
            _K.timerStash.timer_AP = timer.performWithDelay(
              UI.allAudios.kAutoPlay + _Delay, act_autoPlay, 1 )
        else
            _K.timerStash.timer_AP = timer.performWithDelay( _K.kAutoPlay*1000, act_autoPlay, 1 )
        end
+       {{/pageCurl}}
+       {{#pageCurl}}
+       if (UI.allAudios.kAutoPlay > _K.kAutoPlay*1000) then
+           _K.timerStash.timer_AP = timer.performWithDelay(
+             UI.allAudios.kAutoPlay + _Delay ,
+              function()
+                UI.autoPlayCurl(act_autoPlay)
+              end , 1 )
+       else
+           _K.timerStash.timer_AP = timer.performWithDelay( _K.kAutoPlay*1000,
+            function()
+              UI.autoPlayCurl(act_autoPlay)
+            end , 1 )
+       end
+      {{/pageCurl}}
      end
 
+    {{^pageCurl}}
     {{#preload}}
        -- Preloads next scene. Must be off to use page curl
       if not _K.exportCurrent then
@@ -66,7 +92,7 @@ function _M:allListeners(UI)
        end)
        end
     {{/preload}}
-
+    {{/pageCurl}}
 end
 --
 function _M:toDispose()

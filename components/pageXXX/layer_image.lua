@@ -315,7 +315,7 @@ function _M:localPos(UI)
   for i=1, #layerSet_{{mySet}} do
     local target = layerSet_{{mySet}}[i]
     local frame = options.frames[i]
-    local frame1 = display.newImageRect( sheet, i, frame.width, _K.systemDir, frame.height )
+    local frame1 = display.newImageRect( sheet, i, frame.width, frame.height )
     frame1.x, frame1.y = _K.ultimatePosition(target.x, target.y)
     frame1.name = target.myLName
     frame1.oriX              = frame1.x
@@ -355,7 +355,7 @@ function _M:localPos(UI)
 {{^mySet}}
   myNewImage()
 {{/mySet}}
-{{#isComic}}
+{{/isComic}}
 {{^isComic}}
   myNewImage()
 {{/isComic}}

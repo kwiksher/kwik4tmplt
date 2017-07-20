@@ -6,6 +6,7 @@ local _M = {}
 --
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
+local ui     = require("components.store.UI")
 -----------------------------------------------
 -- local _BackgroundLayerName = "background.jpg"
 -----------------------------------------------
@@ -67,7 +68,7 @@ function _M:allListeners(UI)
     local curl = event.target
     curl.alpha = 1
     if event.dir == "right" then
-      if next == nil and curPage~=nextPage then
+      if next == nil and curPage~=nextPage and ui.setDir(nextPage) then
         -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, _K.systemDir, bgW, bgH )
         -- next.x = pgX
         -- next.y = pgY
@@ -82,7 +83,7 @@ function _M:allListeners(UI)
 
       end
     else
-      if prev == nil and curPage ~= prevPage then
+      if prev == nil and curPage ~= prevPage and ui.setDir(prevPage) then
         -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, _K.systemDir,bgW, bgH )
         -- prev.x = pgX
         -- prev.y = pgY
@@ -143,6 +144,7 @@ function _M:allListeners(UI)
             ui.gotoPreviousScene({ effect = "fromLeft"})
           end
        end
+        passed_threshold = false
     end
 {{/isTmplt}}
 {{^isTmplt}}
@@ -164,9 +166,10 @@ function _M:allListeners(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
-       if tonumber(wPage) ~= tonumber(curPage) then
+       if tonumber(wPage) ~= tonumber(curPage) and ui.setDir(wPage) then
             _K.appInstance:showView("views.page0"..wPage.."Scene", options)
         end
+        passed_threshold = false
     end
 {{/isTmplt}}
     if event.dir == "right" and not passed_threshold then

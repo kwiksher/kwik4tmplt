@@ -1,6 +1,6 @@
 -- Code created by Kwik - Copyright: kwiksher.com {{year}}
 -- Version: {{vers}}
--- Project: {{ProjName}}, published on {{today}}
+-- Project: {{ProjName}},
 --
 local ActionCommand = {}
 local _K            = require "Application"

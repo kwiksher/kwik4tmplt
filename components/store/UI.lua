@@ -108,7 +108,9 @@ end
 --
 M.setDir = function(pageNum)
     if bookShelfType == type.pages then
-        if #model.epsodes == 0 or model.URL == nil then return true end
+        if next(model.epsodes) == nil or model.URL == nil then
+            return true
+        end
         --
         local epname = model.isIAP(pageNum)
         local isDL   = setSystemDir[type.pages](epname)
@@ -595,6 +597,16 @@ function M.hasDownloaded(epsode)
     else
         return false
     end
+end
+
+function M.isPageReady(num)
+    if bookShelfType == 0 then -- pages
+        local epsode =  model.isIAP(num)
+        if epsode then
+            return M.hasDownloaded(epsode)
+        end
+    end
+    return true
 end
 
 return M

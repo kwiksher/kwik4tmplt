@@ -16,4 +16,8 @@ local pages = {
 local pages = {isDownloadable = {{isDownloadable}}, pageNum={{pageNum}} }
 {{/BookEmbedded}}
 
+{{#BookPages}}
+local pages = {}
+{{/BookPages}}
+
 return pages

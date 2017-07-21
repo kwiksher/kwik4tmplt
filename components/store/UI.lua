@@ -27,6 +27,7 @@ local function getPageNum(num)
     end
     return num
 end
+M.getPageNum = getPageNum
 --
 local function readPageJson(epsode)
     local jsonFile = function(filename )
@@ -50,15 +51,16 @@ local function readPageJson(epsode)
     M.numPages = #currentBookModel
 end
 --
-_K.getModel = function(layerName, imagePath)
-    local page = currentBookModel[M.currentPage]
+_K.getModel = function(layerName, imagePath, dummy)
+    local targetPage = dummy or M.currentPage
+    local page = currentBookModel[targetPage]
     local layer = page[layerName]
     if layer == nil then layer = {x=0, y=0, width=0, height=0} end
     local _x, _y = _K.ultimatePosition(layer.x, layer.y)
     local path = nil
     if imagePath then
         local i = string.find(imagePath, "/")
-       path = "p"..M.currentPage..string.sub(imagePath, i)
+       path = "p"..targetPage..string.sub(imagePath, i)
    end
     return _x, _y, layer.width/4, layer.height/4, path
 end
@@ -94,11 +96,14 @@ end
 --     end
 -- end
 ---
-setSystemDir[type.tmplt] = function (isDL)
+setSystemDir[type.tmplt] = function (isDL, pageNum)
+    local targetPage = pageNum or M.currentPage
+    print("isDL", isDL)
+    print("targetPage", targetPage)
     if isDL then
         _K.systemDir = system.ApplicationSupportDirectory
         _K.imgDir = currentBook.."/images/"
-        _K.audioDir = currentBook.."/audios/p"..M.currentPage.."_"
+        _K.audioDir = currentBook.."/audios/p"..targetPage.."_"
     else
         _K.systemDir = system.ResourceDirectory
         _K.imgDir = "assets/images/"
@@ -131,6 +136,8 @@ M.setDir = function(pageNum)
             end
         end
         return isDL
+    elseif bookShelfType == type.tmplt then
+        setSystemDir[type.tmplt](master[getPageNum(pageNum)].isTmplt, pageNum)
     end
     return true
 end
@@ -164,11 +171,30 @@ M.gotoNextScene = function(params)
     local nextAlias = getPageNum(M.currentPage+1)
     M.currentPage = M.currentPage + 1
     if prevAlias == nextAlias then
-        setSystemDir[type.tmplt](false)
+        --setSystemDir[type.tmplt](false)
         composer.gotoScene("extlib.page_reload")
     else
         setSystemDir[type.tmplt](true)
         composer.gotoScene("views.page0"..getPageNum(M.currentPage).."Scene", {params = params})
+    end
+end
+-- type.tmplt only
+M.gotoTmpltScene = function(tmpltNum, pageNum, params)
+    if pageNum then
+        local prevAlias = getPageNum(M.currentPage)
+        local nextAlias = getPageNum(pageNum)
+        M.currentPage = pageNum
+        if prevAlias == nextAlias then
+            --setSystemDir[type.tmplt](false)
+            composer.gotoScene("extlib.page_reload")
+        else
+            setSystemDir[type.tmplt](true)
+            composer.gotoScene("views.page0"..tmpltNum.."Scene", {params = params})
+        end
+    else
+        M.currentPage = 1
+        setSystemDir[type.tmplt](false)
+        composer.gotoScene("views.page0"..tmpltNum.."Scene", {params = params})
     end
 end
 -- type.embedded and type.tmplt
@@ -181,7 +207,7 @@ M.gotoPreviousScene = function(params)
     local nextAlias = getPageNum(M.currentPage-1)
     M.currentPage = M.currentPage -1
     if prevAlias == nextAlias then
-        setSystemDir[type.tmplt](false)
+        --setSystemDir[type.tmplt](false)
         composer.gotoScene("extlib.page_reload")
     else
         setSystemDir[type.tmplt](true)
@@ -193,12 +219,12 @@ M.gotoSceneBook = function(epsode, page, params)
     if master.isEmbedded then
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode, page=page})
     else
-        print("gotoSceneBook ".. model.getPageName(epsode))
         if epsode == "TOC" then
             M.currentPage = 1
             setSystemDir[type.tmplt](false)
             composer.gotoScene("views.page01Scene", {params = params})
         else
+            print("gotoSceneBook ".. model.getPageName(epsode))
             M.currentPage = page
             readPageJson(epsode)
             setSystemDir[type.tmplt](true)

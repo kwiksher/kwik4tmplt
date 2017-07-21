@@ -49,6 +49,7 @@ local curlWidth = 400
 {{#isTmplt}}
 local ui  = require("components.store.UI")
 {{/isTmplt}}
+local passed_threshold = false
 -----------------------------------------------
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
@@ -57,10 +58,18 @@ function _M:allListeners(UI)
   local numPages    = UI.numPages
   local back, next, prev
   local prevPage, nextPage
+{{#isTmplt}}
+  nextPage = ui.currentPage + 1
+  if nextPage > ui.numPages then nextPage = ui.currentPage end
+  prevPage = ui.currentPage - 1
+  if prevPage < 1 then prevPage = 1 end
+{{/isTmplt}}
+{{^isTmplt}}
   nextPage = curPage + 1
   if nextPage > numPages then nextPage = curPage end
   prevPage = curPage - 1
   if prevPage < 1 then prevPage = 1 end
+{{/isTmplt}}
 
   if layer.{{backLayer}} == nil then return end
   local W, H = layer.{{backLayer}}.width, layer.{{backLayer}}.height
@@ -74,12 +83,23 @@ function _M:allListeners(UI)
         -- next.y = pgY
         -- sceneGroup:insert(next)
         -- next:toFront()
+{{#isTmplt}}
+        local scene ={view=display.newGroup()}
+        local pageNextUI    = require("components.page0"..ui.getPageNum(nextPage).."UI").new(scene)
+        pageNextUI.dummy   = nextPage
+        pageNextUI:create()
+        next = scene.view
+        sceneGroup:insert(next)
+        next:toFront()
+{{/isTmplt}}
+{{^isTmplt}}
         local scene ={view=display.newGroup()}
         local pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
         pageNextUI:create()
         next = scene.view
         sceneGroup:insert(next)
         next:toFront()
+{{/isTmplt}}
 
       end
     else
@@ -89,12 +109,23 @@ function _M:allListeners(UI)
         -- prev.y = pgY
         -- sceneGroup:insert(prev)
         -- prev:toFront()
+{{#isTmplt}}
+        local scene ={view=display.newGroup()}
+        local pagePrevUI    = require("components.page0"..ui.getPageNum(prevPage).."UI").new(scene)
+        pagePrevUI.dummy   = prevPage
+        pagePrevUI:create()
+        prev = scene.view
+        sceneGroup:insert(prev)
+        prev:toFront()
+{{/isTmplt}}
+{{^isTmplt}}
         local scene ={view=display.newGroup()}
         local pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
         pagePrevUI:create()
         prev = scene.view
         sceneGroup:insert(prev)
         prev:toFront()
+{{/isTmplt}}
       end
     end
     back:toFront()
@@ -113,7 +144,6 @@ function _M:allListeners(UI)
     end
   end
   --
-  local passed_threshold = false
   --
   local function Moved (event)
     local curl = event.target
@@ -121,6 +151,7 @@ function _M:allListeners(UI)
 {{#isTmplt}}
     local function GoNext()
        local wPage = ui.currentPage
+       timer.performWithDelay(500, function() passed_threshold = false end )
        if event.dir == "right" and _K.kBidi == false then
           wPage = ui.currentPage + 1
           if wPage > ui.numPages then return end
@@ -144,7 +175,6 @@ function _M:allListeners(UI)
             ui.gotoPreviousScene({ effect = "fromLeft"})
           end
        end
-        passed_threshold = false
     end
 {{/isTmplt}}
 {{^isTmplt}}
@@ -193,6 +223,7 @@ function _M:allListeners(UI)
   --
   if back == nil then
     local function saveWithDelay()
+      if sceneGroup then
       display.save( sceneGroup, { filename="entireGroup.jpg", baseDir=system.TemporaryDirectory, captureOffscreenArea=false, backgroundColor={0,0,0,0} } )
       back = page_curl.NewPageCurlWidget{width =bgW, height=bgH, size = curlWidth}
       -- back:SetImage(_K.imgDir.."p"..curPage.."/".._BackgroundLayerName)
@@ -207,6 +238,7 @@ function _M:allListeners(UI)
       back:toBack()
       back.alpha = 0.1
       layer.pageCurl = back
+      end
     end
     timer.performWithDelay( 100, saveWithDelay )
     -- debug mode

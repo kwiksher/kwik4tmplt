@@ -122,7 +122,7 @@ local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
 --
 function _M:localVars(UI)
   {{#isTmplt}}
-   mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath)
+   mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)
   {{/isTmplt}}
   {{#multLayers}}
     UI.tab{{um}}["{{dois}}"] = {imagePath, imageWidth, imageHeight, mX, mY, oriAlpha}

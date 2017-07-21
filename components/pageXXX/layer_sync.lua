@@ -64,12 +64,22 @@ function _M:localPos(UI)
   end
   {{/isTmplt}}
 
+  {{#isTmplt}}
+  {{#deviceH}}
+    layer.speak{{spe}} =  display.newImageRect( "assets/images/".. audioImage,  speakW, speakH);
+  {{/deviceH}}
+  {{^deviceH}}
+    layer.speak{{spe}} =  display.newImageRect( "assets/images/".. audioImage, 30, 30 );
+  {{/deviceH}}
+  {{/isTmplt}}
+  {{^isTmplt}}
   {{#deviceH}}
     layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, speakW, speakH);
   {{/deviceH}}
   {{^deviceH}}
     layer.speak{{spe}} =  display.newImageRect( _K.imgDir.. audioImage, _K.systemDir, 30, 30 );
   {{/deviceH}}
+  {{/isTmplt}}
 
   layer.speak{{spe}}.x = mX
   layer.speak{{spe}}.y = mY
@@ -160,9 +170,9 @@ end
 function _M:toDispose()
 end
 --
-function _M:localVars()
+function _M:localVars(UI)
   {{#isTmplt}}
-   mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath)
+   mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath, UI.dummy)
   {{/isTmplt}}
 end
 --

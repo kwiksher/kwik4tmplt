@@ -47,7 +47,7 @@ function M.new ()
     function CMD.onPurchaseComplete(event)
         local selectedPurchase = event.product
         local button = CMD.downloadGroup[selectedPurchase]
-        print(button.purchaseBtn)
+        print(selectedPurchase, button.purchaseBtn)
         --
         if button then
             button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)

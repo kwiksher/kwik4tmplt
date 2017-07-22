@@ -104,11 +104,19 @@ setSystemDir[type.tmplt] = function (isDL, pageNum)
         _K.systemDir = system.ApplicationSupportDirectory
         _K.imgDir = currentBook.."/images/"
         _K.audioDir = currentBook.."/audios/p"..targetPage.."_"
+        _K.spriteDir   = currentBook.."/sprites/"
+        _K.thumbDir    = currentBook.."/thumbnails/"
+        _K.videoDir    = currentBook.."/videos/"
+        _K.particleDir = currentBook.."/particles/"
     else
         _K.systemDir = system.ResourceDirectory
-        _K.imgDir = "assets/images/"
-        _K.audioDir = "assets/audios/"
-    end
+        _K.imgDir      = "assets/images/"
+        _K.audioDir    = "assets/audios/"
+        _K.spriteDir   = "assets/sprites/"
+        _K.thumbDir    = "assets/thumbnails/"
+        _K.videoDir    = "assets/videos/"
+        _K.particleDir = "assets/particles/"
+ end
 end
 --
 M.setDir = function(pageNum)
@@ -125,6 +133,10 @@ M.setDir = function(pageNum)
                 _K.systemDir = system.ResourceDirectory
                 _K.imgDir = "assets/images/"
                 _K.audioDir = "assets/audios/"
+                _K.spriteDir   = "assets/sprites/"
+                _K.thumbDir    = "assets/thumbnails/"
+                _K.videoDir    = "assets/videos/"
+                _K.particleDir = "assets/particles/"
                 composer.gotoScene("views.page0"..model.epsodes[epname].info:sub(2).."Scene")
             else
                 local infoString = "The page is not found."

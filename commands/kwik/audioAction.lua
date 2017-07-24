@@ -66,11 +66,13 @@ function _M:rewindAudio( vaudio, vchan, vrepeat)
 end
 --
 function _M:pauseAudio(vaduio, vchan, vrepeat)
-  if not vrepeat then
-    audio.pause( vchan )
-  else
-    audio.pause( _M.x9[vaudio] )
-  end
+  timer.performWithDelay(0, function()
+    if not vrepeat then
+      audio.pause( vchan )
+    else
+      audio.pause( _M.x9[vaudio] )
+    end
+  end )
 end
 --
 function _M:stopAudio(vaduio, vchan, vrepeat)

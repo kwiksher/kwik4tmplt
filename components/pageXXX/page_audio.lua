@@ -1,3 +1,4 @@
+
 -- Code created by Kwik - Copyright: kwiksher.com {{year}}
 -- Version: {{vers}}
 -- Project: {{ProjName}}
@@ -136,7 +137,7 @@ function _M:toDestroy(UI)
         {{/allowRepeat}}
     {{/areadme}}
   {{/akeep}}
---end
+end
 
 -- function audioDisposal(UI)
   -- audio

@@ -35,6 +35,26 @@ local randYEnd = {{randYEnd}}
 {{/ultimate}}
 local oriAlpha = {{oriAlpha}}
 --
+{{#kwik3Tp}}
+{{#newImageSheet}}
+    {{#arq}}
+        local {{myLName}}_options = {
+            {{arq}}
+        }
+    {{/arq}}
+    {{^arq}}
+        local {{myLName}}_options = {
+            width              = {{frameWidth}},
+            height             = {{frameHeight}},
+            numFrames          = {{autoFrames}},
+            sheetContentWidth  = {{sheetWidth}},
+            sheetContentHeight = {{sheetHeight}}
+        }
+    {{/arq}}
+    _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", _K.systemDir, {{myLName}}_options )
+{{/newImageSheet}}
+{{/kwik3Tp}}
+{{^kwik3Tp}}
 {{#newImageSheet}}
     {{#arq}}
         local {{myLName}}_options = {}
@@ -54,6 +74,7 @@ local oriAlpha = {{oriAlpha}}
     {{/arq}}
     _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", _K.systemDir, {{myLName}}_options )
 {{/newImageSheet}}
+{{/kwik3Tp}}
 --
 {{#frameCount}}
     -- 2

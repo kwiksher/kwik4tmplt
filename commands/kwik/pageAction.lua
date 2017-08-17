@@ -44,7 +44,11 @@ function _M:gotoPage(pnum, ptrans, delay)
        composer.gotoScene( "views.page0"..pnum.."Scene" )
 		end
   end
-  _K.timerStash.pageAction = timer.performWithDelay(delay, myClosure_switch, 1)
+  if delay > 0 then
+    _K.timerStash.pageAction = timer.performWithDelay(delay, myClosure_switch, 1)
+  else
+    myClosure_switch()
+  end
 end
 --
 return _M

@@ -6,6 +6,7 @@ local _M = {}
 local _K = require("Application")
 ---------------------
 ---------------------
+{{^Table}}
 -- Capture and set group position
  local function groupPos(obj)
     local minX, minY
@@ -27,11 +28,12 @@ local _K = require("Application")
     obj.x = minX + obj.contentWidth * 0.5
     obj.y = minY + obj.contentHeight * 0.5
 end
+{{/Table}}
 --
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  --
+{{^Table}}
   layer.{{gname}} = display.newGroup()
   layer.{{gname}}.anchorX = 0.5
   layer.{{gname}}.anchorY = 0.5
@@ -58,18 +60,25 @@ function _M:localPos(UI)
   layer.{{gname}}}.oriYs = layer.{{gname}}}.yScale
   sceneGroup:insert( layer.{{gname}}})
   --groupPos( layer.{{gname}}})
+{{/Table}}
 end
 --
-function _M:allListeners()
+function _M:allListeners(UI)
 end
 --
-function _M:toDispose()
+function _M:toDispose(UI)
 end
 --
-function _M:willHide()
+function _M:willHide(UI)
 end
 --
-function _M:localVars()
+function _M:localVars(UI)
+{{#Table}}
+  UI.{{ggname}} = {}
+  {{#children}}
+    table.insert(UI.{{ggname}}, "{{chldName}}")
+  {{/children}}
+{{/Table}}
 end
 --
 return _M

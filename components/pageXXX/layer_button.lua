@@ -151,7 +151,7 @@ function _M:buttonLocal(UI)
           if layer.{{myLName}}.enabled == nil or layer.{{myLName}}.enabled then
              layer.{{myLName}}.type = "press"
             -- {{bfun}}(layer.{{myLName}})
-             self.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}}})
+             UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
            end
         end
         layer.{{myLName}} = widget.newButton {

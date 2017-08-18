@@ -7,10 +7,10 @@ local _M = {}
 --		obj:showHide("objB", false)
 function _M:editImage(obj, mx, my, sw, sh, fh, fv, ro)
    local _mx, _my  = _K.ultimatePosition(mx, my)
-   if _mx then
+   if mx then
         obj.x = _mx
    end
-   if _my then
+   if my then
         obj.y = _my
    end
    if sw then

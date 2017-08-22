@@ -5,7 +5,9 @@ local IAP             = require("components.store.IAP")
 local YourHost  = "http://localhost:4000/tutorials/Kwik4"
 M.URL           = YourHost.."/BookShelf/"
 M.backgroundImg = "bg.png"
+{{#bookShelfType}}
 M.bookShelfType  = {{bookShelfType}} --{pages = 0, embedded = 1, tmplt=2}
+{{/bookShelfType}}
 
 ----------------------------------
 -- M.URL = nil means simple IAP store without network download like Kwik3 IAP

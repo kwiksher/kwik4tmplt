@@ -624,8 +624,12 @@ function M.new()
     return UI
 end
 
-function M.hasDownloaded(epsode)
+function M.init(url)
+    model.URL = url
     IAP:init(model.catalogue, nil, nil)
+end
+
+function M.hasDownloaded(epsode)
     if (IAP.getInventoryValue("unlock_"..epsode)==true) then
         if downloadManager.hasDownloaded(epsode) then
             return true

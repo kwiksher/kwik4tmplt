@@ -351,14 +351,16 @@ function _M:localPos(UI)
   layer.{{myLName}}.name = "{{myLName}}"
   sceneGroup.{{myLName}} = layer.{{myLName}}
   sceneGroup:insert( layer.{{myLName}})
-{{/mySet}}
-{{^mySet}}
-  myNewImage()
-{{/mySet}}
+  {{/mySet}}
+  {{^mySet}}
+    myNewImage()
+  {{/mySet}}
 {{/isComic}}
+{{^multLayers}}
 {{^isComic}}
   myNewImage()
 {{/isComic}}
+{{/multLayers}}
 end
 --
 function _M:allListeners(UI)

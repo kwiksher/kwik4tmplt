@@ -55,6 +55,10 @@ function _M:localPos(UI)
 {{#inApp}}
     store_init(sceneGroup, layer)
 {{/inApp}}
+{{^inApp}}
+  ui.init(nil)
+{{/inApp}}
+
 end
 --
 function _M:localVars(UI)

@@ -209,7 +209,7 @@ function ActionCommand:new()
 		{{/purchase.refoundPurchase}}
 
 		{{#purchase.buyProduct}}
-			_AC.Purchase:buyProduct({"{{pid}}"})
+			_AC.Purchase:buyProduct("{{product}}")
 		{{/purchase.buyProduct}}
 
 		{{#random.playRandom}}

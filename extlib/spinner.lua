@@ -29,7 +29,8 @@ function M.new (host)
     end
     --
     function obj:remove()
-        print("remove")
+
+        print("spinner.remove")
         if (spinner) then
             spinner:removeSelf()
             spinner=nil

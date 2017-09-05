@@ -19,8 +19,8 @@ function _Command:new()
 			          if (system.getInfo( "platformName" ) == "Android")  then
 			              native.requestExit()
 			          else
-			              if nil~= composer.getScene("page_1") then composer.removeScene("page_1", true) end
-			              composer.gotoScene("page_1")
+			              if nil~= composer.getScene("views.page01Scene") then composer.removeScene("views.page01Scene", true) end
+			              composer.gotoScene("views.page01Scene")
 			          end
 			       end
 			    end

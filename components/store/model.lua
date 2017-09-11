@@ -72,14 +72,18 @@ end
 --
 M.getPageInfo = function (epsode)
     local pNum = M.epsodes[epsode].info
-    if string.len(pNum) > 1 then
+    if string.len(pNum) > 1 and  string.len(pNum) < 3 then
         pNum = pNum:sub(2)
         return "views.page0"..pNum.."Scene"
     else
+        if string.len(pNum) then
+            native.showAlert("Info", pNum, {"OK"})
+        end
         return false
     end
 end
 --
+{{#BookPages}}
 --
 M.isIAP = function(pageNum)
     for k, v in pairs(M.epsodes) do
@@ -91,5 +95,19 @@ M.isIAP = function(pageNum)
     end
     return false
 end
-
+--
+local composer = require("composer")
+local _gotoScene = composer.gotoScene
+--
+composer.gotoScene = function( sceneName, options)
+    local pageNum = string.sub(sceneName, 11, 12)
+    if M.isIAP(tonumber(pageNum)) then
+        _K.systemDir = system.ApplicationSupportDirectory
+    else
+        _K.systemDir   = system.ResourceDirectory
+    end
+    _gotoScene(sceneName, options)
+end
+{{/BookPages}}
+--
 return M

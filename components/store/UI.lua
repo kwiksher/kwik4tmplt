@@ -369,14 +369,17 @@ function M.new()
         local epsode =  event.target.selectedPurchase
         print("UI.gotoScene ".. epsode)
         if master.isEmbedded then
+            print("  isEmbedded")
             Runtime:dispatchEvent({name="changeThisMug", appName=epsode})
         elseif bookShelfType == type.tmplt then
+            print("  tmplt")
             readPageJson(epsode)
             setSystemDir[type.tmplt](true)
             M.currentPage = 1
-            print("views.page0"..getPageNum(1).."Scene")
+            print("  views.page0"..getPageNum(1).."Scene")
             composer.gotoScene("views.page0"..getPageNum(1).."Scene")
         else
+            print("  pages")
             setSystemDir[type.pages](epsode)
             composer.gotoScene(model.getPageName(epsode) , {effect=model.gotoSceneEffect})
         end
@@ -384,6 +387,7 @@ function M.new()
     end
     --
     function UI.showOverlay(event)
+        if event.target.purchaseBtn.alpha ==  0 then return true end
         local epsode =  event.target.selectedPurchase
         local options = {
             isModal = true,

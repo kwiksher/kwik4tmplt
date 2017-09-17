@@ -2,17 +2,23 @@ settings =
 {
   plugins  =
   {
+    {{#iap}}
         ["plugin.zip"] =
         {
             publisherId = "com.coronalabs",
         },
-    {{#iAds}}
-      ['CoronaProvider.ads.iads'] =
-      {
-         publisherId = 'com.coronalabs',
-         supportedPlatforms = { iphone=true, ["iphone-sim"] = true }
-      },
-    {{/iAds}}
+        --Google in app billing v3
+        ["plugin.google.iap.v3"] = {
+            -- required
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { android = true },
+        },
+        --Amazon IAP
+        ["plugin.amazon.iap"] = {
+            publisherId = "com.coronalabs",
+            supportedPlatforms = { ["android-kindle"]=true }
+        },
+    {{/iap}}
     {{#adMob}}
       ["plugin.google.play.services"] =
       {
@@ -20,13 +26,6 @@ settings =
          supportedPlatforms = { android =true }
       },
     {{/adMob}}
-    {{#viewer}}
-      ["plugin.viewer"] =
-      {
-         publisherId = "com.coronalabs",
-         supportedPlatforms = { android =true, iphone=true }
-      },
-    {{/viewer}}
   },
 
   android  =
@@ -36,16 +35,17 @@ settings =
   {{/expansion}}
   usesPermissions  =
   {
+    {{#recordAudio}}
     "android.permission.RECORD_AUDIO",
+    {{/recordAudio}}
     "android.permission.WRITE_EXTERNAL_STORAGE",
-    {{#prod}}
+    {{#iap}}
        "com.android.vending.BILLING",
-    {{/prod}}
+    {{/iap}}
     {{#hasWeb}}
        "android.permission.INTERNET",
     {{/hasWeb}}
     {{#adMob}}
-       "android.permission.INTERNET",
        "android.permission.ACCESS_NETWORK_STATE",
        "android.permission.READ_PHONE_STATE",
     {{/adMob}}
@@ -199,16 +199,6 @@ settings =
           },
         {{/portrait}}
       },
-      {{#coronaViewer}}
-        CFBundleURLTypes = {
-             {
-                 CFBundleURLSchemes =
-                 {
-                      "db-l1q0pln8qsi8qyp",
-                 }
-           }
-        },
-      {{/coronaViewer}}
     },
   },
 }

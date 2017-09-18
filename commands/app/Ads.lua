@@ -21,7 +21,7 @@ function _Command:new()
 			   end
 			   return true
 			end
-			if (system.getInfo("platformName") == "Android") then
+			if (system.getInfo("platform") == "Android") then
 			     ads.init("admob", adMobKey, showAd )
 			else
 			     ads.init("iads", iAdsKey, showAd )

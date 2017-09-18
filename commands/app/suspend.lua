@@ -16,7 +16,7 @@ function _Command:new()
 			    local quitOnDeviceOnly = true
 			    if quitOnDeviceOnly and system.getInfo("environment")=="device" then
 			       if (event.type == "applicationSuspend")  then
-			          if (system.getInfo( "platformName" ) == "Android")  then
+			          if (system.getInfo( "platform" ) == "Android")  then
 			              native.requestExit()
 			          else
 			              if nil~= composer.getScene("views.page01Scene") then composer.removeScene("views.page01Scene", true) end

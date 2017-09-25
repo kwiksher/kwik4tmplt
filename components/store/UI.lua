@@ -8,8 +8,9 @@ local _K              = require("Application")
 local json            = require("json")
 local master          = require("model") -- case tmplt, it returns the pages table. case embedded, it is overwritten as {isEmbedded = true} at the runtime by Kwikshelf plugin
 --
-local type={pages = 0, embedded = 1, tmplt=2}
+local type = {pages = 0, embedded = 1, tmplt=2}
 local bookShelfType = model.bookShelfType -- please set one of them
+local INFO_PAGE     = "views.page02Scene" -- tmplt, embedded only, UI:init(group, layer, overlay)
 ---------------------------------------------------
 --
 local currentBookModel = nil
@@ -362,7 +363,6 @@ end
 function M.new()
     local UI = {}
     --
-    UI.downloadGroup = {}
     UI.sceneGroup    = nil
     --
     function UI.gotoScene(event)
@@ -387,7 +387,7 @@ function M.new()
     end
     --
     function UI.showOverlay(event)
-        if event.target.purchaseBtn.alpha ==  0 then return true end
+        -- if event.target.purchaseBtn.alpha ==  0 then return true end
         local epsode =  event.target.selectedPurchase
         local options = {
             isModal = true,
@@ -395,16 +395,16 @@ function M.new()
             time = 400,
             params = {}
         }
-        local page = "views.page02Scene" -- INFO
-        if  bookShelfType == type.tmplt then
+        local page = true
+        if  bookShelfType == type.pages then
              page = model.getPageInfo(epsode)
         end
         if page then
             if master.isEmbedded then
-                package.loaded[page] = require("plugin.KwikShelf."..page)
+                package.loaded[INFO_PAGE] = require("plugin.KwikShelf."..INFO_PAGE)
             end
-            model.currentEpsode = {name=epsode}
-            composer.showOverlay(page, options)
+            model.currentEpsode = model.epsodes[epsode]
+            composer.showOverlay(INFO_PAGE, options)
         end
         return true
     end
@@ -417,80 +417,70 @@ function M.new()
         return obj
     end
     --
-    function UI:addEventListener(button, epsode)
-        if (IAP.getInventoryValue("unlock_"..epsode.name)==true) then
-            if downloadManager.hasDownloaded(epsode.name) then
-                print(epsode.name .."(saved)")
-                button.savedBtn:addEventListener("tap", self.gotoScene)
-                button:addEventListener("tap", self.gotoScene)
-                if model.URL then
-                    button.savingTxt.alpha = 0
-                end
-                button.savedBtn.alpha = 1
-            else
-                print(epsode.name.."(saving)")
-                button.savingTxt.alpha = 1
-                Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = epsode.name})
-            end
-        else
-            print(epsode.name.."(not purchased)")
-            --Otherwise add a tap listener to the button that unlocks the epsode
-            button.purchaseBtn.alpha = 1
-            button.purchaseBtn:addEventListener("tap", function(e)
-                print("puchaseBtn", self)
-                IAP.buyEpsode(e)
-                return true
-                end)
-            if self.overlay then
-                button:addEventListener("tap", self.showOverlay)
-            end
-        end
-    end
-
-    --
-    function UI:create(_epsode)
-        local layer = self.layer
-        local overlay = self.overlay
-        print("--- ui create ---")
-        function setButton(layer, button, epsode)
+    local function createButtons(sceneGroup, layer, button, epsode)
             button.selectedPurchase = epsode.name
             --If the user has purchased the epsode before, change the button
             local purchaseBtn = copyDisplayObject(layer.purchaseBtn, button)
             purchaseBtn.alpha = 0
             purchaseBtn.selectedPurchase = epsode.name
-            self.sceneGroup:insert(purchaseBtn)
+        sceneGroup:insert(purchaseBtn)
             button.purchaseBtn = purchaseBtn
-            print(purchaseBtn)
             if model.URL then
                 local downloadBtn = copyDisplayObject(layer.downloadBtn, button)
                 downloadBtn.alpha = 0
                 downloadBtn.selectedPurchase = epsode.name
-                self.sceneGroup:insert(downloadBtn)
+            sceneGroup:insert(downloadBtn)
                 button.downloadBtn = downloadBtn
 
                 local savingTxt = copyDisplayObject(layer.savingTxt, button)
                 savingTxt.alpha = 0
-                self.sceneGroup:insert(savingTxt)
+            sceneGroup:insert(savingTxt)
                 button.savingTxt = savingTxt
             end
             local savedBtn = copyDisplayObject(layer.savedBtn, button)
             savedBtn.alpha = 0
             savedBtn.selectedPurchase = epsode.name
-            self.sceneGroup:insert(savedBtn)
+        sceneGroup:insert(savedBtn)
             button.savedBtn = savedBtn
-
-            self:addEventListener(button, epsode)
             --
-            print("---- SetButton --- ", self, button)
-            self.downloadGroup[epsode.name] = button
+    end
             --
-            -- button image
-            --
-            downloadManager.setButtonImage(button, epsode.name)
+    local function createButtonsVer(sceneGroup, layer, button, _epsode, i)
+        if layer["version0"..i] and string.len(_epsode.versions[i]) > 1 then
+            local versionBtn = copyDisplayObject(layer["version0"..i], button)
+            versionBtn.alpha = 1
+            versionBtn.selectedPurchase = _epsode.name.._epsode.versions[i]
+            sceneGroup:insert(versionBtn)
+            button.versions[i] = versionBtn
+            return versionBtn
         end
+        return nil
+    end
+    --
+    function UI:create(_epsode)
+        local layer = self.layer
+        local overlay = self.overlay
+        print("--- ui create ---")
         if _epsode then -- infoPage
-            if layer["bookXXIcon"] then
-                setButton(layer, layer["bookXXIcon"], _epsode)
+            -- for k, v in pairs(_epsode) do print(k, v) end
+            local button = layer["bookXXIcon"]
+            if button then
+                createButtons(self.sceneGroup, layer, button, _epsode)
+                self.cmd.downloadGroup[_epsode.name] = button
+                downloadManager.setButtonImage(button, _epsode.name)
+                if (IAP.getInventoryValue("unlock_".._epsode.name)==true) then
+                    self.cmd.onPurchaseComplete{product=_epsode.name, actionType = "purchase"}
+                    if downloadManager.hasDownloaded(_epsode.name) then
+                        self.cmd.onDownloadComplete(_epsode.name)
+                    else
+                        button.downloadBtn.alpha = 1
+                    end
+                else
+                    print(_epsode.name.."(not purchased)")
+                    button.purchaseBtn.alpha = 1
+                    button.purchaseBtn:addEventListener("tap", IAP.buyEpsode)
+        end
+
                 if layer.hideOverlayBtn then
                     layer.hideOverlayBtn:addEventListener("tap", function ()
                         composer.hideOverlay("fade", 400 )
@@ -499,13 +489,60 @@ function M.new()
                 if layer.infoTxt then
                     layer.infoTxt.text = model.epsodes[_epsode.name].info
                 end
+                --
+                -- option for purchase? change IAP product
+                button.versions = {}
+                for i=1, 3 do layer["version0"..i].alpha = 0 end
+                for i=1, #_epsode.versions do
+                    local versionBtn = createButtonsVer(self.sceneGroup, layer, button, _epsode, i)
+                    if versionBtn then
+                        if (IAP.getInventoryValue("unlock_".._epsode.name)==true) then
+                            print(_epsode.name.."(purchased)")
+                            if downloadManager.hasDownloaded(_epsode.name, _epsode.versions[i]) then
+                                print(_epsode.versions[i] .."(saved)")
+                                versionBtn:addEventListener("tap", self.gotoScene)
+                            else
+                                print(_epsode.versions[i].."(not saved)")
+                                -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _epsode.versions[i]})
+                                versionBtn.selectedPurchase = _epsode.name
+                                versionBtn.selectedVersion  = _epsode.versions[i]
+                                versionBtn:addEventListener("tap", self.cmd.startDownloadVersion )
+                            end
+                        else
+                            print(_epsode.name.."(not purchased)")
+                            --Otherwise add a tap listener to the button that unlocks the epsode
+                            versionBtn.selectedPurchase = _epsode.name
+                            versionBtn.selectedVersion  = _epsode.versions[i]
+                            versionBtn:addEventListener("tap", self.cmd.startDownloadVersion )
+                        end
+                    end
+                end
+                if layer["version02"] then
+                end
+                if layer["version03"] then
+                end
             end
         else -- TOC
             for k, epsode in pairs( model.epsodes) do
                 -- print(epsode.name)
                 local button = layer[epsode.name.."Icon"]
                 if button then
-                    setButton(layer, button, epsode)
+                    createButtons(self.sceneGroup, layer, button, epsode)
+                    self.cmd.downloadGroup[epsode.name] = button
+                    -- button image
+                    downloadManager.setButtonImage(button, epsode.name)
+                    if (IAP.getInventoryValue("unlock_"..epsode.name)==true) then
+                        print(epsode.name .."(purchased)")
+                        button.savedBtn.alpha = 1
+                    else
+                        print(epsode.name.."(not purchased)")
+                        --Otherwise add a tap listener to the button that unlocks the epsode
+                        button.purchaseBtn.alpha = 1
+                        button.purchaseBtn:addEventListener("tap", IAP.buyEpsode)
+                    end
+                    if overlay then
+                        button:addEventListener("tap", self.showOverlay)
+                    end
                 end
             end
         end
@@ -515,8 +552,8 @@ function M.new()
                 function(event)
                     for k, epsode in pairs (model.epsodes) do
                         local button = layer[epsode.name.."Icon"]
-                        button:removeEventListener("tap", self.gotoScene)
-                        button.savedBtn:removeEventListener("tap", self.gotoScene)
+                        -- button:removeEventListener("tap", self.gotoScene)
+                        -- button.savedBtn:removeEventListener("tap", self.gotoScene)
                     end
                     IAP.restorePurchases(event)
                 end)
@@ -527,10 +564,10 @@ function M.new()
         for k, epsode in pairs( model.epsodes) do
             local button = self.layer[epsode.name.."Icon"]
             if button then
-                button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
+                -- button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
                 button:removeEventListener("tap", self.showOverlay)
-                button.savedBtn:removeEventListener("tap", self.gotoScene)
-                button:removeEventListener("tap", self.gotoScene)
+                -- button.savedBtn:removeEventListener("tap", self.gotoScene)
+                -- button:removeEventListener("tap", self.gotoScene)
              end
         end
 
@@ -542,19 +579,22 @@ function M.new()
             local button = self.layer[epsode.name.."Icon"]
             if button then
                 print("-------- refresh ---------", self,  button)
-                self.downloadGroup[epsode.name] = button
+                self.cmd.downloadGroup[epsode.name] = button
                 button.purchaseBtn.alpha      = 0
                 if model.URL then
                     button.downloadBtn.alpha      = 0
                     button.savingTxt.alpha        = 0
                     button.savedBtn.alpha         = 0
                 end
-                button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
-                button:removeEventListener("tap", self.showOverlay)
-                button.savedBtn:removeEventListener("tap", self.gotoScene)
-                button:removeEventListener("tap", self.gotoScene)
-
-                self:addEventListener(button, epsode)
+                if (IAP.getInventoryValue("unlock_"..epsode.name)==true) then
+                    print(epsode.name .."(purchased)")
+                    button.savedBtn.alpha = 1
+                else
+                    print(epsode.name.."(not purchased)")
+                    --Otherwise add a tap listener to the button that unlocks the epsode
+                    button.purchaseBtn.alpha = 1
+                    button.purchaseBtn:addEventListener("tap", IAP.buyEpsode)
+                end
                 --
              end
         end

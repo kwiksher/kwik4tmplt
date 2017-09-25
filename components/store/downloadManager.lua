@@ -98,7 +98,7 @@ local function _startDownload(selectedPurchase)
         print("---------------------")
         local params    = {}
         params.progress = true
-        network.download( url, "GET", function(event)
+        network.download( url.."?a="..os.time(), "GET", function(event)
                 networkListener(event, deferred, selectedPurchase)
             end,
             params, selectedPurchase..".zip", system.TemporaryDirectory )
@@ -106,10 +106,11 @@ local function _startDownload(selectedPurchase)
     return deferred:promise()
 end
 
-function M.hasDownloaded(epsode)
+function M.hasDownloaded(epsode, version)
+    print(epsode, version)
     if not model.URL then return true end
-
-    local path = system.pathForFile( model.epsodes[epsode].dir, system.ApplicationSupportDirectory )
+    local _ver = version or ""
+    local path = system.pathForFile( model.epsodes[epsode].dir.._ver, system.ApplicationSupportDirectory )
     -- io.open opens a file at path. returns nil if no file found
     local fh, reason = io.open( path.."/copyright.txt", "r" )
     if fh then

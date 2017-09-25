@@ -9,6 +9,7 @@ function M.new ()
     print("commands.new", CMD)
     --
     CMD.downloadGroup = nil
+    CMD.versionGroup  = nil
     CMD.buttons = {}
     --
     local purchaseAlert = function()
@@ -37,9 +38,19 @@ function M.new ()
                 button.downloadBtn:removeEventListener("tap", button.downloadFunc)
                 button.downloadFunc = nil
             end
-            button:addEventListener("tap",
+            button.savedBtn.selectedPurchase = selectedPurchase
+            button.savedBtn:addEventListener("tap",
                 CMD.gotoScene)
-            table.insert(CMD.buttons, button)
+            table.insert(CMD.buttons, button.savedBtn) -- removeEventListener at destroy
+        else
+            local versionBtn = CMD.versionGroup[selectedPurchase]
+            if versionBtn then
+                versionBtn:removeEventListener("tap", CMD.startDownloadVersion)
+                versionBtn.selectedPurchase = selectedPurchase -- chaning from book01 to book01v01
+                versionBtn:addEventListener("tap", CMD.gotoScene)
+                CMD.versionGroup[selectedPurchase] = nil
+                table.insert(CMD.buttons, versionBtn) -- - removeEventListener at destroy
+            end
         end
     end
 
@@ -56,8 +67,19 @@ function M.new ()
             if (event.actionType == "purchase") then
                 -- button.text.text="saving"
                 if model.URL then
+                    button.downloadBtn.alpha = 1
+                    -- downloadManager:startDownload(event.product)
+                    button.downloadBtn.selectedPurchase = selectedPurchase
+                    if not button.downloadFunc then
+                        button.downloadFunc = function(event)
+                            local selectedPurchase = event.target.selectedPurchase
+                            downloadManager:startDownload(selectedPurchase)
+                            -- button.text.text="saving"
                     button.savingTxt.alpha = 1
-                    downloadManager:startDownload(event.product)
+                            return true
+                        end
+                        button.downloadBtn:addEventListener("tap", button.downloadFunc)
+                    end
                 else
                    self.onDownloadComplete(event.product)
                 end
@@ -90,7 +112,8 @@ function M.new ()
     end
 
     function CMD:init(UI)
-        self.downloadGroup = UI.downloadGroup
+        self.downloadGroup = {}
+        self.versionGroup  = {}
         print("CMD:init ", UI)
         UI.cmd = self
         self.gotoScene     = UI.gotoScene
@@ -103,6 +126,19 @@ function M.new ()
 
     function CMD:startDownload()
         downloadManager:startDownload()
+    end
+
+    function CMD.startDownloadVersion(e)
+            local selectedPurchase = e.target.selectedPurchase
+            local selectedVersion  = e.target.selectedVersion
+            if (IAP.getInventoryValue("unlock_"..selectedPurchase)==true) then
+                print("start download version1")
+                CMD.versionGroup[selectedPurchase..selectedVersion] = e.target
+                downloadManager:startDownload(selectedPurchase..selectedVersion)
+            else
+                print("not purchased yet")
+            end
+            return true
     end
 
     function CMD:dispose()

@@ -86,9 +86,11 @@ function _M:allListeners(UI)
         {{/adelay}}
                audio.setVolume({{avol}}, { channel={{achannel}} });
             {{#allowRepeat}}
+                if {{atype}}.{{aname}} == nil then return end
                {{atype}}.{{aname}}x9 = audio.play({{atype}}.{{aname}}, {  channel={{achannel}}, loops={{aloop}}{{tofade}} } )
             {{/allowRepeat}}
             {{^allowRepeat}}
+                if {{atype}}.{{aname}} == nil then return end
               audio.play({{atype}}.{{aname}}, {channel={{achannel}}, loops={{aloop}}{{tofade}} } )
             {{/allowRepeat}}
         {{#adelay}}
@@ -125,8 +127,8 @@ function _M:toDestroy(UI)
     {{^areadme}}
       {{#allowRepeat}}
         if ({{atype}}.{{aname}}x9 ~= 0) then
-          audio.dispose({{atype}}.{{aname}}x9)
-          {{atype}}.{{aname}}x9 = nil
+          audio.dispose({{atype}}.{{aname}})
+          {{atype}}.{{aname}}x9 = 0
         end
       {{/allowRepeat}}
       {{^allowRepeat}}

@@ -54,10 +54,12 @@ function _M:localPos(UI)
       local {{myLName}}_options = { text = "{{elContent}}", x = mX, y = mY, fontSize = elFontSize, font = {{elFont}}, width = imageWidth, align = "{{elAlign}}" }
       local {{myLName}}H = imageHeight
       layer.{{myLName}} = display.newText( {{myLName}}_options )
+      if layer.{{myLName}} == nil then return end
     {{/elpara}}
     {{^elpara}}
       local {{myLName}}_txt = "{{elContent}}"
       layer.{{myLName}} = display.newText( {{myLName}}_txt, mX, mY, imageWidth+eloH, imageHeight+eloV, {{elFont}}, elFontSize)
+      if layer.{{myLName}} == nil then return end
     {{/elpara}}
     layer.{{myLName}}.originalH = imageHeight
     layer.{{myLName}}.originalW = imageWidth

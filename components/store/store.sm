@@ -1,0 +1,150 @@
+%start MainMap::INIT
+%class StoreManager
+%package store
+%fsmclass StoreManagerFSM
+
+%map MainMap
+%%
+INIT
+    Entry{
+        initModel();
+    }
+{
+    showThumbnail()
+        ThumbnailDisplayed{
+            createThumbnail();
+        }
+    onDownloadQueue()
+        push(NetworkMap::Downloading) {}
+}
+
+ThumbnailDisplayed
+    Entry{
+        removeEventListener();
+    }
+    Exit{
+    }
+{
+    clickImage(id)
+        DisplayingDialog{
+            isBookPurchased(id);
+        }
+}
+
+DisplayingDialog
+    Entry{
+    }
+{
+    onClose()
+        ThumbnailDisplayed{}
+    createDialog(id, isPurchase)
+        push(DialogMap::INIT){
+            onCreateDialog(id, isPurchase);
+        }
+    exit()
+        BookDisplayed{}
+}
+
+BookDisplayed
+    Entry{
+        onEntryBookDisplayed();
+    }
+    Exit{
+        onExitBookDisplayed();
+    }
+{
+    exit()
+        INIT{}
+}
+%%
+
+%map DialogMap
+%%
+INIT
+{
+    showDialogPurchased()
+        BookPurchased{}
+    showDialogNotPurchased()
+        BookNotPurchased{}
+}
+
+BookPurchased
+    Entry{
+    }
+    Exit{
+        destroyDialog();
+    }
+{
+    clickImage(id)
+        pop(exit){
+            destroyThumbnail();
+            gotoScene(id);
+        }
+    clickCloseDialog()
+        pop(onClose){}
+}
+
+BookNotPurchased
+    Entry{
+    }
+    Exit{
+    }
+{
+    clickPurchase(id)
+        IAPBadger{
+            purchase(id);
+        }
+    clickCloseDialog()
+        pop(onClose){
+                destroyDialog();
+        }
+}
+
+IAPBadger
+{
+    onPurchase()
+        push(NetworkMap::Downloading){}
+    onPurchaseCancel()
+        BookNotPurchased{}
+    showDialogPurchased()
+        BookPurchased{}
+    showDialogNotPurchased()
+        BookNotPurchased{}
+}
+%%
+
+%map NetworkMap
+%%
+Downloading
+    Entry{
+        startDownload(id);
+    }
+{
+    onSuccess()
+        Downloaded{
+            unzip();
+        }
+    onFailure()
+        DownloadedError{
+            queue(id);
+        }
+}
+
+Downloaded
+{
+    fromThumbnail()
+        pop(showThumbnail){}
+    fromDialog(id)
+        pop(showDialogPurchased){
+            updateDialog(id);
+        }
+}
+
+DownloadedError
+{
+    fromThumbnail()
+        pop(showThumbnail){}
+    fromDialog(id)
+        pop(showDialogNotPurchased){}
+}
+%%

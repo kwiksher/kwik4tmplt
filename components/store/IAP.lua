@@ -12,7 +12,7 @@ end
 -- !!! Please edit salt and deugMode for device build !!!
 --
 function M:init(catalogue, restoreAlert, purchaseAlert)
-    print("iap init")
+    -- print(debug.traceback(""))
     self.catalogue       = catalogue
     self.restoreAlert  = restoreAlert
     self.purchaseAlert = purchaseAlert
@@ -30,7 +30,6 @@ function M:init(catalogue, restoreAlert, purchaseAlert)
         debugMode        = true,
     }
     iap.init(iapOptions)
-    print("iap init end")
 end
 
 ---------------------------------
@@ -43,11 +42,7 @@ local function purchaseListener( product )
     spinner:remove()
     Runtime:dispatchEvent({name = "command:purchaseCompleted", product = product, actionType = "purchase"})
     iap.saveInventory()
-    if M.purchaseAlert then
     M.purchaseAlert()
-    else
-        print("purchaseAlert is empty")
-    end
 end
 --Purchase function
 --Most of the code in this function places a spinner on screen to prevent any further user interaction with

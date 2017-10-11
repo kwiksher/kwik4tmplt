@@ -107,8 +107,8 @@ local function _startDownload(selectedPurchase)
 end
 
 function M.hasDownloaded(epsode)
-    if not model.URL then return true end
 
+    if not model.URL then return true end
     local path = system.pathForFile( model.epsodes[epsode].dir, system.ApplicationSupportDirectory )
     -- io.open opens a file at path. returns nil if no file found
     local fh, reason = io.open( path.."/copyright.txt", "r" )
@@ -116,6 +116,7 @@ function M.hasDownloaded(epsode)
         io.close( fh )
         return true
     else
+        print("error",reason)
         return false
     end
 end
@@ -132,6 +133,10 @@ function M:init(onSuccess, onError)
             downloadQueue:offer(selectedPurchase)
         end
     end)
+end
+
+function M.isDownloadQueue()
+    return downloadQueue:poll()
 end
 
 function M:startDownload(epsode)
@@ -182,7 +187,6 @@ M.setButtonImage = function (_button, epsode)
             }
         end
     end
-    --
     print(URL..epsode.."/"..backgroundImg)
     --
     network.download(

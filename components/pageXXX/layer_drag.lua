@@ -64,7 +64,7 @@ function _M:allListeners(UI)
             end
         {{/gdrop}}
         {{#gdragging}}
-           scene:dispatchEvent({name="{{gdragging}}", event={UI=UI} })
+           scene:dispatchEvent({name="{{gdragging}}", event={UI=UI, dragLayer=dragLayer} })
         {{/gdragging}}
         elseif event.phase == "ended" or event.phase == "cancelled" then
           {{#gdrop}}
@@ -75,7 +75,7 @@ function _M:allListeners(UI)
                  _K.MultiTouch.deactivate(dragLayer)
               {{/dropl}}
               {{#gdropt}}
-               scene:dispatchEvent({name="{{gdropt}}", event={UI=UI} })
+               scene:dispatchEvent({name="{{gdropt}}", event={UI=UI, dragLayer=dragLayer} })
               {{/gdropt}}
             {{#gback}}
             else
@@ -86,13 +86,13 @@ function _M:allListeners(UI)
         {{/gdrop}}
       {{#gdropr}}
           {{#gcomplete}}
-           scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
+           scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI, dragLayer=dragLayer} })
           {{/gcomplete}}
       {{/gdropr}}
       {{^gdropr}}
           {{#gcomplete}}
               if ({{glayer}}_lock == 0) then
-               scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
+               scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI, dragLayer=dragLayer} })
               end
           {{/gcomplete}}
       {{/gdropr}}

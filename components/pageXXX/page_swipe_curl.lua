@@ -46,6 +46,8 @@ local curlWidth = 400
 {{/ultimate}}
 {{/portrait}}
 
+local pageNextUI, pagePrevUI
+
 {{#isTmplt}}
 local ui  = require("components.store.UI")
 {{/isTmplt}}
@@ -88,7 +90,7 @@ function _M:allListeners(UI)
 {{#isTmplt}}
       if next == nil and curPage~=nextPage and ui.setDir(nextPage) then
         local scene ={view=display.newGroup()}
-        local pageNextUI    = require("components.page0"..ui.getPageNum(nextPage).."UI").new(scene)
+        pageNextUI    = require("components.page0"..ui.getPageNum(nextPage).."UI").new(scene)
         pageNextUI.dummy   = nextPage
         pageNextUI:create()
         next = scene.view
@@ -97,7 +99,7 @@ function _M:allListeners(UI)
 {{/isTmplt}}
 {{^isTmplt}}
         local scene ={view=display.newGroup()}
-        local pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
+        pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
         pageNextUI:create()
         next = scene.view
         sceneGroup:insert(next)
@@ -117,7 +119,7 @@ function _M:allListeners(UI)
 {{#isTmplt}}
       if prev == nil and curPage ~= prevPage and ui.setDir(prevPage) then
         local scene ={view=display.newGroup()}
-        local pagePrevUI    = require("components.page0"..ui.getPageNum(prevPage).."UI").new(scene)
+        pagePrevUI    = require("components.page0"..ui.getPageNum(prevPage).."UI").new(scene)
         pagePrevUI.dummy   = prevPage
         pagePrevUI:create()
         prev = scene.view
@@ -126,7 +128,7 @@ function _M:allListeners(UI)
 {{/isTmplt}}
 {{^isTmplt}}
         local scene ={view=display.newGroup()}
-        local pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
+        pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
         pagePrevUI:create()
         prev = scene.view
         sceneGroup:insert(prev)
@@ -140,6 +142,14 @@ function _M:allListeners(UI)
   local function Released(event)
     back:toBack()
     back.alpha = 0.1
+    if pagePrevUI then
+       pagePrevUI:didHide()
+       pagePrevUI = nil
+    end
+    if pageNextUI then
+        pageNextUI:didHide()
+        pageNextUI = nil
+    end
     if next then
       next:removeSelf()
       next = nil
@@ -172,6 +182,14 @@ function _M:allListeners(UI)
           ui.gotoNextScene({ effect = "fromRight"})
        elseif event.dir == "left" and _K.kBidi == false then
           wPage = ui.currentPage - 1
+          if pagePrevUI then
+             pagePrevUI:didHide()
+             pagePrevUI = nil
+          end
+          if pageNextUI then
+              pageNextUI:didHide()
+              pageNextUI = nil
+          end
           if wPage == 0 then
             _K.systemDir = system.ResourceDirectory
             _K.imgDir = "assets/images/"
@@ -203,6 +221,14 @@ function _M:allListeners(UI)
           options = { effect = "fromLeft"}
        end
        if tonumber(wPage) ~= tonumber(curPage)  then
+          if pagePrevUI then
+             pagePrevUI:didHide()
+             pagePrevUI = nil
+          end
+          if pageNextUI then
+              pageNextUI:didHide()
+              pageNextUI = nil
+          end
             _K.appInstance:showView("views.page0"..wPage.."Scene", options)
         end
         passed_threshold = false

@@ -6,7 +6,7 @@ local _M = {}
 --
 local _K = require "Application"
 local page_curl  = require("extlib.page_curl")
-local ui     = require("components.store.UI")
+-- local ui     = require("components.store.UI")
 -----------------------------------------------
 -- local _BackgroundLayerName = "background.jpg"
 -----------------------------------------------
@@ -77,13 +77,16 @@ function _M:allListeners(UI)
     local curl = event.target
     curl.alpha = 1
     if event.dir == "right" then
-      if next == nil and curPage~=nextPage and ui.setDir(nextPage) then
+{{^isTmplt}}
+      if next == nil and curPage~=nextPage then
+{{/isTmplt}}
         -- next = display.newImageRect( _K.imgDir.. "p"..nextPage.."/".._BackgroundLayerName, _K.systemDir, bgW, bgH )
         -- next.x = pgX
         -- next.y = pgY
         -- sceneGroup:insert(next)
         -- next:toFront()
 {{#isTmplt}}
+      if next == nil and curPage~=nextPage and ui.setDir(nextPage) then
         local scene ={view=display.newGroup()}
         local pageNextUI    = require("components.page0"..ui.getPageNum(nextPage).."UI").new(scene)
         pageNextUI.dummy   = nextPage
@@ -103,13 +106,16 @@ function _M:allListeners(UI)
 
       end
     else
-      if prev == nil and curPage ~= prevPage and ui.setDir(prevPage) then
+{{^isTmplt}}
+      if prev == nil and curPage ~= prevPage then
+{{/isTmplt}}
         -- prev = display.newImageRect( _K.imgDir.."p"..prevPage.."/".._BackgroundLayerName, _K.systemDir,bgW, bgH )
         -- prev.x = pgX
         -- prev.y = pgY
         -- sceneGroup:insert(prev)
         -- prev:toFront()
 {{#isTmplt}}
+      if prev == nil and curPage ~= prevPage and ui.setDir(prevPage) then
         local scene ={view=display.newGroup()}
         local pagePrevUI    = require("components.page0"..ui.getPageNum(prevPage).."UI").new(scene)
         pagePrevUI.dummy   = prevPage
@@ -196,7 +202,7 @@ function _M:allListeners(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
-       if tonumber(wPage) ~= tonumber(curPage) and ui.setDir(wPage) then
+       if tonumber(wPage) ~= tonumber(curPage)  then
             _K.appInstance:showView("views.page0"..wPage.."Scene", options)
         end
         passed_threshold = false

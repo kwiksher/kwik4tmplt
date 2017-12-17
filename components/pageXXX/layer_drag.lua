@@ -31,6 +31,9 @@ function _M:allListeners(UI)
         {{#gfocus}}
             local parent = t.parent; parent:insert(t); display.getCurrentStage():setFocus(t); t.isFocus = true
         {{/gfocus}}
+        t.oriBodyType = t.bodyType
+        t.bodyType ="kinematic"
+
       elseif event.phase == "moved" then
         {{#gFlip}}
           if (dragLayer.{{xyx}} < cr_{{glayer}}) then
@@ -64,9 +67,10 @@ function _M:allListeners(UI)
             end
         {{/gdrop}}
         {{#gdragging}}
-           scene:dispatchEvent({name="{{gdragging}}", event={UI=UI, dragLayer=dragLayer} })
+           scene:dispatchEvent({name="{{gdragging}}", event={UI=UI} })
         {{/gdragging}}
         elseif event.phase == "ended" or event.phase == "cancelled" then
+          t.bodyType = t.oriBodyType
           {{#gdrop}}
             if ({{glayer}}_lock == 1 and {{glayer}}_posX <= {{gdropb}}) and ({{glayer}}_posY <= {{gdropb}}) then
                dragLayer.x = layer.{{gdrop}}.x
@@ -75,7 +79,7 @@ function _M:allListeners(UI)
                  _K.MultiTouch.deactivate(dragLayer)
               {{/dropl}}
               {{#gdropt}}
-               scene:dispatchEvent({name="{{gdropt}}", event={UI=UI, dragLayer=dragLayer} })
+               scene:dispatchEvent({name="{{gdropt}}", event={UI=UI} })
               {{/gdropt}}
             {{#gback}}
             else
@@ -86,13 +90,13 @@ function _M:allListeners(UI)
         {{/gdrop}}
       {{#gdropr}}
           {{#gcomplete}}
-           scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI, dragLayer=dragLayer} })
+           scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
           {{/gcomplete}}
       {{/gdropr}}
       {{^gdropr}}
           {{#gcomplete}}
               if ({{glayer}}_lock == 0) then
-               scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI, dragLayer=dragLayer} })
+               scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
               end
           {{/gcomplete}}
       {{/gdropr}}

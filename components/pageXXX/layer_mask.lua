@@ -30,7 +30,7 @@ function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local group = display.newGroup()
     group:insert(layer.{{targetLayer}})
-    sceneGroup.blanket = layer.{{targetLayer}}
+    sceneGroup.{{targetLayer}} = layer.{{targetLayer}}
     layer.{{targetLayer}}.group = group
     sceneGroup:insert(group)
     --sceneGroup:remove(layer.{{targetLayer}})
@@ -43,11 +43,11 @@ function _M:allListeners(UI)
     print( imageSuffix )
     print(_K.imgDir.. imagePath..imageSuffix..ext)
     local mask = graphics.newMask(_K.imgDir.. imagePath..imageSuffix..ext )
-    layer.blanket.group:setMask(mask)
-    layer.blanket.group.maskScaleX = {{scaleX}}*0.5
-    layer.blanket.group.maskScaleY = {{scaleY}}*0.5
-    layer.blanket.group.maskX = mX
-    layer.blanket.group.maskY = mY
+    layer.{{targetLayer}}.group:setMask(mask)
+    layer.{{targetLayer}}.group.maskScaleX = {{scaleX}}*0.5
+    layer.{{targetLayer}}.group.maskScaleY = {{scaleY}}*0.5
+    layer.{{targetLayer}}.group.maskX = mX
+    layer.{{targetLayer}}.group.maskY = mY
 end
 --
 function _M:toDispose(UI)

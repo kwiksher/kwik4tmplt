@@ -156,6 +156,7 @@ function _M:localPos(UI)
   local function myNewImage()
     layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
     -- layer.{{myLName}} = newImageRect({{bn}}, imageWidth, imageHeight )
+    if layer.{{myLName}} == nil then return end
     layer.{{myLName}}.imagePath = imagePath
     layer.{{myLName}}.x = mX
     layer.{{myLName}}.y = mY
@@ -193,8 +194,8 @@ function _M:localPos(UI)
     {{#infinity}}
       layer.{{myLName}}_2 = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
         -- layer.{{myLName}}_2 = newImageRect({{bn}}, imageWidth, imageHeight )
+      if layer.{{myLName}}_2 == nil then return end
       layer.{{myLName}}_2.blendMode = "{{bmode}}"
-
       sceneGroup:insert( layer.{{myLName}}_2)
       sceneGroup.{{myLName}}_2 = layer.{{myLName}}_2
       layer.{{myLName}}.anchorX = 0
@@ -369,6 +370,7 @@ function _M:allListeners(UI)
   {{^multLayers}}
     {{#infinity}}
        -- Infinity background
+       if layer.{{myLName}} == nil  or layer.{{myLName}}_2 == nil then return end
        Runtime:addEventListener("enterFrame", layer.{{myLName}})
        Runtime:addEventListener("enterFrame", layer.{{myLName}}_2)
     {{/infinity}}
@@ -380,6 +382,7 @@ function _M:toDispose(UI)
   local layer       = UI.layer
   {{^multLayers}}
     {{#infinity}}
+      if layer.{{myLName}} == nil  or layer.{{myLName}}_2 == nil then return end
       Runtime:removeEventListener("enterFrame", layer.{{myLName}})
       Runtime:removeEventListener("enterFrame", layer.{{myLName}}_2)
     {{/infinity}}

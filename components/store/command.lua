@@ -116,15 +116,15 @@ function M.onPurchaseComplete(event)
             if model.URL then
                 button.downloadBtn.alpha = 1
                 button.savedBtn.alpha = 0
-                if not button.downloadFunc then
-                    button.downloadFunc = function(event)
+                if not button.tap then
+                    function button:tap (event)
                         local selectedPurchase = event.target.selectedPurchase
                            downloadManager:startDownload(selectedPurchase)
                                 -- button.text.text="saving"
                                 button.savingTxt.alpha = 1
                             return true
                     end
-                    button.downloadBtn:addEventListener("tap", button.downloadFunc)
+                    button.downloadBtn:addEventListener("tap", button)
                 end
             else
                 -- onDownloadComplete(event.product)

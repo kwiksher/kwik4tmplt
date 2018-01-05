@@ -127,6 +127,9 @@ function _M:localPos(UI)
         channel      = {{vchan}},
         lang         = ""
     }
+
+    layer.{{myLName}}:translate(-layer.{{myLName}}.width/2, 0 )
+
     sceneGroup:insert( layer.{{myLName}})
     sceneGroup.{{myLName}} = layer.{{myLName}}
     --

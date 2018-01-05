@@ -71,7 +71,7 @@ end
 function _Class:destroyThumbnail()
     print("------- destroy destroyThumbnail")
   cmd:dispose()
-  self.view:destroy()
+  self.view:destroyThumbnail()
 end
 
 function _Class:removeEventListener()
@@ -120,6 +120,7 @@ end
 
 function _Class:destroyDialog()
     composer.hideOverlay("fade", 400 )
+    self.view:destroyDialog()
     -- Runtime:dispachEvent("hideOverlay")
 end
 

@@ -8,8 +8,9 @@ local _K              = require("Application")
 local json            = require("json")
 local master          = require("model") -- case tmplt, it returns the pages table. case embedded, it is overwritten as {isEmbedded = true} at the runtime by Kwikshelf plugin
 --
-local type={pages = 0, embedded = 1, tmplt=2}
+local type = {pages = 0, embedded = 1, tmplt=2}
 local bookShelfType = model.bookShelfType -- please set one of them
+local INFO_PAGE     = "views.page02Scene" -- tmplt, embedded only, UI:init(group, layer, overlay)
 ---------------------------------------------------
 --
 local currentBookModel = nil
@@ -106,11 +107,19 @@ setSystemDir[type.tmplt] = function (isDL, pageNum)
         _K.systemDir = system.ApplicationSupportDirectory
         _K.imgDir = currentBook.."/images/"
         _K.audioDir = currentBook.."/audios/p"..targetPage.."_"
+        _K.spriteDir   = currentBook.."/sprites/"
+        _K.thumbDir    = currentBook.."/thumbnails/"
+        _K.videoDir    = currentBook.."/videos/"
+        _K.particleDir = currentBook.."/particles/"
     else
         _K.systemDir = system.ResourceDirectory
-        _K.imgDir = "assets/images/"
-        _K.audioDir = "assets/audios/"
-    end
+        _K.imgDir      = "assets/images/"
+        _K.audioDir    = "assets/audios/"
+        _K.spriteDir   = "assets/sprites/"
+        _K.thumbDir    = "assets/thumbnails/"
+        _K.videoDir    = "assets/videos/"
+        _K.particleDir = "assets/particles/"
+ end
 end
 --
 M.setDir = function(pageNum)
@@ -127,6 +136,10 @@ M.setDir = function(pageNum)
                 _K.systemDir = system.ResourceDirectory
                 _K.imgDir = "assets/images/"
                 _K.audioDir = "assets/audios/"
+                _K.spriteDir   = "assets/sprites/"
+                _K.thumbDir    = "assets/thumbnails/"
+                _K.videoDir    = "assets/videos/"
+                _K.particleDir = "assets/particles/"
                 composer.gotoScene("views.page0"..model.epsodes[epname].info:sub(2).."Scene")
             else
                 local infoString = "The page is not found."

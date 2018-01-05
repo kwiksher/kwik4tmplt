@@ -42,7 +42,11 @@ local function purchaseListener( product )
     spinner:remove()
     Runtime:dispatchEvent({name = "command:purchaseCompleted", product = product, actionType = "purchase"})
     iap.saveInventory()
+    if M.purchaseAlert then
     M.purchaseAlert()
+    else
+        print("purchaseAlert is empty")
+    end
 end
 --Purchase function
 --Most of the code in this function places a spinner on screen to prevent any further user interaction with

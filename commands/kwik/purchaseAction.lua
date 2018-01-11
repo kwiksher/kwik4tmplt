@@ -2,6 +2,8 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
+local store = require("store")
+
 local _M = {}
 --
 function _M:restorePurchase()

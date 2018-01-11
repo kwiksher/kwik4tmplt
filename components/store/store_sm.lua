@@ -7,7 +7,7 @@ local error = error
 local pcall = pcall
 local strformat = require 'string'.format
 
-local statemap = require 'statemap'
+local statemap = require 'extlib.statemap'
 
 local _ENV = nil
 
@@ -414,7 +414,7 @@ function StoreManagerFSM:enterStartState ()
     self:getState():Entry(self)
 end
 
-return 
+return
 StoreManagerFSM
 -- Local variables:
 --  buffer-read-only: t

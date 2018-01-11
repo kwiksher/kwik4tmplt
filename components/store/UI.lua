@@ -10,7 +10,6 @@ local master          = require("model") -- case tmplt, it returns the pages tab
 --
 local type = {pages = 0, embedded = 1, tmplt=2}
 local bookShelfType = model.bookShelfType -- please set one of them
-local INFO_PAGE     = "views.page02Scene" -- tmplt, embedded only, UI:init(group, layer, overlay)
 ---------------------------------------------------
 --
 local currentBookModel = nil
@@ -363,7 +362,7 @@ M.replaceTimeCodes = function(syncLayer, filename)
 end
 
 function M.hasDownloaded(epsode)
-    IAP:init(model.catalogue, nil, nil)
+    IAP:init(model.catalogue, nil, nil, model.debug)
     if (IAP.getInventoryValue("unlock_"..epsode)==true) then
         if downloadManager.hasDownloaded(epsode) then
             return true

@@ -50,7 +50,7 @@ function M.new ()
             time = 400,
             params = {}
         }
-        local page = "views.page02Scene" -- INFO
+        local page = model.INFO_PAGE
         if  bookShelfType == type.pages then
              page = model.getPageInfo(epsode.name)
         end

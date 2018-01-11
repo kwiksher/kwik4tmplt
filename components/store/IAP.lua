@@ -11,7 +11,7 @@ end
 --
 -- !!! Please edit salt and deugMode for device build !!!
 --
-function M:init(catalogue, restoreAlert, purchaseAlert)
+function M:init(catalogue, restoreAlert, purchaseAlert, debug)
     -- print(debug.traceback(""))
     self.catalogue       = catalogue
     self.restoreAlert  = restoreAlert
@@ -27,7 +27,7 @@ function M:init(catalogue, restoreAlert, purchaseAlert)
         --Once the product has been purchased, it will remain in the inventory.  Uncomment the following line
         --to test the purchase functions again in future.  It's also useful for testing restore purchases.
         --doNotLoadInventory=true,
-        debugMode        = true,
+        debugMode        = debug,
     }
     iap.init(iapOptions)
 end

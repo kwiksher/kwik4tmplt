@@ -185,7 +185,7 @@ end
 function _Class:init (overlay, view)
     self.view = view
     --cmd:init(view)
-    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert)
+    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, model.debug)
     downloadManager:init(self.onDownloadComplete,self.onDownloadError)    --
     self.fsm:enterStartState()
     self.fsm:setDebugFlag(true)

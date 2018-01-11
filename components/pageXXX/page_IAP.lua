@@ -5,25 +5,11 @@
 local _M = {}
 local _K = require "Application"
 local composer = require("composer")
-local store = require ( "store" ) -- Available in Corona build #261 or later
 ---------------------
 ---------------------
-{{^inApp}}
-local ui          = require("components.store.UI")
-{{/inApp}}
-
 {{#inApp}}
-    -- see iap(myi).jsx
-    -- In-app purchase{{}}
-    local listOfProducts = {
-        {{#prod}}
-          "{{pID}}",
-        {{/prod}}
-    }
-
-local model       = require("components.store.model")
-local ui          = require("components.store.UI").new()
-local cmd         = require("components.store.command").new()
+local view          = require("components.store.view").new()
+local storeFSM = require ( "components.store.storeFSM" ).getInstance()
 ---------------------
 function _M:resume()
   ui:refresh(true)
@@ -34,39 +20,33 @@ local function hideOverlay()
     return true
 end
 --
-local function store_init(sceneGroup, layer)
-    ui:init(sceneGroup, layer, true)
-    cmd:init(ui)
-    ui:create()
-    -- UI:createBuyButton(model.epsode02, _W/2, _H/2, 150, 50)
-    -- UI:createBuyButton(model.epsode03, _W/2, _H/2 + 50, 150, 50)
-    -- UI:createRestoreButton(_W/2, _H/2+100, 150, 50)
-    cmd:startDownload()
-    if layer.hideOverlayBtn then
-      layer.hideOverlayBtn:addEventListener("tap", hideOverlay)
-    end
-end
 {{/inApp}}
+{{#lockPage}}
+local cmd          = require("components.store.command").new()
+{{/lockPage}}
 --
 function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
   -- Page properties
 {{#inApp}}
-    store_init(sceneGroup, layer)
+    view:init(sceneGroup, layer, storeFSM.fsm)
+    storeFSM:init(true, view) -- overlay
 {{/inApp}}
-{{^inApp}}
-  ui.init(nil)
-{{/inApp}}
-
+{{#lockPage}}
+    cmd:init(nil)
+{{/lockPage}}
 end
 --
 function _M:localVars(UI)
 end
 --
 function _M:allListeners(UI)
+  {{#inApp}}
+  storeFSM.view = view
+  {{/inApp}}
   {{#lockPage}}
-    if not ui.hasDownloaded( "{{product}}" ) then
+    if not cmd.hasDownloaded( "{{product}}" ) then
         --Page restricted. Send to pageError
         local infoString = "This page needs to be purchased."
         local function onComplete( event )
@@ -92,11 +72,7 @@ end
 --
 function _M:toDispose(UI)
 {{#inApp}}
-  if UI.layer.hideOverlayBtn then
-    UI.layer.hideOverlayBtn:removeEventListener("tap", hideOverlay)
-  end
-  cmd:dispose()
-  ui:destroy()
+    storeFSM:destroy()
 {{/inApp}}
 end
 --

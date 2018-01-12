@@ -1,5 +1,6 @@
 local M = {}
 --
+local store = require("store")
 local iap = require("extlib.iap_badger")
 local spinner = require("extlib.spinner").new()
 --
@@ -16,6 +17,7 @@ function M:init(catalogue, restoreAlert, purchaseAlert, debug)
     self.catalogue       = catalogue
     self.restoreAlert  = restoreAlert
     self.purchaseAlert = purchaseAlert
+    self.debug         = debug
 
     local iapOptions = {
         catalogue         = catalogue,
@@ -108,4 +110,11 @@ function M.getInventoryValue(inventryItem)
     return iap.getInventoryValue(inventryItem)
 end
 
+function M.canMakePurchases()
+    return M.debug or store.canMakePurchases
+end
+
+function M.restore()
+    store.restore()
+end
 return M

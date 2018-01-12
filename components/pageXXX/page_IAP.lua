@@ -7,7 +7,7 @@ local _K = require "Application"
 local composer = require("composer")
 ---------------------
 ---------------------
-{{#inApp}}
+{{#BookShelf}}
 local view          = require("components.store.view").new()
 local storeFSM = require ( "components.store.storeFSM" ).getInstance()
 ---------------------
@@ -19,34 +19,38 @@ local function hideOverlay()
     composer.hideOverlay("fade", 400 )
     return true
 end
+{{/BookShelf}}
 --
-{{/inApp}}
-{{#lockPage}}
-local cmd          = require("components.store.command").new()
-{{/lockPage}}
+{{#simpleLock}}
+local model       = require("components.store.model")
+local IAP         = require ( "components.store.IAP" )
+local view        = require("components.store.view").new()
+{{/simpleLock}}
 --
 function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
   -- Page properties
-{{#inApp}}
+{{#BookShelf}}
     view:init(sceneGroup, layer, storeFSM.fsm)
     storeFSM:init(true, view) -- overlay
-{{/inApp}}
-{{#lockPage}}
-    cmd:init(nil)
-{{/lockPage}}
+{{/BookShelf}}
+{{#simpleLock}}
+    view:init(sceneGroup, layer)
+    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, model.debug)
+{{/simpleLock}}
 end
---
+--F
 function _M:localVars(UI)
 end
 --
 function _M:allListeners(UI)
-  {{#inApp}}
+  {{#BookShelf}}
   storeFSM.view = view
-  {{/inApp}}
-  {{#lockPage}}
-    if not cmd.hasDownloaded( "{{product}}" ) then
+  {{/BookShelf}}
+  {{#simpleLock}}
+    {{#redirect}}
+    if not IAP.getInventoryValue( "unlock_".."{{product}}" ) then
         --Page restricted. Send to pageError
         local infoString = "This page needs to be purchased."
         local function onComplete( event )
@@ -64,16 +68,15 @@ function _M:allListeners(UI)
         end
         local alert = native.showAlert("Restricted Content", infoString,{ "OK" }, onComplete)
     end
-  {{/lockPage}}
+    {{/redirect}}
+  {{/simpleLock}}
 end
 --
-function _M:willHide(UI)
-end
 --
 function _M:toDispose(UI)
-{{#inApp}}
+{{#BookShelf}}
     storeFSM:destroy()
-{{/inApp}}
+{{/BookShelf}}
 end
 --
 return _M

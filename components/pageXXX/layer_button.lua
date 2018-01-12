@@ -6,6 +6,9 @@ local _M = require("components.kwik.tabButFunction").new(scene)
 --
 local widget = require("widget")
 local _K = require "Application"
+{{#buyProductHide}}
+local IAP    = require ( "components.store.IAP" )
+{{/buyProductHide}}
 --
 -- scene, layer and sceneGroup should be INPUT
 -- tab{{um}} should be INPUT
@@ -77,18 +80,13 @@ function _M:allListeners(UI)
   {{#tabButFunction}}
     _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
   {{/tabButFunction}}
-  --
-  {{#button}}
     {{#buyProductHide}}
       --Hide button if purchase was already made
-      local path = system.pathForFile ("{{inApp}}.txt", system.DocumentsDirectory )
-      local file = io.open( path, "r" )
-      if file then
+    if IAP.getInventoryValue("unlock_".."{{inApp}}") then
          --This page was purchased, do not show the BUY button
-         {{layer}}.alpha = 0
+       layer.{{layer}}.alpha = 0
       end
     {{/buyProductHide}}
-  {{/button}}
   {{/multLayers}}
 end
 --

@@ -2,12 +2,12 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
-local store = require("store")
+local IAP = require("components.store.IAP")
 
 local _M = {}
 --
 function _M:restorePurchase()
-	store.restore()
+	IAP.restore()
 end
 --
 function _M:refoundPurchase()
@@ -15,8 +15,7 @@ function _M:refoundPurchase()
 end
 --
 function _M:buyProduct(product)
-	if store.canMakePurchases then
-			local IAP = require("components.store.IAP")
+	if IAP.canMakePurchases() then
 			local event = {target={selectedPurchase=product}}
 			IAP.buyEpsode(event)
 	  -- store.purchase(product)

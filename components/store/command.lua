@@ -39,6 +39,7 @@ function M.new ()
     end
 
     function CMD.gotoScene(event)
+        print("CMD.gotoScene")
         UI.gotoScene(event)
     end
     --
@@ -97,6 +98,7 @@ end
 function M.onPurchaseComplete(event)
     local selectedPurchase = event.product
     local button = downloadGroup[selectedPurchase]
+    print("#########", selectedPurchase)
     --
     if button then
         button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
@@ -105,7 +107,9 @@ function M.onPurchaseComplete(event)
         if (event.actionType == "purchase") then
             -- button.text.text="saving"
             if model.URL then
+                if button.savingTxt then
                 button.savingTxt.alpha = 1
+                end
                 downloadManager:startDownload(event.product)
             else
                -- onDownloadComplete(event.product)

@@ -236,6 +236,9 @@ M.gotoSceneBook = function(epsode, page, params)
         if epsode == "TOC" then
             M.currentPage = 1
             setSystemDir[type.tmplt](false)
+
+local storeFSM = require("components.store.storeFSM").getInstance()
+storeFSM:exit()
             composer.gotoScene("views.page01Scene", {params = params})
         else
             print("gotoSceneBook ".. model.getPageName(epsode))
@@ -385,7 +388,7 @@ function M.isPageReady(num)
 end
 
 function M.gotoScene(event)
-    local epsode =  event.target.selectedPurchase
+    local epsode =  model.epsodes[event.target.selectedPurchase]
     print("UI.gotoScene ".. epsode.name)
     if master.isEmbedded then
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode.name})

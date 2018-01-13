@@ -18,6 +18,9 @@ function M.new()
     --
     local function copyDisplayObject(src, dst, id, group)
         local obj = display.newImageRect( _K.imgDir..src.imagePath, _K.systemDir, src.width, src.height)
+            if obj == nil then
+                print("copyDisplay object fail", id)
+            end
             obj.x = dst.x + src.x - _W/2
             obj.y = dst.y + src.y - _H/2
             src.alpha = 0
@@ -60,7 +63,7 @@ function M.new()
             if button then
                 button.epsode = epsode
                 function button:tap(e)
-                    self.fsm:clickImage(self.epsode)
+                    VIEW.fsm:clickImage(self.epsode)
                 end
                 button:addEventListener("tap", button)
             end
@@ -77,11 +80,12 @@ function M.new()
         self.epsode = epsode
         local bookXXIcon = self.layer["bookXXIcon"]
         if bookXXIcon then
-            self.downloadGroup[epsode] = bookXXIcon
+            self.downloadGroup[epsode.name] = bookXXIcon
             bookXXIcon.versions = {}
             bookXXIcon.selectedPurchase = epsode
             --If the user has purchased the epsode before, change the bookXXIcon
             bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, bookXXIcon, epsode, self.sceneGroup)
+            bookXXIcon.purchaseBtn.selectedPurchase = epsode.name
             if model.URL then
                 if epsode.versions == nil or #epsode.versions == 0 then
                     bookXXIcon.downloadBtn = copyDisplayObject(self.layer.downloadBtn, bookXXIcon, epsode, self.sceneGroup)
@@ -96,8 +100,10 @@ function M.new()
             --
             if epsode.versions then
                 for i=1, #epsode.versions do
-                    if self.layer["version0"..i] and string.len(epsode.versions[i]) > 1 then
-                        local versionBtn = copyDisplayObject(self,layer["version0"..i], bookXXIcon, epsode.name..self.epsode.versions[i], epsode.name..epsode.versions[i])
+                    if self.layer["version_"..epsode.versions[i]] and string.len(epsode.versions[i]) > 1 then
+                        local versionBtn = copyDisplayObject(self.layer["version_"..epsode.versions[i]], bookXXIcon, epsode.name..self.epsode.versions[i], self.sceneGroup)
+                        print(epsode.versions[i])
+                        versionBtn.alpha = 1
                         versionBtn.selectedPurchase = epsode.name
                         versionBtn.selectedVersion  = epsode.versions[i]
                         table.insert(bookXXIcon.versions, versionBtn)
@@ -116,10 +122,10 @@ function M.new()
                 if #bookXXIcon.versions == 0 then
                     if cmd.hasDownloaded(epsode.name) then
                         -- bookXXIcon.savedBtn:addEventListener("tap", function(e)
-                        --     self.fsm:clickImage(_epsode)
+                        --     VIEW.fsm:clickImage(_epsode)
                         --     end)
                         function bookXXIcon:tap(e)
-                            self.fsm:clickImage(self.selectedPurchase)
+                            VIEW.fsm:clickImage(self.selectedPurchase)
                         end
                         bookXXIcon:addEventListener("tap", bookXXIcon)
                         if model.URL then
@@ -141,7 +147,7 @@ function M.new()
                                 print(versionBtn.selectedVersion .."(saved)")
                                 function versionBtn:tap(e)
                                     --self.gotoScene
-                                    self.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
+                                    VIEW.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
                                 end
                                 versionBtn:addEventListener("tap", versionBtn)
                             else
@@ -149,7 +155,7 @@ function M.new()
                                 -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _epsode.versions[i]})
                                 function versionBtn:tap(e)
                                     --self.cmd.startDownloadVersion
-                                    self.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
+                                    VIEW.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
                                 end
                                 versionBtn:addEventListener("tap", versionBtn)
                             end
@@ -161,7 +167,7 @@ function M.new()
                 --Otherwise add a tap listener to the bookXXIcon that unlocks the epsode
                 bookXXIcon.purchaseBtn.alpha = 1
                 function bookXXIcon.purchaseBtn:tap(e)
-                    self.fsm:clickPurchase(self.selectedPurchase)
+                    VIEW.fsm:clickPurchase(self.selectedPurchase)
                 end
                 bookXXIcon.purchaseBtn:addEventListener("tap", bookXXIcon.purchaseBtn)
                 --Otherwise add a tap listener to the button that unlocks the epsode
@@ -172,7 +178,7 @@ function M.new()
                     if versionBtn then
                         function versionBtn:tap(e)
                             --self.cmd.startDownloadVersion
-                            self.fsm:clickPurchase(self.selectedPurchase)
+                            VIEW.fsm:clickPurchase(self.selectedPurchase)
                         end
                         versionBtn:addEventListener("tap", versionBtn)
                     end
@@ -183,7 +189,7 @@ function M.new()
         if self.layer.hideOverlayBtn then
             -- composer.hideOverlay("fade", 400 )
             function self.layer.hideOverlayBtn:tap (e)
-                    self.fsm:clickCloseDialog()
+                    VIEW.fsm:clickCloseDialog()
                 end
             self.layer.hideOverlayBtn:addEventListener("tap", self.layer.hideOverlayBtn)
         end
@@ -202,12 +208,13 @@ function M.new()
         native.showAlert("Restore", model.restoreAlertMessage, {"Okay"})
     end
     --
-    function VIEW.updateDialog(selectedPurchase)
+    function VIEW:updateDialog(selectedPurchase)
        local button = VIEW.downloadGroup[selectedPurchase]
        --self.epsode  = selectedPurchase
-        print("VIEW.updateDialog download is completed!")
+        print("VIEW.updateDialog", selectedPurchase)
         -- button.text.text=selectedPurchase.."(saved)"
-        if button then
+        if button and (#button.versions == 0) then
+            print("book")
             if model.URL then
                 button.savingTxt.alpha = 0
                 button.savedBtn.alpha = 1
@@ -222,9 +229,14 @@ function M.new()
             button:addEventListener("tap", button)
         else
             -- not found. It means it is a version button
-            local versionBtn = self.versionGroup[selectedPurchase]
+            local versions = model.epsodes[selectedPurchase].versions
+            for k, v in pairs(versions) do print(k, v) end
+            for i=1, #versions do
+                local versionBtn = self.versionGroup[selectedPurchase..versions[i]]
+                print(selectedPurchase..versions[i],versionBtn)
             if versionBtn then
                 if versionBtn.tap then
+                        print("removeEventListener")
                     versionBtn:removeEventListener("tap", versionBtn)
                 end
                 function versionBtn:tap(e)
@@ -233,7 +245,8 @@ function M.new()
                 versionBtn:addEventListener("tap", versionBtn)
                 -- versionBtn.selectedPurchase = selectedPurchase -- chaning from book01 to book01v01
                 -- versionBtn:addEventListener("tap", CMD.gotoScene)
-                self.versionGroup[selectedPurchase] = nil
+                    self.versionGroup[selectedPurchase..versions[i]] = nil
+                end
             end
         end
     end
@@ -287,6 +300,11 @@ function M.new()
         self.layer      = layer
         self.fsm        = fsm
         cmd:init(self)
+        if model.URL then
+            layer.savingTxt.alpha = 0
+            layer.savedBtn.alpha = 0
+            layer.downloadBtn.alpha = 0
+        end
     end
     --
     return VIEW

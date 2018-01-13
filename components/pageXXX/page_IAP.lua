@@ -11,14 +11,16 @@ local composer = require("composer")
 local view          = require("components.store.view").new()
 local storeFSM = require ( "components.store.storeFSM" ).getInstance()
 ---------------------
+{{#TOC}}
 function _M:resume()
-  ui:refresh(true)
+--  ui:refresh(true)
 end
 --
 local function hideOverlay()
     composer.hideOverlay("fade", 400 )
     return true
 end
+{{/TOC}}
 {{/BookShelf}}
 --
 {{#simpleLock}}
@@ -33,7 +35,9 @@ function _M:localPos(UI)
   -- Page properties
 {{#BookShelf}}
     view:init(sceneGroup, layer, storeFSM.fsm)
+    {{#TOC}}
     storeFSM:init(true, view) -- overlay
+    {{/TOC}}
 {{/BookShelf}}
 {{#simpleLock}}
     view:init(sceneGroup, layer)
@@ -75,7 +79,9 @@ end
 --
 function _M:toDispose(UI)
 {{#BookShelf}}
+    {{#TOC}}
     storeFSM:destroy()
+    {{/TOC}}
 {{/BookShelf}}
 end
 --

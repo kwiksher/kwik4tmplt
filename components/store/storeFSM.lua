@@ -20,7 +20,7 @@ end
 
 function _Class:destroy()
   --cmd:dispose()
-  self.view:destroy()
+  --self.view:destroy()
 end
 ------------------------------
 --- INIT state
@@ -57,7 +57,7 @@ end
 -- Downloaded
 --
 function _Class:updateDialog(id)
-    self.view.updateDialog(id)
+    self.view:updateDialog(id)
 end
 
 ------------------------------
@@ -126,7 +126,6 @@ end
 
 function _Class:gotoScene(epsode)
     print("------- gotoScene", epsode)
-
     local event = {target={selectedPurchase = epsode}}
     cmd.gotoScene(event)
     -- Runtime:dispachEvent("hideOverlay")
@@ -141,7 +140,7 @@ function _Class:purchase(id)
     IAP.buyEpsode(e)
     timer.performWithDelay(10, function()
         self.fsm:onPurchase() end)
-    Runtime:addEventListener("command:purchaseCompleted", self.onPurchaseComplete)
+   -- Runtime:addEventListener("command:purchaseCompleted", self.onPurchaseComplete)
 
 end
 
@@ -153,6 +152,11 @@ end
 
 function _Class:onExitBookDisplayed()
     -- addEventListner ("tap", self.fsm:showThumbnail() )
+end
+
+function _Class:exit()
+    print("-------- exit ------------")
+    self.fsm:exit()
 end
 
 ------------------------------

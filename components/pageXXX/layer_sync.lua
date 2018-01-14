@@ -176,6 +176,8 @@ end
 function _M:localVars(UI)
   {{#isTmplt}}
    mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath, UI.dummy)
+   -- mX = mX - imageWidth/2
+   mY = mY - imageHeight/2
   {{/isTmplt}}
 end
 --

@@ -6,11 +6,6 @@ local _M = {}
 --
 local _K = require "Application"
 --
-function _M:Var(UI)
-  local sceneGroup  = UI.scene.view
-  local layer       = UI.layer
-end
---
 {{#ultimate}}
 local imageWidth             = {{elW}}/4
 local imageHeight            = {{elH}}
@@ -41,6 +36,12 @@ local randYEnd = {{randYEnd}}
 local elFontSize = {{elFontSize}}
 {{/ultimate}}
 local oriAlpha = {{oriAlpha}}
+--
+function _M:localVars(UI)
+  {{#isTmplt}}
+   mX, mY = _K.getModel("{{myLName}}", imagePath, UI.dummy)
+  {{/isTmplt}}
+end
 --
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view

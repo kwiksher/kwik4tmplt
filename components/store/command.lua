@@ -44,7 +44,7 @@ function M.new ()
     end
     --
     function CMD.showOverlay(event)
-        local epsode =  event.target.selectedPurchase
+        local epsode =  event.target.epsode
         local options = {
             isModal = true,
             effect = model.showOverlayEffect,
@@ -61,8 +61,10 @@ function M.new ()
             end
             model.currentEpsode = {name=epsode, isPurchased = event.target.isPurchased}
             composer.showOverlay(page, options)
-        end
         return true
+        else
+            return false
+        end
     end
 
     function CMD.hideOverlay()
@@ -91,6 +93,19 @@ function M.new ()
         IAP.buyEpsode(e)
     end
 
+    function CMD.onPurchase(name)
+        IAP.buyEpsode({target = {selectedPurchase = name}})
+    end
+
+    function CMD.onDownload(name)
+       downloadManager:startDownload(name)
+    end
+
+    function CMD.onSaved(name)
+        if downloadManager.hasDownloaded(name) then
+            UI.gotoScene({target = {selectedPurchase = name}})
+        end
+    end
     return CMD
 end
 
@@ -98,18 +113,14 @@ end
 function M.onPurchaseComplete(event)
     local selectedPurchase = event.product
     local button = downloadGroup[selectedPurchase]
-    print("#########", selectedPurchase)
+    print("CMD onPurchaseComplete", selectedPurchase)
     --
     if button then
         button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
-        button.purchaseBtn.alpha = 0
         --
         if (event.actionType == "purchase") then
             -- button.text.text="saving"
             if model.URL then
-                if button.savingTxt then
-                button.savingTxt.alpha = 1
-                end
                 downloadManager:startDownload(event.product)
             else
                -- onDownloadComplete(event.product)
@@ -118,14 +129,10 @@ function M.onPurchaseComplete(event)
             -- restore
             --button.text.text="press to download"
             if model.URL then
-                button.downloadBtn.alpha = 1
-                button.savedBtn.alpha = 0
                 if not button.tap then
                     function button:tap (event)
                         local selectedPurchase = event.target.selectedPurchase
                            downloadManager:startDownload(selectedPurchase)
-                                -- button.text.text="saving"
-                                button.savingTxt.alpha = 1
                             return true
                     end
                     button.downloadBtn:addEventListener("tap", button)

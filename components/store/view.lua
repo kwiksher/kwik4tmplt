@@ -21,8 +21,13 @@ function M.new()
             if obj == nil then
                 print("copyDisplay object fail", id)
             end
+            if dst then
             obj.x = dst.x + src.x - _W/2
             obj.y = dst.y + src.y - _H/2
+            else
+                obj.x = src.x
+                obj.y = src.y
+            end
             src.alpha = 0
             obj.alpha = 0
             obj.selectedPurchase = id
@@ -47,6 +52,13 @@ function M.new()
                     button.savingTxt   = copyDisplayObject(self.layer.savingTxt, button, epsode.name, self.sceneGroup)
                 end
                 button.savedBtn = copyDisplayObject(self.layer.savedBtn, button, epsode.name, self.sceneGroup)
+                if model.bookShelfType  == 0 then -- pages
+                    if cmd.hasDownloaded(epsode.name) then
+                        button.savedBtn.alpha = 1
+                    else
+                    button.purchaseBtn.alpha = 1
+                end
+                end
                 --
                 -- button image
                 --
@@ -66,6 +78,28 @@ function M.new()
                     VIEW.fsm:clickImage(self.epsode)
                 end
                 button:addEventListener("tap", button)
+                --
+                if model.bookShelfType  == 0 then -- pages
+                    function button.purchaseBtn:tap(e)
+                        VIEW.fsm:clickPurchase(self.selectedPurchase, false)
+                        --cmd.onPurchase(self.selectedPurchase)
+                    end
+                    function button.downloadBtn:tap(e)
+                        --cmd.onDownload(self.selectedPurchase)
+                    end
+                    function button.savedBtn:tap(e)
+                        VIEW.fsm:gotoBook(self.epsode)
+                    end
+                    button.purchaseBtn.selectedPurchase = epsode.name
+                    button.downloadBtn.selectedPurchase = epsode.name
+                    button.savedBtn.selectedPurchase = epsode.name
+                    button.purchaseBtn.epsode = epsode
+                    button.downloadBtn.epsode = epsode
+                    button.savedBtn.epsode = epsode
+                    button.purchaseBtn:addEventListener( "tap", button.purchaseBtn)
+                    button.downloadBtn:addEventListener( "tap", button.downloadBtn)
+                    button.savedBtn:addEventListener( "tap", button.savedBtn)
+                end
             end
         end
         if self.layer.restoreBtn then
@@ -75,24 +109,48 @@ function M.new()
               self.layer.hideOverlayBtn:addEventListener("tap", cmd.hideOverlay)
         end
     end
+    --
+    function VIEW:refreshThumbnail()
+        print("VIEW refreshThumbnail")
+        for k, epsode in pairs( model.epsodes) do
+            local button = self.layer[epsode.name.."Icon"]
+            if button then
+                button.purchaseBtn.alpha = 0
+                button.downloadBtn = 0
+                button.savedBtn.alpha = 0
+                if cmd.hasDownloaded(epsode.name) then
+                    button.purchaseBtn.alpha = 0
+                    button.downloadBtn = 0
+                    button.savedBtn.alpha = 1
+                else
+                    button.purchaseBtn.alpha = 1
+                    button.downloadBtn = 0
+                    button.savedBtn.alpha = 0
+                end
+            end
+        end
+    end
     ---
     function VIEW:createDialog(epsode, isPurchased)
         self.epsode = epsode
         local bookXXIcon = self.layer["bookXXIcon"]
+        if model.bookShelfType == 0 then
+            bookXXIcon = self.layer[epsode.name.."Icon"]
+        end
         if bookXXIcon then
             self.downloadGroup[epsode.name] = bookXXIcon
             bookXXIcon.versions = {}
-            bookXXIcon.selectedPurchase = epsode
+            bookXXIcon.selectedPurchase = epsode.name
             --If the user has purchased the epsode before, change the bookXXIcon
-            bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, bookXXIcon, epsode, self.sceneGroup)
+            bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, nil, epsode, self.sceneGroup)
             bookXXIcon.purchaseBtn.selectedPurchase = epsode.name
             if model.URL then
                 if epsode.versions == nil or #epsode.versions == 0 then
-                    bookXXIcon.downloadBtn = copyDisplayObject(self.layer.downloadBtn, bookXXIcon, epsode, self.sceneGroup)
-                    bookXXIcon.savingTxt   = copyDisplayObject(self.layer.savingTxt, bookXXIcon, epsode, self.sceneGroup)
+                    bookXXIcon.downloadBtn = copyDisplayObject(self.layer.downloadBtn, nil, epsode, self.sceneGroup)
+                    bookXXIcon.savingTxt   = copyDisplayObject(self.layer.savingTxt, nil, epsode, self.sceneGroup)
                 end
             end
-            -- bookXXIcon.savedBtn = copyDisplayObject(self.layer.savedBtn, bookXXIcon, self.epsode, self.sceneGroup)
+            bookXXIcon.savedBtn = copyDisplayObject(self.layer.savedBtn, nil, self.epsode, self.sceneGroup)
             --
             -- bookXXIcon image then
             --
@@ -101,7 +159,7 @@ function M.new()
             if epsode.versions then
                 for i=1, #epsode.versions do
                     if self.layer["version_"..epsode.versions[i]] and string.len(epsode.versions[i]) > 1 then
-                        local versionBtn = copyDisplayObject(self.layer["version_"..epsode.versions[i]], bookXXIcon, epsode.name..self.epsode.versions[i], self.sceneGroup)
+                        local versionBtn = copyDisplayObject(self.layer["version_"..epsode.versions[i]], nil, epsode.name..self.epsode.versions[i], self.sceneGroup)
                         print(epsode.versions[i])
                         versionBtn.alpha = 1
                         versionBtn.selectedPurchase = epsode.name
@@ -116,16 +174,20 @@ function M.new()
     --
     function VIEW:controlDialog(epsode, isPurchased)
         local bookXXIcon = self.layer["bookXXIcon"]
+        if model.bookShelfType == 0 then
+            bookXXIcon = self.layer[epsode.name.."Icon"]
+        end
         if bookXXIcon then
+            bookXXIcon.epsode = epsode
             if isPurchased then
                 print(epsode.name.."(purchased)")
-                if #bookXXIcon.versions == 0 then
+                if bookXXIcon.versions ==nil or #bookXXIcon.versions == 0 then
                     if cmd.hasDownloaded(epsode.name) then
                         -- bookXXIcon.savedBtn:addEventListener("tap", function(e)
                         --     VIEW.fsm:clickImage(_epsode)
                         --     end)
                         function bookXXIcon:tap(e)
-                            VIEW.fsm:clickImage(self.selectedPurchase)
+                            VIEW.fsm:clickImage(self.epsode)
                         end
                         bookXXIcon:addEventListener("tap", bookXXIcon)
                         if model.URL then
@@ -167,23 +229,25 @@ function M.new()
                 --Otherwise add a tap listener to the bookXXIcon that unlocks the epsode
                 bookXXIcon.purchaseBtn.alpha = 1
                 function bookXXIcon.purchaseBtn:tap(e)
-                    VIEW.fsm:clickPurchase(self.selectedPurchase)
+                    VIEW.fsm:clickPurchase(self.selectedPurchase, true)
                 end
                 bookXXIcon.purchaseBtn:addEventListener("tap", bookXXIcon.purchaseBtn)
                 --Otherwise add a tap listener to the button that unlocks the epsode
                 -----------
                 --
+                if bookXXIcon.versions then
                 for i=1, #bookXXIcon.versions do
                     local versionBtn = bookXXIcon.versions[i]
                     if versionBtn then
                         function versionBtn:tap(e)
                             --self.cmd.startDownloadVersion
-                            VIEW.fsm:clickPurchase(self.selectedPurchase)
+                            VIEW.fsm:clickPurchase(self.selectedPurchase, true)
                         end
                         versionBtn:addEventListener("tap", versionBtn)
                     end
                 end
             end
+        end
         end
         --
         if self.layer.hideOverlayBtn then
@@ -195,6 +259,11 @@ function M.new()
         end
         if self.layer.infoTxt then
             self.layer.infoTxt.text = model.epsodes[epsode.name].info
+            self.layer.infoTxt.x = self.layer.infoTxt.oriX
+            self.layer.infoTxt.y = self.layer.infoTxt.oriY
+            self.layer.infoTxt.anchorX = 0
+            self.layer.infoTxt.anchorY = 0.3
+
         end
     end
     --
@@ -214,7 +283,6 @@ function M.new()
         print("VIEW.updateDialog", selectedPurchase)
         -- button.text.text=selectedPurchase.."(saved)"
         if button and (#button.versions == 0) then
-            print("book")
             if model.URL then
                 button.savingTxt.alpha = 0
                 button.savedBtn.alpha = 1
@@ -224,7 +292,7 @@ function M.new()
                 button.downloadBtn:removeEventListener("tap", button)
             end
             function button:tap(e)
-                self.fsm:clickImage(self.selectedPurchase)
+                VIEW.fsm:clickImage(self.epsode)
             end
             button:addEventListener("tap", button)
         else
@@ -257,12 +325,17 @@ function M.new()
     end
     --
     function VIEW:destroyThumbnail()
+        print("VIEW:destroyThumbnail")
         for k, epsode in pairs( model.epsodes) do
             local button = self.layer[epsode.name.."Icon"]
             if button then
+                if button.purchaseBtn then
                 button.purchaseBtn:removeEventListener("tap", button.purchaseBtn)
+                end
                 button:removeEventListener("tap", cmd.showOverlay)
+                if button.savedBtn then
                 button.savedBtn:removeEventListener("tap", cmd.gotoScene)
+                end
                 button:removeEventListener("tap", cmd.gotoScene)
              end
         end
@@ -272,6 +345,7 @@ function M.new()
       if self.layer.restoreBtn then
             self.layer.restoreBtn:removeEventListener("tap", cmd.restore)
       end
+        print("VIEW:destroyThumbnail", "exit")
     end
 ------
     function VIEW:destroyDialog()

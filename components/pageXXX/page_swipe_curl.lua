@@ -100,6 +100,7 @@ function _M:allListeners(UI)
 {{^isTmplt}}
         local scene ={view=display.newGroup()}
         pageNextUI    = require("components.page0"..nextPage.."UI").new(scene)
+        pageNextUI.dummy   = nextPage
         pageNextUI:create()
         next = scene.view
         sceneGroup:insert(next)
@@ -129,6 +130,7 @@ function _M:allListeners(UI)
 {{^isTmplt}}
         local scene ={view=display.newGroup()}
         pagePrevUI    = require("components.page0"..prevPage.."UI").new(scene)
+        pagePrevUI.dummy   = prevPage
         pagePrevUI:create()
         prev = scene.view
         sceneGroup:insert(prev)

@@ -91,11 +91,25 @@ function _Class:isBookPurchased(epsode)
             print(epsode.name.."(saving)")
         end
     end
-    local event = {target={selectedPurchase = self.epsode, isPurchased = isPurchased}}
-    cmd.showOverlay(event)
+    local event = {target={epsode = epsode, selectedPurchase = epsode.name, isPurchased = isPurchased}}
+    if cmd.showOverlay(event) then
     timer.performWithDelay(100, function ()
         self.fsm:createDialog(epsode, isPurchased)
     end)
+    else
+        print("---------- not overlay -------- ")
+        if isPurchased then
+            timer.performWithDelay(100, function ()
+                self.fsm:onClose()
+                self.fsm:gotoBook(epsode)
+            end)
+        else
+            print("not purchased")
+            timer.performWithDelay(100, function ()
+                self.fsm:onClose()
+            end)
+        end
+    end
     -- Runtime:addEventListener("hideOverlay", self.fsm.onClose)
 end
 
@@ -125,8 +139,8 @@ function _Class:destroyDialog()
 end
 
 function _Class:gotoScene(epsode)
-    print("------- gotoScene", epsode)
-    local event = {target={selectedPurchase = epsode}}
+    print("storeFSM gotoScene", epsode.name)
+    local event = {target={epsode = epsode, selectedPurchase = epsode.name}}
     cmd.gotoScene(event)
     -- Runtime:dispachEvent("hideOverlay")
 end
@@ -134,16 +148,17 @@ end
 -- IAPBadger
 --
 
-function _Class:purchase(id)
-    self.fromDialog= true
+function _Class:purchase(id, fromDialog)
+    self.fromDialog= fromDialog
     local e = {target={selectedPurchase=id}}
     IAP.buyEpsode(e)
-    timer.performWithDelay(10, function()
-        self.fsm:onPurchase() end)
-   -- Runtime:addEventListener("command:purchaseCompleted", self.onPurchaseComplete)
-
 end
 
+function _Class:refreshThumbnail()
+        print("storeFSM refreshThumbnail")
+        self.view:refreshThumbnail()
+    -- timer.performWithDelay(5000, function()self.view:refreshThumbnail() end)
+end
 ------------------------------
 -- BookDisplayed
 --
@@ -169,7 +184,7 @@ function _Class.onDownloadComplete(selectedPurchase)
         self.fsm:fromDialog(selectedPurchase)
         self.fromDialog = false
     else
-        self.fsm:fromThumbnail()
+        self.fsm:backThumbnail()
         self.fromThumbnail = false
     end
 end
@@ -180,16 +195,35 @@ function _Class.onDownloadError(selectedPurchase, message)
         self.fsm:fromDialog(selectedPurchase)
         self.fromDialog = false
     else
-        self.fsm:fromThumbnail()
+        self.fsm:backThumbnail()
         self.fromThumbnail = false
     end
     self.view.onDownloadError(selectedPurchase, message)
 end
 --
+function _Class.purchaseListener()
+    local self = _Class.getInstance()
+    self.fsm:onPurchase()
+end
+
+function _Class.failedListener()
+    local self = _Class.getInstance()
+    if self.fromDialog then
+        self.fsm:onPurchaseCancel()
+    else
+        self.fsm:backThumbnail()
+    end
+end
+--
 function _Class:init (overlay, view)
     self.view = view
     --cmd:init(view)
-    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, model.debug)
+    IAP:init(model.catalogue, view.restoreAlert,
+        function()
+            self.purchaseListener()
+            view.purchaseAlert()
+        end,
+        self.failedListener,  model.debug)
     downloadManager:init(self.onDownloadComplete,self.onDownloadError)    --
     self.fsm:enterStartState()
     self.fsm:setDebugFlag(true)

@@ -22,7 +22,8 @@ end
 --
 function _Class:_create(type, layer, custom)
   self:setMod(layer, custom)
-  if self.mod.localPos then
+  -- dummy is pageCurl UI creation
+  if self.mod.localPos and (self.dummy == nil) then
     self.mod:localPos(self)
   end
 end

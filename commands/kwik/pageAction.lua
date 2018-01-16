@@ -39,14 +39,22 @@ function _M:gotoPage(pnum, ptrans, delay)
   ui.currentPage = pnum-1
 {{/isTmplt}}
   local myClosure_switch= function()
+    local model = require("components.store.model")
+    if model and model.bookShelfType ==0 and model.tocPage == pnum then
+      local ui = require("components.store.UI")
+      local storeFSM = require("components.store.storeFSM").getInstance()
+      storeFSM:exit()
+      ui.gotoPage(1)
+    else
       if nil~= composer.getScene("views.page0"..pnum.."Scene") then
-      	composer.removeScene("views.page0"..pnum.."Scene", true)
+          composer.removeScene("views.page0"..pnum.."Scene", true)
+        end
+      if ptrans and ptrans ~="" then
+         composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans} )
+      else
+         composer.gotoScene( "views.page0"..pnum.."Scene" )
       end
-		if ptrans and ptrans ~="" then
-       composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans} )
-		else
-       composer.gotoScene( "views.page0"..pnum.."Scene" )
-		end
+    end
   end
   if delay > 0 then
     _K.timerStash.pageAction = timer.performWithDelay(delay, myClosure_switch, 1)

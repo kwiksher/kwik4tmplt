@@ -21,13 +21,14 @@ StoreManagerState.Exit = _empty
 local function _default (self, fsm)
     self:Default(fsm)
 end
+StoreManagerState.backThumbnail = _default
 StoreManagerState.clickCloseDialog = _default
 StoreManagerState.clickImage = _default
 StoreManagerState.clickPurchase = _default
 StoreManagerState.createDialog = _default
 StoreManagerState.exit = _default
 StoreManagerState.fromDialog = _default
-StoreManagerState.fromThumbnail = _default
+StoreManagerState.gotoBook = _default
 StoreManagerState.onClose = _default
 StoreManagerState.onDownloadQueue = _default
 StoreManagerState.onFailure = _default
@@ -93,6 +94,33 @@ function MainMap.ThumbnailDisplayed:clickImage (fsm, id)
         end
     )
     fsm:setState(MainMap.DisplayingDialog)
+    fsm:getState():Entry(fsm)
+end
+
+function MainMap.ThumbnailDisplayed:clickPurchase (fsm, id, fromDialog)
+    local ctxt = fsm.owner
+    local endState = fsm:getState()
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:purchase(id, fromDialog)
+        end
+    )
+    fsm:setState(endState)
+    fsm:pushState(DialogMap.IAPBadger)
+    fsm:getState():Entry(fsm)
+end
+
+function MainMap.ThumbnailDisplayed:gotoBook (fsm, id)
+    local ctxt = fsm.owner
+    fsm:getState():Exit(fsm)
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:gotoScene(id)
+        end
+    )
+    fsm:setState(MainMap.BookDisplayed)
     fsm:getState():Entry(fsm)
 end
 
@@ -200,13 +228,13 @@ function DialogMap.BookNotPurchased:clickCloseDialog (fsm)
     fsm:onClose()
 end
 
-function DialogMap.BookNotPurchased:clickPurchase (fsm, id)
+function DialogMap.BookNotPurchased:clickPurchase (fsm, id, fromDialog)
     local ctxt = fsm.owner
     fsm:getState():Exit(fsm)
     fsm:clearState()
     local r, msg = pcall(
         function ()
-            ctxt:purchase(id)
+            ctxt:purchase(id, fromDialog)
         end
     )
     fsm:setState(DialogMap.IAPBadger)
@@ -214,6 +242,18 @@ function DialogMap.BookNotPurchased:clickPurchase (fsm, id)
 end
 
 DialogMap.IAPBadger = DialogMap.Default:new('DialogMap.IAPBadger', 7)
+
+function DialogMap.IAPBadger:backThumbnail (fsm)
+    local ctxt = fsm.owner
+    fsm:getState():Exit(fsm)
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:refreshThumbnail()
+        end
+    )
+    fsm:popState()
+end
 
 function DialogMap.IAPBadger:onPurchase (fsm)
     fsm:pushState(NetworkMap.Downloading)
@@ -275,6 +315,12 @@ end
 
 NetworkMap.Downloaded = NetworkMap.Default:new('NetworkMap.Downloaded', 9)
 
+function NetworkMap.Downloaded:backThumbnail (fsm)
+    fsm:getState():Exit(fsm)
+    fsm:popState()
+    fsm:backThumbnail()
+end
+
 function NetworkMap.Downloaded:fromDialog (fsm, id)
     local ctxt = fsm.owner
     fsm:getState():Exit(fsm)
@@ -288,13 +334,13 @@ function NetworkMap.Downloaded:fromDialog (fsm, id)
     fsm:showDialogPurchased()
 end
 
-function NetworkMap.Downloaded:fromThumbnail (fsm)
+NetworkMap.DownloadedError = NetworkMap.Default:new('NetworkMap.DownloadedError', 10)
+
+function NetworkMap.DownloadedError:backThumbnail (fsm)
     fsm:getState():Exit(fsm)
     fsm:popState()
-    fsm:showThumbnail()
+    fsm:backThumbnail()
 end
-
-NetworkMap.DownloadedError = NetworkMap.Default:new('NetworkMap.DownloadedError', 10)
 
 function NetworkMap.DownloadedError:fromDialog (fsm, id)
     fsm:getState():Exit(fsm)
@@ -302,16 +348,16 @@ function NetworkMap.DownloadedError:fromDialog (fsm, id)
     fsm:showDialogNotPurchased()
 end
 
-function NetworkMap.DownloadedError:fromThumbnail (fsm)
-    fsm:getState():Exit(fsm)
-    fsm:popState()
-    fsm:showThumbnail()
-end
-
 local StoreManagerFSM = statemap.FSMContext.class()
 
 function StoreManagerFSM:_init ()
     self:setState(MainMap.INIT)
+end
+
+function StoreManagerFSM:backThumbnail ()
+    self.transition = 'backThumbnail'
+    self:getState():backThumbnail(self)
+    self.transition = nil
 end
 
 function StoreManagerFSM:clickCloseDialog ()
@@ -350,9 +396,9 @@ function StoreManagerFSM:fromDialog (...)
     self.transition = nil
 end
 
-function StoreManagerFSM:fromThumbnail ()
-    self.transition = 'fromThumbnail'
-    self:getState():fromThumbnail(self)
+function StoreManagerFSM:gotoBook (...)
+    self.transition = 'gotoBook'
+    self:getState():gotoBook(self, ...)
     self.transition = nil
 end
 

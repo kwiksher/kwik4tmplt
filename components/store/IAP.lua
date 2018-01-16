@@ -5,14 +5,14 @@ local iap = require("extlib.iap_badger")
 local spinner = require("extlib.spinner").new()
 --
 --Called when any purchase fails
-local function failedListener()
+local function _failedListener()
     --If the spinner is on screen, remove it
     spinner:remove()
 end
 --
 -- !!! Please edit salt and deugMode for device build !!!
 --
-function M:init(catalogue, restoreAlert, purchaseAlert, debug)
+function M:init(catalogue, restoreAlert, purchaseAlert, failedListener, debug)
     -- print(debug.traceback(""))
     self.catalogue       = catalogue
     self.restoreAlert  = restoreAlert
@@ -24,8 +24,14 @@ function M:init(catalogue, restoreAlert, purchaseAlert, debug)
         filename          = "epsodes_inventory.txt",
         --Salt for the hashing algorithm
         salt              = "something tr1cky to gue55!",
-        failedListener    = failedListener,
-        cancelledListener = failedListener,
+        failedListener    = function ()
+            _failedListener()
+            failedListener()
+            end,
+        cancelledListener = function ()
+            _failedListener()
+            failedListener()
+            end,
         --Once the product has been purchased, it will remain in the inventory.  Uncomment the following line
         --to test the purchase functions again in future.  It's also useful for testing restore purchases.
         --doNotLoadInventory=true,

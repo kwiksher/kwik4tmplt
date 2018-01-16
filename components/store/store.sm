@@ -29,6 +29,14 @@ ThumbnailDisplayed
         DisplayingDialog{
             isBookPurchased(id);
         }
+    gotoBook(id)
+        BookDisplayed{
+            gotoScene(id);
+        }
+    clickPurchase(id, fromDialog)
+        push(DialogMap::IAPBadger) {
+            purchase(id, fromDialog);
+        }
 }
 
 DisplayingDialog
@@ -90,9 +98,9 @@ BookNotPurchased
     Exit{
     }
 {
-    clickPurchase(id)
+    clickPurchase(id, fromDialog)
         IAPBadger{
-            purchase(id);
+            purchase(id, fromDialog);
         }
     clickCloseDialog()
         pop(onClose){
@@ -106,6 +114,10 @@ IAPBadger
         push(NetworkMap::Downloading){}
     onPurchaseCancel()
         BookNotPurchased{}
+    backThumbnail()
+        pop(){
+            refreshThumbnail();
+        }
     showDialogPurchased()
         BookPurchased{}
     showDialogNotPurchased()
@@ -132,8 +144,8 @@ Downloading
 
 Downloaded
 {
-    fromThumbnail()
-        pop(showThumbnail){}
+    backThumbnail()
+        pop(backThumbnail){}
     fromDialog(id)
         pop(showDialogPurchased){
             updateDialog(id);
@@ -142,8 +154,8 @@ Downloaded
 
 DownloadedError
 {
-    fromThumbnail()
-        pop(showThumbnail){}
+    backThumbnail()
+        pop(backThumbnail){}
     fromDialog(id)
         pop(showDialogNotPurchased){}
 }

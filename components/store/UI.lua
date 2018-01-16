@@ -158,6 +158,14 @@ end
 --
 -- only type.pages
 --
+M.gotoTOC = function(params)
+    local storeFSM = require("components.store.storeFSM").getInstance()
+    storeFSM:exit()
+   if setSystemDir[type.pages](model.isIAP(model.tocPage)) then
+        composer.gotoScene("views.page0"..model.tocPage.."Scene", {params = params})
+    end
+end
+
 M.gotoPage = function(pageNum, params)
    if setSystemDir[type.pages](model.isIAP(pageNum)) then
     composer.gotoScene("views.page0"..pageNum.."Scene", {params = params})
@@ -175,6 +183,22 @@ M.gotoPreviousPage = function(curPage, params)
         composer.gotoScene("views.page0"..(curPage-1).."Scene", {params = params})
     end
 end
+
+M.showView = function(curPage, wPage, options)
+    print(curPage, wPage)
+    if bookShelfType == type.pages then
+        for k, v in pairs(model.epsodes) do
+            if curPage >= v.startPage and curPage <= v.startPage + v.numOfPages -1 then
+                if wPage < v.startPage or wPage > v.startPage + v.numOfPages -1 then
+                    M.gotoTOC(options)
+                    return
+                end
+            end
+        end
+    end
+    _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+end
+
 -- type.embedded and type.tmplt
 M.gotoNextScene = function(params)
     if master.isEmbedded then
@@ -237,8 +261,8 @@ M.gotoSceneBook = function(epsode, page, params)
             M.currentPage = 1
             setSystemDir[type.tmplt](false)
 
-local storeFSM = require("components.store.storeFSM").getInstance()
-storeFSM:exit()
+            local storeFSM = require("components.store.storeFSM").getInstance()
+            storeFSM:exit()
             composer.gotoScene("views.page01Scene", {params = params})
         else
             print("gotoSceneBook ".. model.getPageName(epsode))

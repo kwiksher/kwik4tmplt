@@ -57,7 +57,7 @@ function _M:allListeners(UI)
             _K.systemDir = system.ResourceDirectory
             _K.imgDir = "assets/images/"
             _K.audioDir = "assets/audios/"
-            composer.gotoScene("views.page01Scene", {params = { effect = "fromLeft"}})
+            ui.gotoSceneBook("TOC", { effect = "fromLeft"})
           else
             ui.gotoPreviousScene({ effect = "fromLeft"})
           end
@@ -98,11 +98,13 @@ function _M:allListeners(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
-       if tonumber(wPage) ~= tonumber(curPage) then
           local ui           = require("components.store.UI")
+       if tonumber(wPage) ~= tonumber(curPage) then
           if ui.setDir(wPage) then
-              _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+              ui.showView(curPage, wPage, options)
           end
+       else
+          ui.gotoTOC(options)
          end
       end
     end

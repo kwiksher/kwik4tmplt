@@ -222,6 +222,7 @@ function _M:allListeners(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
+       local ui           = require("components.store.UI")
        if tonumber(wPage) ~= tonumber(curPage)  then
           if pagePrevUI then
              pagePrevUI:didHide()
@@ -231,7 +232,11 @@ function _M:allListeners(UI)
               pageNextUI:didHide()
               pageNextUI = nil
           end
-            _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+          if ui.setDir(wPage) then
+            ui.showView(curPage, wPage, options)
+          end
+       else
+          ui.gotoTOC(options)
         end
         passed_threshold = false
     end

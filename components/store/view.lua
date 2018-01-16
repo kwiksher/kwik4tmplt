@@ -162,6 +162,7 @@ function M.new()
                         local versionBtn = copyDisplayObject(self.layer["version_"..epsode.versions[i]], nil, epsode.name..self.epsode.versions[i], self.sceneGroup)
                         print(epsode.versions[i])
                         versionBtn.alpha = 1
+                        versionBtn.epsode = epsode
                         versionBtn.selectedPurchase = epsode.name
                         versionBtn.selectedVersion  = epsode.versions[i]
                         table.insert(bookXXIcon.versions, versionBtn)
@@ -209,15 +210,16 @@ function M.new()
                                 print(versionBtn.selectedVersion .."(saved)")
                                 function versionBtn:tap(e)
                                     --self.gotoScene
-                                    VIEW.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
+                                    VIEW.fsm:clickImage(self.epsode, self.selectedVersion)
                                 end
                                 versionBtn:addEventListener("tap", versionBtn)
                             else
                                 print(versionBtn.selectedVersion.."(not saved)")
                                 -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _epsode.versions[i]})
                                 function versionBtn:tap(e)
+                                    print("TBI")
                                     --self.cmd.startDownloadVersion
-                                    VIEW.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
+                                    --VIEW.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
                                 end
                                 versionBtn:addEventListener("tap", versionBtn)
                             end
@@ -287,6 +289,7 @@ function M.new()
                 button.savingTxt.alpha = 0
                 button.savedBtn.alpha = 1
                 button.downloadBtn.alpha = 0
+                button.purchaseBtn.alpha = 0
             end
             if button.tap then
                 button.downloadBtn:removeEventListener("tap", button)
@@ -296,6 +299,20 @@ function M.new()
             end
             button:addEventListener("tap", button)
         else
+            if model.URL then
+                if button.savingTxt then
+                    button.savingTxt.alpha = 0
+                end
+                if button.savedBtn then
+                    button.savedBtn.alpha = 1
+                end
+                if button.downloadBtn then
+                    button.downloadBtn.alpha = 0
+                end
+                if button.purchaseBtn then
+                    button.purchaseBtn.alpha = 0
+                end
+            end
             -- not found. It means it is a version button
             local versions = model.epsodes[selectedPurchase].versions
             for k, v in pairs(versions) do print(k, v) end
@@ -308,7 +325,7 @@ function M.new()
                     versionBtn:removeEventListener("tap", versionBtn)
                 end
                 function versionBtn:tap(e)
-                    self.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
+                        self.fsm:clickImage(self.epsode, self.selectedVersion)
                 end
                 versionBtn:addEventListener("tap", versionBtn)
                 -- versionBtn.selectedPurchase = selectedPurchase -- chaning from book01 to book01v01
@@ -360,9 +377,15 @@ function M.new()
                 self.downloadGroup[epsode.name] = button
                 button.purchaseBtn.alpha      = 0
                 if model.URL then
-                    button.downloadBtn.alpha      = 0
-                    button.savingTxt.alpha        = 0
-                    button.savedBtn.alpha         = 0
+                    if button.savingTxt then
+                        button.savingTxt.alpha = 0
+                    end
+                    if button.savedBtn then
+                        button.savedBtn.alpha = 0
+                    end
+                    if button.downloadBtn then
+                        button.downloadBtn.alpha = 0
+                    end
                 end
                 --
              end
@@ -375,9 +398,15 @@ function M.new()
         self.fsm        = fsm
         cmd:init(self)
         if model.URL then
-            layer.savingTxt.alpha = 0
-            layer.savedBtn.alpha = 0
-            layer.downloadBtn.alpha = 0
+            if layer.savingTxt then
+                layer.savingTxt.alpha = 0
+            end
+            if layer.savedBtn then
+                layer.savedBtn.alpha = 0
+            end
+            if layer.downloadBtn then
+                layer.downloadBtn.alpha = 0
+            end
         end
     end
     --

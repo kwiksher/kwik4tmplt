@@ -42,9 +42,7 @@ function _M:gotoPage(pnum, ptrans, delay)
     local model = require("components.store.model")
     if model and model.bookShelfType ==0 and model.tocPage == pnum then
       local ui = require("components.store.UI")
-      local storeFSM = require("components.store.storeFSM").getInstance()
-      storeFSM:exit()
-      ui.gotoPage(1)
+        ui.gotoTOC(ptrans)
     else
       if nil~= composer.getScene("views.page0"..pnum.."Scene") then
           composer.removeScene("views.page0"..pnum.."Scene", true)

@@ -22,7 +22,9 @@ end
 --
 function _Class:removeTabButFunction(UI, model)
   self.UI = UI
+  if model.obj then
   model.obj:removeEventListener("tap", model.obj)
+  end
 end
 ---------------------
 ---------------------

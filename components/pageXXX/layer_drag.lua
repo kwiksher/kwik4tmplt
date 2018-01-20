@@ -15,6 +15,7 @@ function _M:allListeners(UI)
   {{/gPage}}
   {{^gPage}}
   local dragLayer = layer.{{glayer}}
+  if dragLayer == nil then return end
   {{/gPage}}
     _K.MultiTouch.activate( dragLayer, "move", "single", {{dbounds}} )
     {{#gdrop}}
@@ -109,7 +110,7 @@ function _M:allListeners(UI)
     dragLayer:addEventListener( _K.MultiTouch.MULTITOUCH_EVENT, _K.{{glayer}}Drag )
 end
 --
-function _M:dispose(UI)
+function _M:toDispose(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
   local scene       = UI.scene
@@ -119,7 +120,7 @@ function _M:dispose(UI)
   {{^gPage}}
   local dragLayer = layer.{{glayer}}
   {{/gPage}}
-    if (nil ~= {{glayer}} ) then
+    if (nil ~= dragLayer ) then
        dragLayer:removeEventListener ( _K.MultiTouch.MULTITOUCH_EVENT,  _K.{{glayer}}Drag );
     end
 end

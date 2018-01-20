@@ -219,7 +219,7 @@ M.gotoNextScene = function(params)
     local nextAlias = getPageNum(M.currentPage+1)
     M.currentPage = M.currentPage + 1
     if prevAlias == nextAlias  then
-        --setSystemDir[type.tmplt](false)
+        setSystemDir[type.tmplt](true)
         composer.gotoScene("extlib.page_reload")
     else
         setSystemDir[type.tmplt](true)
@@ -233,7 +233,7 @@ M.gotoTmpltScene = function(tmpltNum, pageNum, params)
         local nextAlias = getPageNum(pageNum)
         M.currentPage = pageNum
         if prevAlias == nextAlias then
-            --setSystemDir[type.tmplt](false)
+            setSystemDir[type.tmplt](true)
             composer.gotoScene("extlib.page_reload")
         else
             setSystemDir[type.tmplt](true)
@@ -255,7 +255,7 @@ M.gotoPreviousScene = function(params)
     local nextAlias = getPageNum(M.currentPage-1)
     M.currentPage = M.currentPage -1
     if prevAlias == nextAlias then
-        --setSystemDir[type.tmplt](false)
+        setSystemDir[type.tmplt](true)
         composer.gotoScene("extlib.page_reload")
     else
         setSystemDir[type.tmplt](true)
@@ -440,9 +440,7 @@ function M.gotoScene(event)
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode.name})
     elseif bookShelfType == type.tmplt then
         readPageJson(epsode.name)
-        print("#############")
         setSystemDir[type.tmplt](true)
-        print("#############")
         M.currentPage = 1
         print("views.page0"..getPageNum(1).."Scene")
         composer.gotoScene("views.page0"..getPageNum(1).."Scene")

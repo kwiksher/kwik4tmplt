@@ -13,6 +13,8 @@ end
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
+  if layer.{{bname}} == nil then return end
+
     {{#auto}}
       layer.{{bname}}:{{btraj}}({{bxforce}}, {{byforce}}, layer.{{bname}}.x, layer.{{bname}}.y)
     {{/auto}}

@@ -128,9 +128,11 @@ end
 function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
+    if _M.{{myLName}}_sheet == nil then return end
 
 {{^multLayers}}
     layer.{{myLName}} = display.newSprite(_M.{{myLName}}_sheet, {{myLName}}_seq ) -- ff_seq is to be used in future
+    if layer.{{myLName}} == nil then return end
     layer.{{myLName}}.x        = mX
     layer.{{myLName}}.y        = mY
     layer.{{myLName}}.alpha    = oriAlpha

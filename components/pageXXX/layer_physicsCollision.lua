@@ -13,6 +13,8 @@ end
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
+  if layer.{{bname}} == nil then return end
+
    local function onCollision_{{bname}}(self, event)
   {{#collArr}}
         if event.phase == "began" and event.other.myName == "{{mcoll}}" then

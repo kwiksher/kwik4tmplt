@@ -58,6 +58,7 @@ function _M:localPos(UI)
 
   {{^multLayers}}
   layer.{{myLName}} = display.newText(mVar,  mX, mY, imageWidth, imageHeight, {{elFont}}, elFontSize )
+  if layer.{{myLName}} == nil then return end
   layer.{{myLName}}:setFillColor( {{elR}}, {{elG}}, {{elB}} )
   layer.{{myLName}}.anchorX = 0
   layer.{{myLName}}.anchorY = 0;

@@ -78,6 +78,7 @@ function _M:allListeners(UI)
   --
   {{^multLayers}}
   {{#tabButFunction}}
+  if {{tabButFunction.obj}} == nil then return end
     _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
   {{/tabButFunction}}
     {{#buyProductHide}}
@@ -94,6 +95,7 @@ function _M:toDispose(UI)
   local layer      = UI.layer
   {{^multLayers}}
   {{#tabButFunction}}
+  if {{tabButFunction.obj}} == nil then return end
     _M:removeTabButFunction(UI, {obj={{tabButFunction.obj}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
   {{/tabButFunction}}
   {{/multLayers}}
@@ -117,6 +119,7 @@ function _M:buttonLocal(UI)
   {{^multLayers}}
     {{^Press}}
       layer.{{myLName}} = display.newImageRect( _K.imgDir.. imagePath, _K.systemDir, imageWidth, imageHeight )
+    if layer.{{myLName}} == nil then return end
       layer.{{myLName}}.x        = mX
       layer.{{myLName}}.y        = mY
       layer.{{myLName}}.alpha    = oriAlpha

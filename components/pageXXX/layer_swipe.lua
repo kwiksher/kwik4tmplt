@@ -9,6 +9,7 @@ local _K = require "Application"
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
+  if layer.{{myLName}} == nil then return end
   _K.Gesture.activate( layer.{{myLName}}, {{dbounds}} )
   _K.{{myLName}}Swipe = function (event )
     if event.phase == "ended" and event.direction ~= nil then
@@ -24,6 +25,7 @@ end
 function _M:toDispose(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
+  if layer.{{myLName}} == nil then return end
   layer.{{myLName}}:removeEventListener ( _K.Gesture.SWIPE_EVENT, _K.{{myLName}}Swipe )
   --_K.Gesture.deactivate(layer.{{myLName+') ;
 end

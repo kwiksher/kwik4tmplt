@@ -32,6 +32,7 @@ function _M:localPos (UI)
   local layer       = UI.layer
   {{^multLayers}}
     layer.{{myLName}} = particleDesigner.newEmitter( _K.particleDir.. "{{elURL}}", _K.systemDir)
+    if layer.{{myLName}} == nil then return end
     {{^elPlay}}
         layer.{{myLName}}:pause();
     {{/elPlay}}

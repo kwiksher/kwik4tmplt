@@ -58,6 +58,7 @@ function _M:localPos(UI)
   {{^multLayers}}
     local {{myLName}}_options = { text = "{{elVar}}", x = mX, y = mY, fontSize = elFontSize, font = {{elFont}}, align = "{{elAlign}}" }
     layer.{{myLName}} = display.newText( {{myLName}}_options )
+   if layer.{{myLName}} == nil then return end
     layer.{{myLName}}.anchorX = 0.5; layer.{{myLName}}.anchorY = 0;
     _K.repositionAnchor(layer.{{myLName}},0.5,0);
     layer.{{myLName}}:setFillColor ({{elFontColor}})

@@ -60,6 +60,8 @@ end
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
+  if layer.{{bname}} == nil then return end
+
     {{#piston}}
       local {{bgroup}} = physics.newJoint("{{btype}}", layer.{{bconn}}, layer.{{bname}}, bX, bY, aXd, aYd)
     {{/piston}}

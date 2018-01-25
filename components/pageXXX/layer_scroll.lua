@@ -51,6 +51,8 @@ end
 function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
+  if layer.{{glayer}} == nil then return end
+
   {{^layer}}
    {{#para}}
     local _top         = layer.{{glayer}}.contentBounds.yMin

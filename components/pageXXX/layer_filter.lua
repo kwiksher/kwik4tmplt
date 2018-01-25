@@ -45,6 +45,7 @@ end
 function _M:localPos(UI)
   local layer       = UI.layer
   local object = layer.{{myLName}}
+  if layer.{{myLName}} == nil then return end
   {{#animation}}
   object:addEventListener( "playFilterAnim", function()
   {{#wait}}

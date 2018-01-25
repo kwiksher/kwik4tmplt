@@ -16,6 +16,7 @@ function _M:allListeners(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   local curPage = UI.curPage
+  if layer.{{bname}} == nil then return end
     {{#circle}}
       physics.addBody(layer.{{bname}}, "{{btype}}", {density={{bdensity}}, friction={{bfriction}}, bounce={{bbounce}}, radius={{bradius}} })
     {{/circle}}

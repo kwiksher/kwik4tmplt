@@ -61,7 +61,7 @@ function transition.kwikFilter(obj, params)
   local proxy = {step = 0} ;
   local mt
 
-  if( _obj and _obj.fill.effect ) then
+  if( _obj and _obj.fill and _obj.fill.effect ) then
       mt = {
       __index = function(t,k)
         return t["step"]
@@ -73,7 +73,7 @@ function transition.kwikFilter(obj, params)
         elseif k == "_resume" then
           _obj.isPlay = true
         else
-          if(_obj.fill.effect and _obj.isPlay) then
+          if(_obj.fill and _obj.fill.effect and _obj.isPlay) then
             local value = setEffect(from, diffTable, v)
             params.filterTable.set(_obj.fill.effect, value)
           end

@@ -24,9 +24,9 @@ function _M:allListeners(UI)
 			transition.resume(_K.trans.{{tm}})
 		{{/gtDissolve}}
 		{{^gtDissolve}}
-		if _K.gt.{{gtName}} then
-			_K.gt.{{gtName}}:play()
-		end
+	--	if _K.gt.{{gtName}} then
+	--		_K.gt.{{gtName}}:play()
+	--	end
 		{{/gtDissolve}}
 	{{/aplay}}
 end
@@ -414,8 +414,8 @@ function _M:buildAnim(UI)
 					{{/gtNewAngle}}
 					})
 			{{/gtTypePath}}
-			_K.gt.{{gtName}}:pause()
-  		_K.gt.{{gtName}}:toBeginning()
+		--	_K.gt.{{gtName}}:pause()
+  		--  _K.gt.{{gtName}}:toBeginning()
   		{{#isComic}}
   		{{gtLayer}}.anim["{{gtName}}"] = _K.gt.{{gtName}}
   		{{/isComic}}

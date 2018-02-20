@@ -37,7 +37,7 @@ function _M:localPos(UI)
   layer.{{gname}} = display.newGroup()
   layer.{{gname}}.anchorX = 0.5
   layer.{{gname}}.anchorY = 0.5
---  layer.{{gname}}.anchorChildren = true
+  layer.{{gname}}.anchorChildren = true
   {{#children}}
     layer.{{gname}}:insert(layer.{{chldName}})
   {{/children}}
@@ -59,7 +59,7 @@ function _M:localPos(UI)
   layer.{{gname}}}.oriXs = layer.{{gname}}}.xScale
   layer.{{gname}}}.oriYs = layer.{{gname}}}.yScale
   sceneGroup:insert( layer.{{gname}}})
-  --groupPos( layer.{{gname}}})
+  groupPos( layer.{{gname}}})
 {{/Table}}
 end
 --

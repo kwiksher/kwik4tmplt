@@ -17,7 +17,7 @@ function _M:resumeAnimation(layer)
 end
 --
 function _M:playAnimation(layer)
-    -- _K.gt[layer]:toBeginning()
+    _K.gt[layer]:toBeginning()
     _K.gt[layer]:play()
 end
 --

@@ -5,39 +5,39 @@ local iap = require("extlib.iap_badger")
 local spinner = require("extlib.spinner").new()
 --
 --Called when any purchase fails
-local function _failedListener()
+local function failedListener()
     --If the spinner is on screen, remove it
     spinner:remove()
+    if M.failedListener then
+        M.failedListener()
+    end
 end
 --
 -- !!! Please edit salt and deugMode for device build !!!
 --
-function M:init(catalogue, restoreAlert, purchaseAlert, failedListener, debug)
+function M:init(catalogue, restoreAlert, purchaseAlert, errorListener, debug)
     -- print(debug.traceback(""))
-    self.catalogue       = catalogue
     self.restoreAlert  = restoreAlert
     self.purchaseAlert = purchaseAlert
+    self.failedListener = errorListener
+    -- only once
+    if self.catalogue == nil then
+        self.catalogue     = catalogue
     self.debug         = debug
-
     local iapOptions = {
         catalogue         = catalogue,
         filename          = "epsodes_inventory.txt",
         --Salt for the hashing algorithm
         salt              = "something tr1cky to gue55!",
-        failedListener    = function ()
-            _failedListener()
-            failedListener()
-            end,
-        cancelledListener = function ()
-            _failedListener()
-            failedListener()
-            end,
+            failedListener    = failedListener,
+            cancelledListener = failedListener,
         --Once the product has been purchased, it will remain in the inventory.  Uncomment the following line
         --to test the purchase functions again in future.  It's also useful for testing restore purchases.
         --doNotLoadInventory=true,
         debugMode        = debug,
     }
     iap.init(iapOptions)
+    end
 end
 
 ---------------------------------
@@ -61,6 +61,7 @@ end
 --the screen.  The actual code to initiate the purchase is the single line iap.purchase("removeAds"...)
 --
 function M.buyEpsode(event)
+    print ("IAP buyEpsode", event.target.selectedPurchase)
     local selectedPurchase = event.target.selectedPurchase
     spinner:show(iap.getStoreName())
     --Tell IAP to initiate a purchase

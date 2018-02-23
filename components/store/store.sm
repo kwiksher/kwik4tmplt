@@ -1,7 +1,6 @@
 %start MainMap::INIT
 %class StoreManager
 %package store
-%fsmclass StoreManagerFSM
 
 %map MainMap
 %%
@@ -37,6 +36,9 @@ ThumbnailDisplayed
         push(DialogMap::IAPBadger) {
             purchase(id, fromDialog);
         }
+    showThumbnail() nil {}
+    backThumbnail() nil {}
+
 }
 
 DisplayingDialog
@@ -51,6 +53,8 @@ DisplayingDialog
         }
     exit()
         BookDisplayed{}
+    backThumbnail()
+        ThumbnailDisplayed{}
 }
 
 BookDisplayed
@@ -61,8 +65,8 @@ BookDisplayed
         onExitBookDisplayed();
     }
 {
-    exit()
-        INIT{}
+    exit() INIT {}
+    showThumbnail() INIT {}
 }
 %%
 
@@ -80,16 +84,16 @@ BookPurchased
     Entry{
     }
     Exit{
-        destroyDialog();
     }
 {
     clickImage(id)
         pop(exit){
-            destroyThumbnail();
             gotoScene(id);
         }
     clickCloseDialog()
-        pop(onClose){}
+        pop(onClose){
+            destroyDialog();
+        }
 }
 
 BookNotPurchased
@@ -106,14 +110,19 @@ BookNotPurchased
         pop(onClose){
                 destroyDialog();
         }
+    showThumbnail() nil {}
 }
 
 IAPBadger
 {
     onPurchase()
-        push(NetworkMap::Downloading){}
+        push(NetworkMap::Downloading){
+            refreshDialog(true);
+        }
     onPurchaseCancel()
-        BookNotPurchased{}
+        BookNotPurchased{
+            refreshDialog(false);
+        }
     backThumbnail()
         pop(){
             refreshThumbnail();
@@ -122,6 +131,7 @@ IAPBadger
         BookPurchased{}
     showDialogNotPurchased()
         BookNotPurchased{}
+    showThumbnail() nil {}
 }
 %%
 
@@ -140,6 +150,7 @@ Downloading
         DownloadedError{
             queue(id);
         }
+    showThumbnail() nil {}
 }
 
 Downloaded

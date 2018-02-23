@@ -48,7 +48,7 @@ function M.new ()
         local options = {
             isModal = true,
             effect = model.showOverlayEffect,
-            time = 400,
+            time = 200,
             params = {}
         }
         local page = model.INFO_PAGE
@@ -68,6 +68,7 @@ function M.new ()
     end
 
     function CMD.hideOverlay()
+        print("CMD.hideOverlay")
         composer.hideOverlay("fade", 400 )
         return true
     end

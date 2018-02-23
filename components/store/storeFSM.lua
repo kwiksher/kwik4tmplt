@@ -27,27 +27,15 @@ end
 ---
 function _Class:initModel()
 end
-
-
 ------------------------------
 -- Downloading State
 --
 function _Class:startDownload(id)
     cmd:startDownload()
-   -- addEventListener("onSuccess", self.fsm:onSuccess)
-  --  addEventListener("onFailure", self.fsm.onFailure)
 end
 
 function _Class:unzip(id)
-    --
-    -- unzip async
-    --
-    -- if self.fromThumbnail then
-    --     self.fsm:fromThumbnail()
-    -- else
-    --     self.fsm.fromDialog(id)
-    -- end
-
+    -- obsolete
 end
 
 function _Class:queue(id)
@@ -64,12 +52,13 @@ end
 -- ThumnailDisplayed state
 --
 function _Class:createThumbnail()
+    print("== storeFSM createThumbnail ==")
     self.view:createThumbnail()
     self.view:controlThumbnail()
 end
 
 function _Class:destroyThumbnail()
-    print("------- destroy destroyThumbnail")
+    print("== storeFSM destoryThumbnail ==")
   cmd:dispose()
   self.view:destroyThumbnail()
 end
@@ -81,6 +70,7 @@ end
 -- DisplayingDialog state
 --
 function _Class:isBookPurchased(epsode)
+    print("storeFSM isBookPurchased")
     self.epsode = epsode
     local isPurchased  = false
     if (IAP.getInventoryValue("unlock_"..epsode.name)==true) then
@@ -117,6 +107,7 @@ end
 -- BookPurchased/BookNotPurchased
 --
 function _Class:onCreateDialog(id, isPurchased)
+    print("storeFSM onCreateDialog")
     self.view:createDialog(id, isPurchased)
     self.view:controlDialog(id, isPurchased)
     timer.performWithDelay(100, function()
@@ -126,22 +117,21 @@ function _Class:onCreateDialog(id, isPurchased)
             self.fsm:showDialogNotPurchased()
         end
     end)
-    -- sel.fsm:clickImage(id)
-    -- self.fsm.clickCloseDialog()
-    -- self.fsm:clickPurchase(id)
-    -- addEventLitener ("onCancel", function() self.fsm:onPurchaseCancel() end )
 end
 
 function _Class:destroyDialog()
-    composer.hideOverlay("fade", 400 )
+    print("storeFSM destroyDialog")
     self.view:destroyDialog()
-    -- Runtime:dispachEvent("hideOverlay")
+    composer.hideOverlay("fade", 400 )
 end
 
 function _Class:gotoScene(epsode)
     print("storeFSM gotoScene", epsode.name)
     local event = {target={epsode = epsode, selectedPurchase = epsode.name}}
+     composer.hideOverlay("fade", 100 )
+    timer.performWithDelay(100, function()
     cmd.gotoScene(event)
+    end)
     -- Runtime:dispachEvent("hideOverlay")
 end
 ------------------------------
@@ -149,15 +139,18 @@ end
 --
 
 function _Class:purchase(id, fromDialog)
-    self.fromDialog= fromDialog
-    local e = {target={selectedPurchase=id}}
-    IAP.buyEpsode(e)
+    print ("storeFSM purchase", id, fromDialog)
+    self.fromDialog = fromDialog
+    IAP.buyEpsode({target={selectedPurchase=id}})
+end
+
+function _Class:refreshDialog(isPurchased)
+    print("refreshDialog")
 end
 
 function _Class:refreshThumbnail()
         print("storeFSM refreshThumbnail")
         self.view:refreshThumbnail()
-    -- timer.performWithDelay(5000, function()self.view:refreshThumbnail() end)
 end
 ------------------------------
 -- BookDisplayed
@@ -208,6 +201,7 @@ end
 
 function _Class.failedListener()
     local self = _Class.getInstance()
+    print("page02", "failedListener", self.fromDialog)
     if self.fromDialog then
         self.fsm:onPurchaseCancel()
     else
@@ -216,6 +210,7 @@ function _Class.failedListener()
 end
 --
 function _Class:init (overlay, view)
+    print("========= storeFSM init ===============")
     self.view = view
     --cmd:init(view)
     IAP:init(model.catalogue, view.restoreAlert,
@@ -226,7 +221,9 @@ function _Class:init (overlay, view)
         self.failedListener,  model.debug)
     downloadManager:init(self.onDownloadComplete,self.onDownloadError)    --
     self.fsm:enterStartState()
+    if ( system.getInfo("environment") == "simulator" )then
     self.fsm:setDebugFlag(true)
+    end
     if overlay then
         if downloadManager.isDownloadQueue() then
             self.fromThumbnail = true
@@ -235,7 +232,7 @@ function _Class:init (overlay, view)
             self.fsm:showThumbnail()
         end
     else
-        mydebug.print()
+       -- mydebug.print()
         if model.currentEpsode.isPurchased then
             self.fsm:showDialogPurchased()
         else
@@ -245,6 +242,7 @@ function _Class:init (overlay, view)
 end
 
 function _Class:resume()
+    print("storeFSM resume")
   self.view:refresh(true)
 end
 

@@ -25,6 +25,11 @@ local function getPageNum(num)
             return i
         end
     end
+    print("book page not found in model.lua ", pageName )
+    print("-- downloaded book json --")
+    for k,v in pairs(currentBookModel) do
+        print(k, v.alias)
+    end
     return num
 end
 M.getPageNum = getPageNum

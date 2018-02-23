@@ -141,6 +141,7 @@ function M.new()
             self.downloadGroup[epsode.name] = bookXXIcon
             bookXXIcon.versions = {}
             bookXXIcon.selectedPurchase = epsode.name
+            print("createDialog with", epsode.name)
             --If the user has purchased the epsode before, change the bookXXIcon
             bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, nil, epsode, self.sceneGroup)
             bookXXIcon.purchaseBtn.selectedPurchase = epsode.name
@@ -231,6 +232,7 @@ function M.new()
                 --Otherwise add a tap listener to the bookXXIcon that unlocks the epsode
                 bookXXIcon.purchaseBtn.alpha = 1
                 function bookXXIcon.purchaseBtn:tap(e)
+                    print("tap purchaseBtn", self.selectedPurchase, e.target.selectedPurchase)
                     VIEW.fsm:clickPurchase(self.selectedPurchase, true)
                 end
                 bookXXIcon.purchaseBtn:addEventListener("tap", bookXXIcon.purchaseBtn)

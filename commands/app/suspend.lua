@@ -4,6 +4,7 @@
 --
 local _Command = {}
 local composer = require("composer")
+local storeFSM = require("components.store.storeFSM").getInstance()
 -----------------------------
 -----------------------------
 function _Command:new()
@@ -19,8 +20,15 @@ function _Command:new()
 			          if (system.getInfo( "platform" ) == "Android")  then
 			              native.requestExit()
 			          else
-			              if nil~= composer.getScene("views.page01Scene") then composer.removeScene("views.page01Scene", true) end
-			              composer.gotoScene("views.page01Scene")
+			          		if storeFSM.fsm:getState().name == "ThumbnailDisplayed" then
+					              if nil~= composer.getScene("views.page01Scene") then
+		                      print("=== suspend remove page01Scene === ")
+					                composer.removeScene("views.page01Scene", true)
+					              end
+				            end
+			              print("==== suspend =====")
+			              storeFSM.fsm:showThumbnail()
+			              -- composer.gotoScene("views.page01Scene")
 			          end
 			       end
 			    end

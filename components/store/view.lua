@@ -131,7 +131,7 @@ function M.new()
         end
     end
     ---
-    function VIEW:createDialog(epsode, isPurchased)
+    function VIEW:createDialog(epsode, isPurchased, isDownloaded)
         self.epsode = epsode
         local bookXXIcon = self.layer["bookXXIcon"]
         if model.bookShelfType == 0 then
@@ -174,7 +174,7 @@ function M.new()
         end
     end
     --
-    function VIEW:controlDialog(epsode, isPurchased)
+    function VIEW:controlDialog(epsode, isPurchased, isDownloaded)
         local bookXXIcon = self.layer["bookXXIcon"]
         if model.bookShelfType == 0 then
             bookXXIcon = self.layer[epsode.name.."Icon"]
@@ -184,7 +184,7 @@ function M.new()
             if isPurchased then
                 print(epsode.name.."(purchased)")
                 if bookXXIcon.versions ==nil or #bookXXIcon.versions == 0 then
-                    if cmd.hasDownloaded(epsode.name) then
+                    if isDownloaded then
                         -- bookXXIcon.savedBtn:addEventListener("tap", function(e)
                         --     VIEW.fsm:clickImage(_epsode)
                         --     end)

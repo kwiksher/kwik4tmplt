@@ -47,9 +47,9 @@ DisplayingDialog
 {
     onClose()
         ThumbnailDisplayed{}
-    createDialog(id, isPurchase)
+    createDialog(id, isPurchase, isDownloaded)
         push(DialogMap::INIT){
-            onCreateDialog(id, isPurchase);
+            onCreateDialog(id, isPurchase, isDownloaded);
         }
     exit()
         BookDisplayed{}
@@ -94,6 +94,16 @@ BookPurchased
         pop(onClose){
             destroyDialog();
         }
+    onRestore(id)
+        push(NetworkMap::Downloading){
+            startDownload(id);
+        }
+    updateDialog(id) nil {
+        refreshDialog(true);
+    }
+    showDialogPurchased() nil {
+        refreshDialog(true);
+    }
 }
 
 BookNotPurchased
@@ -139,7 +149,7 @@ IAPBadger
 %%
 Downloading
     Entry{
-        startDownload(id);
+        startDownload();
     }
 {
     onSuccess()

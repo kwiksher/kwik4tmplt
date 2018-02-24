@@ -31,7 +31,12 @@ end
 -- Downloading State
 --
 function _Class:startDownload(id)
+    if id then
+        print("storeFSM startDownload", id.name)
+        cmd:startDownload(id.name)
+    else
     cmd:startDownload()
+    end
 end
 
 function _Class:unzip(id)
@@ -73,18 +78,20 @@ function _Class:isBookPurchased(epsode)
     print("storeFSM isBookPurchased")
     self.epsode = epsode
     local isPurchased  = false
+    local isDownloaded = false
     if (IAP.getInventoryValue("unlock_"..epsode.name)==true) then
+        isPurchased = true
         if downloadManager.hasDownloaded(epsode.name) then
+            isDownloaded = true
             print(epsode.name .."(saved)")
-            isPurchased = true
         else
             print(epsode.name.."(saving)")
         end
     end
-    local event = {target={epsode = epsode, selectedPurchase = epsode.name, isPurchased = isPurchased}}
+    local event = {target={epsode = epsode, selectedPurchase = epsode.name, isPurchased = isPurchased, isDownloaded=isDownloaded}}
     if cmd.showOverlay(event) then
     timer.performWithDelay(100, function ()
-        self.fsm:createDialog(epsode, isPurchased)
+            self.fsm:createDialog(epsode, isPurchased, isDownloaded)
     end)
     else
         print("---------- not overlay -------- ")
@@ -106,13 +113,19 @@ end
 ------------------------------
 -- BookPurchased/BookNotPurchased
 --
-function _Class:onCreateDialog(id, isPurchased)
+function _Class:onCreateDialog(id, isPurchased, isDownloaded)
     print("storeFSM onCreateDialog")
-    self.view:createDialog(id, isPurchased)
-    self.view:controlDialog(id, isPurchased)
+    self.view:createDialog(id, isPurchased, isDownloaded)
+    self.view:controlDialog(id, isPurchased, isDownloaded)
+    self.fromDialog = true;
+    local epsode = id
     timer.performWithDelay(100, function()
         if isPurchased then
             self.fsm:showDialogPurchased()
+            if not isDownloaded then
+                --print("##### ", epsode.name)
+                self.fsm:onRestore(epsode)
+            end
         else
             self.fsm:showDialogNotPurchased()
         end
@@ -123,17 +136,20 @@ function _Class:destroyDialog()
     print("storeFSM destroyDialog")
     self.view:destroyDialog()
     composer.hideOverlay("fade", 400 )
+    self.fromDialog = false
 end
 
 function _Class:gotoScene(epsode)
     print("storeFSM gotoScene", epsode.name)
     local event = {target={epsode = epsode, selectedPurchase = epsode.name}}
      composer.hideOverlay("fade", 100 )
+     self.fromDialog = false
     timer.performWithDelay(100, function()
     cmd.gotoScene(event)
     end)
     -- Runtime:dispachEvent("hideOverlay")
 end
+
 ------------------------------
 -- IAPBadger
 --
@@ -144,8 +160,8 @@ function _Class:purchase(id, fromDialog)
     IAP.buyEpsode({target={selectedPurchase=id}})
 end
 
-function _Class:refreshDialog(isPurchased)
-    print("refreshDialog")
+function _Class:refreshDialog(isDownloaded)
+    print("refreshDialog" , isDownloaded)
 end
 
 function _Class:refreshThumbnail()
@@ -193,6 +209,9 @@ function _Class.onDownloadError(selectedPurchase, message)
     end
     self.view.onDownloadError(selectedPurchase, message)
 end
+--
+-- purchase and restore call this purchaseListener
+-- and IAP.lua also fires command:purcahseComplted wth purchase/restore
 --
 function _Class.purchaseListener()
     local self = _Class.getInstance()

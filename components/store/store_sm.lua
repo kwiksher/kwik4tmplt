@@ -34,10 +34,12 @@ StoreManagerState.onDownloadQueue = _default
 StoreManagerState.onFailure = _default
 StoreManagerState.onPurchase = _default
 StoreManagerState.onPurchaseCancel = _default
+StoreManagerState.onRestore = _default
 StoreManagerState.onSuccess = _default
 StoreManagerState.showDialogNotPurchased = _default
 StoreManagerState.showDialogPurchased = _default
 StoreManagerState.showThumbnail = _default
+StoreManagerState.updateDialog = _default
 
 function StoreManagerState:Default (fsm)
     local msg = strformat("Undefined Transition\nState: %s\nTransition: %s\n",
@@ -138,13 +140,13 @@ function MainMap.DisplayingDialog:backThumbnail (fsm)
     fsm:getState():Entry(fsm)
 end
 
-function MainMap.DisplayingDialog:createDialog (fsm, id, isPurchase)
+function MainMap.DisplayingDialog:createDialog (fsm, id, isPurchase, isDownloaded)
     local ctxt = fsm.owner
     local endState = fsm:getState()
     fsm:clearState()
     local r, msg = pcall(
         function ()
-            ctxt:onCreateDialog(id, isPurchase)
+            ctxt:onCreateDialog(id, isPurchase, isDownloaded)
         end
     )
     fsm:setState(endState)
@@ -230,6 +232,44 @@ function DialogMap.BookPurchased:clickImage (fsm, id)
     )
     fsm:popState()
     fsm:exit()
+end
+
+function DialogMap.BookPurchased:onRestore (fsm, id)
+    local ctxt = fsm.owner
+    local endState = fsm:getState()
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:startDownload(id)
+        end
+    )
+    fsm:setState(endState)
+    fsm:pushState(NetworkMap.Downloading)
+    fsm:getState():Entry(fsm)
+end
+
+function DialogMap.BookPurchased:showDialogPurchased (fsm)
+    local ctxt = fsm.owner
+    local endState = fsm:getState()
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:refreshDialog(true)
+        end
+    )
+    fsm:setState(endState)
+end
+
+function DialogMap.BookPurchased:updateDialog (fsm, id)
+    local ctxt = fsm.owner
+    local endState = fsm:getState()
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:refreshDialog(true)
+        end
+    )
+    fsm:setState(endState)
 end
 
 DialogMap.BookNotPurchased = DialogMap.Default:new('DialogMap.BookNotPurchased', 6)
@@ -325,7 +365,7 @@ NetworkMap.Downloading = NetworkMap.Default:new('NetworkMap.Downloading', 8)
 
 function NetworkMap.Downloading:Entry (fsm)
     local ctxt = fsm.owner
-    ctxt:startDownload(id)
+    ctxt:startDownload()
 end
 
 function NetworkMap.Downloading:onFailure (fsm)
@@ -476,6 +516,12 @@ function storeContext:onPurchaseCancel ()
     self.transition = nil
 end
 
+function storeContext:onRestore (...)
+    self.transition = 'onRestore'
+    self:getState():onRestore(self, ...)
+    self.transition = nil
+end
+
 function storeContext:onSuccess ()
     self.transition = 'onSuccess'
     self:getState():onSuccess(self)
@@ -497,6 +543,12 @@ end
 function storeContext:showThumbnail ()
     self.transition = 'showThumbnail'
     self:getState():showThumbnail(self)
+    self.transition = nil
+end
+
+function storeContext:updateDialog (...)
+    self.transition = 'updateDialog'
+    self:getState():updateDialog(self, ...)
     self.transition = nil
 end
 

@@ -26,8 +26,8 @@ function M.new ()
     end
     -- Called when the scene's view does not exist:
 
-    function CMD:startDownload()
-        downloadManager:startDownload()
+    function CMD:startDownload(id)
+        downloadManager:startDownload(id)
     end
 
     function CMD:dispose()
@@ -76,8 +76,10 @@ function M.new ()
     function CMD.restore(event)
         for k, epsode in pairs (model.epsodes) do
             local button = CMD.view.layer[epsode.name.."Icon"]
+            if button then
             button:removeEventListener("tap", CMD.gotoScene)
             button.savedBtn:removeEventListener("tap", CMD.gotoScene)
+        end
         end
         IAP.restorePurchases(event)
     end
@@ -116,12 +118,13 @@ function M.onPurchaseComplete(event)
     local button = downloadGroup[selectedPurchase]
     print("CMD onPurchaseComplete", selectedPurchase)
     --
-    if button then
+    if button and button.purchaseBtn.removeEventListener then
         button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
         --
         if (event.actionType == "purchase") then
             -- button.text.text="saving"
             if model.URL then
+                print("startDownload")
                 downloadManager:startDownload(event.product)
             else
                -- onDownloadComplete(event.product)

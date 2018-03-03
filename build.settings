@@ -82,6 +82,18 @@ settings =
       {{^suspend}}
         UIApplicationExitsOnSuspend = false,
       {{/suspend}}
+      {{#exceptionDomains}}
+      NSAppTransportSecurity = {
+          NSExceptionDomains = {
+            {{#domainArr}}
+              ["{{domain}}"] = {
+                  NSIncludesSubdomains = true,
+                  NSThirdPartyExceptionAllowsInsecureHTTPLoads = true
+              },
+            {{/domainArr}}
+          }
+      },
+      {{/exceptionDomains}}
       UIStatusBarHidden = true,
       CFBundleIconFiles = {
         "Icon.png",

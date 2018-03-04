@@ -122,7 +122,6 @@ function _M:allListeners(UI)
          end
     {{/bookshelf}}
     end
-  end
 {{/isTmplt}}
     layer.{{backLayer}}:addEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
     {{#infinity}}

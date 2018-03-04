@@ -62,19 +62,17 @@ function _M:allListeners(UI)
             ui.gotoPreviousScene({ effect = "fromLeft"})
           end
        end
-      -- if tonumber(wPage) ~= tonumber(curPage) then
-          {{#hasShake}}
-          Runtime:removeEventListener("accelerometer", _K.shakeMe);
-          {{/hasShake}}
-          {{#invert}}
-          Runtime:removeEventListener("orientation", _K.kOrientation_act);
-          {{/invert}}
-          {{#navigation}}
-            Navigation.hide()
-          {{/navigation}}
-         end
-     -- end
-    end
+        {{#hasShake}}
+        Runtime:removeEventListener("accelerometer", _K.shakeMe);
+        {{/hasShake}}
+        {{#invert}}
+        Runtime:removeEventListener("orientation", _K.kOrientation_act);
+        {{/invert}}
+        {{#navigation}}
+          Navigation.hide()
+        {{/navigation}}
+     end
+   end
 {{/isTmplt}}
 {{^isTmplt}}
   _K.pageSwap = function (event )
@@ -124,8 +122,8 @@ function _M:allListeners(UI)
          end
     {{/bookshelf}}
     end
+  end
 {{/isTmplt}}
-
     layer.{{backLayer}}:addEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
     {{#infinity}}
       layer.{{backLayer}}_2:addEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )

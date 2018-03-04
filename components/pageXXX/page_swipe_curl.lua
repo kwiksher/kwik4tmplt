@@ -222,6 +222,7 @@ function _M:allListeners(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
+    {{#bookshelf}}
        local ui           = require("components.store.UI")
        if tonumber(wPage) ~= tonumber(curPage)  then
           if pagePrevUI then
@@ -237,8 +238,22 @@ function _M:allListeners(UI)
           end
        else
           ui.gotoTOC(options)
-        end
-        passed_threshold = false
+       end
+       {{/bookshelf}}
+      {{^bookshelf}}
+       if tonumber(wPage) ~= tonumber(curPage)  then
+          if pagePrevUI then
+             pagePrevUI:didHide()
+             pagePrevUI = nil
+          end
+          if pageNextUI then
+              pageNextUI:didHide()
+              pageNextUI = nil
+          end
+          _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+       end
+      {{/bookshelf}}
+       passed_threshold = false
     end
 {{/isTmplt}}
     if event.dir == "right" and not passed_threshold then

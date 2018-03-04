@@ -81,7 +81,7 @@ function _M:allListeners(UI)
              layer.{{myLName}}:play()
           {{/elLoop}}
           {{#elTrigger}}
-             {{elTrigger}}()
+           UI.scene:dispatchEvent({name="action_{{elTrigger}}", layer=layer.{{myLName}} })
           {{/elTrigger}}
         end
       end

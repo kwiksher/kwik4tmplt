@@ -5,7 +5,7 @@
 local _M = {}
 --
 function _M:playVideo(obj)
-	obj:pause()
+	obj:play()
 end
 --
 function _M:pauseVideo(obj)

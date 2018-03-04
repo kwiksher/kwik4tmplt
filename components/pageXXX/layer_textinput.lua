@@ -38,7 +38,7 @@ function _M:allListeners(UI)
         layer.{{$.kwik.myProj.pages.page[myi].replacement[bi].name}}.text = UI.{{elContent}}
       {{/dynamic}}
       {{#elTrigger}}
-        {{elTrigger}}()
+           UI.scene:dispatchEvent({name="action_{{elTrigger}}", layer=layer.{{myLName}} })
       {{/elTrigger}}
       native.setKeyboardFocus(nil)
       end

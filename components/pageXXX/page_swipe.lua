@@ -98,7 +98,8 @@ function _M:allListeners(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
-          local ui           = require("components.store.UI")
+    {{#bookshelf}}
+      local ui           = require("components.store.UI")
        if tonumber(wPage) ~= tonumber(curPage) then
           if ui.setDir(wPage) then
               ui.showView(curPage, wPage, options)
@@ -107,6 +108,21 @@ function _M:allListeners(UI)
           ui.gotoTOC(options)
          end
       end
+    {{/bookshelf}}
+    {{^bookshelf}}
+       if tonumber(wPage) ~= tonumber(curPage) then
+          {{#hasShake}}
+          Runtime:removeEventListener("accelerometer", _K.shakeMe);
+          {{/hasShake}}
+          {{#invert}}
+          Runtime:removeEventListener("orientation", _K.kOrientation_act);
+          {{/invert}}
+          {{#navigation}}
+            Navigation.hide()
+          {{/navigation}}
+          _K.appInstance:showView("views.page0"..wPage.."Scene", options)
+         end
+    {{/bookshelf}}
     end
 {{/isTmplt}}
 

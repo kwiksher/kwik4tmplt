@@ -16,6 +16,7 @@ function _Class:createTabButFunction(UI, model)
             UI.scene:dispatchEvent({name=model.eventName, event = event})
       end
     end
+    return true
   end
   model.obj:addEventListener("tap", model.obj)
 end

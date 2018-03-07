@@ -414,9 +414,11 @@ function _M:buildAnim(UI)
 					{{/gtNewAngle}}
 					})
 			{{/gtTypePath}}
-		--	_K.gt.{{gtName}}:pause()
-  		--  _K.gt.{{gtName}}:toBeginning()
-  		{{#isComic}}
+				{{^aplay}}
+				_K.gt.{{gtName}}:pause()
+				{{/aplay}}
+  			-- _K.gt.{{gtName}}:toBeginning()
+	  		{{#isComic}}
   		{{gtLayer}}.anim["{{gtName}}"] = _K.gt.{{gtName}}
   		{{/isComic}}
 		{{/gtDissolve}}

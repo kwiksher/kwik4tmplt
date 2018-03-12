@@ -14,10 +14,10 @@ local URL       = model.URL
 local filename = "/assets.zip"
 local backgroundImg = model.backgroundImg
 --
-local function zipListener( event, deferred , selectedPurchase)
+local function zipListener( event, deferred , selectedPurchase, version)
     if ( event.isError ) then
         print( "Unzip error" )
-        onDownloadError(selectedPurchase, "Unzip error")
+        onDownloadError(selectedPurchase, version, "Unzip error")
         deferred:reject()
     else
         print( "event.name:" .. event.name )
@@ -28,18 +28,18 @@ local function zipListener( event, deferred , selectedPurchase)
             -- end
             -- local selectedPurchase = event.response[1]
             -- selectedPurchase = selectedPurchase:sub(1, selectedPurchase:len()-1)
-            print("zipListener:"..selectedPurchase)
-            onDownloadComplete(selectedPurchase)
+            print("zipListener:"..selectedPurchase..version)
+            onDownloadComplete(selectedPurchase, version)
         end
         deferred:resolve()
     end
     spinner:remove()
 end
 --
-local function networkListener(event, deferred, selectedPurchase)
+local function networkListener(event, deferred, selectedPurchase, version)
     if ( event.isError ) then
         print( "Network error - download failed" )
-        onDownloadError(selectedPurchase, "Network error - download failed")
+        onDownloadError(selectedPurchase, version, "Network error - download failed")
         deferred:reject()
     elseif ( event.phase == "began" ) then
         print( "Progress Phase: began" )
@@ -48,7 +48,7 @@ local function networkListener(event, deferred, selectedPurchase)
         spinner:remove()
         if ( math.floor(event.status/100) > 3 ) then
             print( "Network error - download failed", event.status )
-            onDownloadError(selectedPurchase, event.status)
+            onDownloadError(selectedPurchase, version, event.status)
             deferred:reject()
             --NOTE: 404 errors (file not found) is actually a successful return,
             --though you did not get a file, so trap for that
@@ -58,7 +58,7 @@ local function networkListener(event, deferred, selectedPurchase)
                 zipBaseDir = event.response.baseDirectory,
                 -- dstBaseDir = system.DocumentsDirectory,
                 dstBaseDir = system.ApplicationSupportDirectory,
-                listener = function(event) zipListener(event, deferred, selectedPurchase) end,
+                listener = function(event) zipListener(event, deferred, selectedPurchase, version) end,
             }
             spinner:show()
             zip.uncompress(options)
@@ -67,41 +67,43 @@ local function networkListener(event, deferred, selectedPurchase)
 end
 -- 
 --
-local function _startDownload(selectedPurchase)
+local function _startDownload(selectedPurchase, version)
     local deferred = Deferred()
-    local path = system.pathForFile(selectedPurchase..".zip", system.TemporaryDirectory)
+    local path = system.pathForFile(selectedPurchase..version..".zip", system.TemporaryDirectory)
     print(path)
     local fh, reason = io.open( path, "r" )
     if fh then
         io.close( fh )
-        if M.hasDownloaded(selectedPurchase) then
+        if M.hasDownloaded(selectedPurchase, version) then
             local epsode = selectedPurchase
             timer.performWithDelay(50, function()
-                onDownloadComplete(epsode)
+                onDownloadComplete(epsode, version)
                 deferred:resolve()
                 end )
         else
             local options = {
-                zipFile = selectedPurchase..".zip",
+                zipFile = selectedPurchase..version..".zip",
                 zipBaseDir = system.TemporaryDirectory,
                 -- dstBaseDir = system.DocumentsDirectory,
                 dstBaseDir = system.ApplicationSupportDirectory,
-                listener = function(event) zipListener(event, deferred, selectedPurchase) end,
+                listener = function(event) zipListener(event, deferred, selectedPurchase, version) end,
             }
             spinner:show()
             zip.uncompress(options)
         end
     else
-        local url = URL ..selectedPurchase..filename
+
+        local url = URL ..selectedPurchase..version..filename
         print("---------------------")
         print(url)
         print("---------------------")
         local params    = {}
         params.progress = true
-        network.download( url.."?a="..os.time(), "GET", function(event)
-                networkListener(event, deferred, selectedPurchase)
+        network.download( url.."?a="..os.time(), "GET",
+            function(event)
+                networkListener(event, deferred, selectedPurchase, version)
             end,
-            params, selectedPurchase..".zip", system.TemporaryDirectory )
+            params, selectedPurchase..version..".zip", system.TemporaryDirectory )
     end
     return deferred:promise()
 end
@@ -128,10 +130,11 @@ function M:init(onSuccess, onError)
     downloadQueue = queue.new()
     Runtime:addEventListener("downloadManager:purchaseCompleted", function(event)
         local selectedPurchase = event.target
-        if M.hasDownloaded(selectedPurchase) then
-            onDownloadComplete(selectedPurchase)
+        local version = event.version
+        if M.hasDownloaded(selectedPurchase, version) then
+            onDownloadComplete(selectedPurchase, version)
         else
-            downloadQueue:offer(selectedPurchase)
+            downloadQueue:offer({product=selectedPurchase, version=version})
         end
     end)
 end
@@ -140,11 +143,21 @@ function M.isDownloadQueue()
     return downloadQueue:poll()
 end
 
-function M:startDownload(epsode)
-    local selectedPurchase = epsode or downloadQueue:poll()
+function M:startDownload(epsode, version)
+    local selectedPurchase = epsode
+    local _version = version or ""
+
+    if selectedPurchase == nil then
+        local item = downloadQueue:poll()
+        if item then
+            selectedPurchase = item.product
+            _version = item.version  or ""
+        end
+    end
+
     if selectedPurchase then
-        print("startDownload:"..selectedPurchase)
-        promise = _startDownload(selectedPurchase)
+        print("startDownload:"..selectedPurchase, _version)
+        promise = _startDownload(selectedPurchase, _version)
             :done(function()
                     self:startDownload()
                 end)
@@ -155,7 +168,6 @@ function M:startDownload(epsode)
                 end)
     end
 end
-
 --
 M.setButtonImage = function (_button, epsode)
     local params = {}

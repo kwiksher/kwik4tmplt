@@ -26,8 +26,8 @@ function M.new ()
     end
     -- Called when the scene's view does not exist:
 
-    function CMD:startDownload(id)
-        downloadManager:startDownload(id)
+    function CMD:startDownload(id, version)
+        downloadManager:startDownload(id, version)
     end
 
     function CMD:dispose()
@@ -38,9 +38,9 @@ function M.new ()
         -- end
     end
 
-    function CMD.gotoScene(event)
+    function CMD.gotoScene(event, version)
         print("CMD.gotoScene")
-        UI.gotoScene(event)
+        UI.gotoScene(event, version)
     end
     --
     function CMD.showOverlay(event)
@@ -49,7 +49,7 @@ function M.new ()
             isModal = true,
             effect = model.showOverlayEffect,
             time = 200,
-            params = {}
+            params = {selectedPurchase=epsode.name}
         }
         local page = model.INFO_PAGE
         if  bookShelfType == type.pages then
@@ -59,7 +59,7 @@ function M.new ()
             if master.isEmbedded then
                 package.loaded[page] = require("plugin.KwikShelf."..page)
             end
-            model.currentEpsode = {name=epsode, isPurchased = event.target.isPurchased}
+            model.currentEpsode = {name=epsode.name, isPurchased = event.target.isPurchased}
             composer.showOverlay(page, options)
         return true
         else
@@ -88,8 +88,8 @@ function M.new ()
         downloadManager.setButtonImage(button, id)
     end
 
-    function CMD.hasDownloaded(name)
-        return downloadManager.hasDownloaded(name)
+    function CMD.hasDownloaded(name, version)
+        return downloadManager.hasDownloaded(name, version)
     end
 
     function CMD.buyBook(e)
@@ -124,8 +124,12 @@ function M.onPurchaseComplete(event)
         if (event.actionType == "purchase") then
             -- button.text.text="saving"
             if model.URL then
+                if #model.epsodes[selectedPurchase].versions == 0 then
                 print("startDownload")
                 downloadManager:startDownload(event.product)
+                else
+                    print("user can download a version now")
+                end
             else
                -- onDownloadComplete(event.product)
             end

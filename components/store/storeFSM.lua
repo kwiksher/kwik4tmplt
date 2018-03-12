@@ -30,10 +30,10 @@ end
 ------------------------------
 -- Downloading State
 --
-function _Class:startDownload(id)
+function _Class:startDownload(id, version)
     if id then
-        print("storeFSM startDownload", id.name)
-        cmd:startDownload(id.name)
+        print("storeFSM startDownload", id.name, version)
+        cmd:startDownload(id.name, version)
     else
     cmd:startDownload()
     end
@@ -124,7 +124,9 @@ function _Class:onCreateDialog(id, isPurchased, isDownloaded)
             self.fsm:showDialogPurchased()
             if not isDownloaded then
                 --print("##### ", epsode.name)
+                if #epsode.versions == 0 then
                 self.fsm:onRestore(epsode)
+            end
             end
         else
             self.fsm:showDialogNotPurchased()
@@ -139,13 +141,13 @@ function _Class:destroyDialog()
     self.fromDialog = false
 end
 
-function _Class:gotoScene(epsode)
-    print("storeFSM gotoScene", epsode.name)
+function _Class:gotoScene(epsode, version)
+    print("storeFSM gotoScene", epsode.name, version)
     local event = {target={epsode = epsode, selectedPurchase = epsode.name}}
      composer.hideOverlay("fade", 100 )
      self.fromDialog = false
-    timer.performWithDelay(100, function()
-    cmd.gotoScene(event)
+     timer.performWithDelay(300, function()
+        cmd.gotoScene(event, version)
     end)
     -- Runtime:dispachEvent("hideOverlay")
 end
@@ -192,6 +194,7 @@ function _Class.onDownloadComplete(selectedPurchase)
     if self.fromDialog then
         self.fsm:fromDialog(selectedPurchase)
         self.fromDialog = false
+        print("onDownloadComplete fromDialog false")
     else
         self.fsm:backThumbnail()
         self.fromThumbnail = false
@@ -213,9 +216,14 @@ end
 -- purchase and restore call this purchaseListener
 -- and IAP.lua also fires command:purcahseComplted wth purchase/restore
 --
-function _Class.purchaseListener()
+function _Class.purchaseListener(product)
     local self = _Class.getInstance()
-    self.fsm:onPurchase()
+    if model.epsodes[product].versions == 0 then
+        self.fsm:startDownload()
+    else
+        self.fsm:showDialogPurchased()
+        self.view:updateDialog(product)
+    end
 end
 
 function _Class.failedListener()
@@ -233,8 +241,8 @@ function _Class:init (overlay, view)
     self.view = view
     --cmd:init(view)
     IAP:init(model.catalogue, view.restoreAlert,
-        function()
-            self.purchaseListener()
+        function(product)
+            self.purchaseListener(product)
             view.purchaseAlert()
         end,
         self.failedListener,  model.debug)

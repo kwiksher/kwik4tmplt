@@ -20,11 +20,11 @@ function _M:allListeners(UI)
   _K.{{glayer}}Spin = function (event )
     if event.direction == "clockwise" then
       {{#gtclock}}
-           UI.scene:dispatchEvent({name="{{gtclock}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="{{gtclock}}", spin=event })
       {{/gtclock}}
     elseif event.direction == "counter_clockwise" then
       {{#gtcounter}}
-           UI.scene:dispatchEvent({name="{{gtcounter}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="{{gtcounter}}", spin=event })
       {{/gtcounter}}
      end
      return true

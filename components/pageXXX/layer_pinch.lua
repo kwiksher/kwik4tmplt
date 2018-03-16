@@ -14,11 +14,11 @@ function _M:allListeners(UI)
     _K.{{glayer}}Pinc = function (event )
         if event.phase == "moved" then
             {{#gtclock}}
-           UI.scene:dispatchEvent({name="{{gtclock}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="{{gtclock}}", pinch=event })
             {{/gtclock}}
          elseif event.phase == "ended" then
             {{#gtcounter}}
-           UI.scene:dispatchEvent({name="{{gtcounter}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="{{gtcounter}}", pinch=event })
             {{/gtcounter}}
         end
         return true

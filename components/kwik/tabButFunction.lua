@@ -10,10 +10,10 @@ function _Class:createTabButFunction(UI, model)
     if model.enabled or model.enabled == nil then
       if model.btaps and event.numTaps then
         if event.numTaps == model.btaps then
-            UI.scene:dispatchEvent({name=model.eventName, event = event})
+            UI.scene:dispatchEvent({name=model.eventName, tap = event})
         end
       else
-            UI.scene:dispatchEvent({name=model.eventName, event = event})
+            UI.scene:dispatchEvent({name=model.eventName, tap = event})
       end
     end
     return true

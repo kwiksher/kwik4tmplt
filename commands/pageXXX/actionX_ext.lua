@@ -13,6 +13,7 @@ function ActionCommand:new()
 		local sceneGroup = UI.scene.view
 		local layer      = UI.layer
 		local phase     = params.event.phase
+		local event     = params.event
 			{{#vvar}}
 				{{vvar}}
 			{{/vvar}}

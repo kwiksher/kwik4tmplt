@@ -14,7 +14,7 @@ function _M:allListeners(UI)
   _K.{{myLName}}Swipe = function (event )
     if event.phase == "ended" and event.direction ~= nil then
       {{#gcomplete}}
-         UI.scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
+         UI.scene:dispatchEvent({name="{{gcomplete}}", swip=event })
       {{/gcomplete}}
     end
     return true

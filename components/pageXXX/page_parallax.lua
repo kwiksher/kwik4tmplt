@@ -24,11 +24,11 @@ function _M:allListeners(UI)
       {{/dampY}}
         if event.zGravity > 0 then
           {{#triggerBack}}
-           UI.scene:dispatchEvent({name="{{triggerBack}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="{{triggerBack}}", accel=event })
           {{/triggerBack}}
         else
           {{#triggerForward}}
-           UI.scene:dispatchEvent({name="{{triggerForward}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="{{triggerForward}}", accel=event })
           {{/triggerForward}}
         end
       {{/parallaxArr}}

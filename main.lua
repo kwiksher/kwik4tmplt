@@ -1,4 +1,4 @@
--- Template Version 2018.0005
+-- Template Version 2018.0010
 -- Code created by Kwik - Copyright: kwiksher.com {{year}}
 -- Version: {{vers}}
 -- Project: {{ProjName}}
@@ -72,3 +72,15 @@ local path = system.pathForFile("log.db", system.DocumentsDirectory)
 db = sqlite3.open(path)
 log:set(db, "support@kwiksher.com")
 ]]
+
+d = {}
+d.print = function(num)
+	local _num = num or 1
+	-- for k, v in pairs(debug.getinfo(1)) do print(k, v) end
+	local t = debug.getinfo(2)
+	print( t.short_src..":("..t.currentline..")", t.name)
+end
+
+d.printT = function()
+	print(debug.traceback(""))
+end

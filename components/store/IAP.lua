@@ -51,7 +51,7 @@ local function purchaseListener( product )
     Runtime:dispatchEvent({name = "command:purchaseCompleted", product = product, actionType = "purchase"})
     iap.saveInventory()
     if M.purchaseAlert then
-    M.purchaseAlert()
+    M.purchaseAlert(product)
     else
         print("purchaseAlert is empty")
     end

@@ -71,8 +71,8 @@ function _M:localPos(UI)
     layer.{{myLName}}:setFillColor ({{elColor}})
     layer.{{myLName}}.alpha = oriAlpha
     layer.{{myLName}}.oldAlpha = oriAlpha
-    layer.{{myLName}}.anchorX = 0
-    layer.{{myLName}}.anchorY = 0
+    layer.{{myLName}}.anchorX = 0.5
+    layer.{{myLName}}.anchorY = 0.5
     {{#background}}
       sceneGroup:insert( 1, layer.{{myLName}})
       sceneGroup.{{myLName}} = layer.{{myLName}}

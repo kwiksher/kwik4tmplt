@@ -14,7 +14,7 @@ end
 function _M:allListeners(UI)
   _K.timerStash.{{gname}} = timer.performWithDelay({{gdelay}}*1000 ,
   	function()
-      UI.scene:dispatchEvent({name = "{{gcomplete}}", event={UI=UI} })
+      UI.scene:dispatchEvent({name = "{{gcomplete}}" })
   	end,
   	{{gloop}} )
 end

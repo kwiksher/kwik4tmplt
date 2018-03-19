@@ -134,7 +134,7 @@ function ActionCommand:new()
 		{{/countdown.playCountDown}}
 
 		{{#external.externalCode}}
-      UI.scene:dispatchEvent({name = "ext_{{triggerName}}", event={UI=UI} })
+      UI.scene:dispatchEvent({name = "ext_{{triggerName}}", parent = params.event })
 		{{/external.externalCode}}
 
 		{{#image.editImage}}
@@ -290,7 +290,7 @@ function ActionCommand:new()
 		{{/variables.restartTrackVars}}
 
 		{{#variables.editVars}}
-      UI.scene:dispatchEvent({name = "var_{{triggerName}}", event={UI=UI} })
+      UI.scene:dispatchEvent({name = "var_{{triggerName}}", parent = params.event })
 		{{/variables.editVars}}
 
 		{{#video.playVideo}}

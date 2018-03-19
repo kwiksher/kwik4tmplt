@@ -93,6 +93,8 @@ end
 --
 function _M:toDispose(UI)
   local layer      = UI.layer
+  local sceneGroup = UI.scene.view
+
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end

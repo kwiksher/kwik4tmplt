@@ -34,10 +34,10 @@ local function getPageNum(num)
 end
 M.getPageNum = getPageNum
 --
-local function readPageJson(name)
+local function readPageJson(name, version)
     local jsonFile = function(filename )
        local path = system.pathForFile(filename, system.ApplicationSupportDirectory)
-       --print(path)
+       print(path)
        local contents
        local file = io.open( path, "r" )
        if file then
@@ -48,8 +48,9 @@ local function readPageJson(name)
        end
        return contents
     end
-    currentBook = name
-    currentBookModel =  json.decode( jsonFile(name.."/model.json") )
+    local _ver = version or ""
+    currentBook = name.._ver
+    currentBookModel =  json.decode( jsonFile(name.._ver.."/model.json") )
     -- for k, v in pairs(currentBookModel) do
     --     for l, m in pairs(v) do print(l, m) end
     -- end
@@ -436,18 +437,18 @@ function M.isPageReady(num)
     return true
 end
 
-function M.gotoScene(event)
+function M.gotoScene(event, version)
     local epsode =  model.epsodes[event.target.selectedPurchase]
-    print("UI.gotoScene ".. epsode.name)
+    print("UI.gotoScene ".. epsode.name, version)
     if master.isEmbedded then
         -- local storeFSM = require("components.store.storeFSM").getInstance()
         -- storeFSM:exit()
         Runtime:dispatchEvent({name="changeThisMug", appName=epsode.name})
     elseif bookShelfType == type.tmplt then
-        readPageJson(epsode.name)
+        readPageJson(epsode.name, version)
         setSystemDir[type.tmplt](true)
         M.currentPage = 1
-        print("views.page0"..getPageNum(1).."Scene")
+        --print("views.page0"..getPageNum(1).."Scene")
         composer.gotoScene("views.page0"..getPageNum(1).."Scene")
     else
         setSystemDir[type.pages](epsode.name)

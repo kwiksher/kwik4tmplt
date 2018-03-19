@@ -17,6 +17,7 @@ function M.new()
     --
     --
     local function copyDisplayObject(src, dst, id, group)
+        print( _K.imgDir..src.imagePath)
         local obj = display.newImageRect( _K.imgDir..src.imagePath, _K.systemDir, src.width, src.height)
             if obj == nil then
                 print("copyDisplay object fail", id)
@@ -174,6 +175,36 @@ function M.new()
         end
     end
     --
+    --
+    local function setVersionButtons(bookXXIcon)
+        for i=1, #bookXXIcon.versions do
+            local versionBtn = bookXXIcon.versions[i]
+            if versionBtn then
+                if cmd.hasDownloaded(versionBtn.selectedPurchase, versionBtn.selectedVersion) then
+                    print(versionBtn.selectedVersion .."(saved)")
+                    function versionBtn:tap(e)
+                        print("versionBtn tap for gotoScene")
+                        --self.gotoScene
+                        VIEW.fsm:clickImage(self.epsode, self.selectedVersion)
+                        return true
+                    end
+                    versionBtn:addEventListener("tap", versionBtn)
+                else
+                    print(versionBtn.selectedVersion.."(not saved)")
+                    -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _epsode.versions[i]})
+                    function versionBtn:tap(e)
+                        print("versionBtn tap for download")
+                        VIEW.fsm:startDownload(self.epsode, self.selectedVersion)
+                    end
+                    versionBtn:addEventListener("tap", versionBtn)
+                end
+            else
+                print("Error to find versionBtn")
+            end
+        end
+     end
+    --
+    --
     function VIEW:controlDialog(epsode, isPurchased, isDownloaded)
         local bookXXIcon = self.layer["bookXXIcon"]
         if model.bookShelfType == 0 then
@@ -204,28 +235,7 @@ function M.new()
                 else
                 -----------------
                 -- version
-                    for i=1, #bookXXIcon.versions do
-                        local versionBtn = bookXXIcon.versions[i]
-                        if versionBtn then
-                            if cmd.hasDownloaded(versionBtn.selectedPurchase, versionBtn.selectedVersion) then
-                                print(versionBtn.selectedVersion .."(saved)")
-                                function versionBtn:tap(e)
-                                    --self.gotoScene
-                                    VIEW.fsm:clickImage(self.epsode, self.selectedVersion)
-                                end
-                                versionBtn:addEventListener("tap", versionBtn)
-                            else
-                                print(versionBtn.selectedVersion.."(not saved)")
-                                -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _epsode.versions[i]})
-                                function versionBtn:tap(e)
-                                    print("TBI")
-                                    --self.cmd.startDownloadVersion
-                                    --VIEW.fsm:clickImage(self.selectedPurchase, self.selectedVersion)
-                                end
-                                versionBtn:addEventListener("tap", versionBtn)
-                            end
-                        end
-                    end
+                    setVersionButtons(bookXXIcon)
                 end
             else
                 print(epsode.name.."(not purchased)")
@@ -316,25 +326,26 @@ function M.new()
                 end
             end
             -- not found. It means it is a version button
-            local versions = model.epsodes[selectedPurchase].versions
-            for k, v in pairs(versions) do print(k, v) end
-            for i=1, #versions do
-                local versionBtn = self.versionGroup[selectedPurchase..versions[i]]
-                print(selectedPurchase..versions[i],versionBtn)
-            if versionBtn then
-                if versionBtn.tap then
-                        print("removeEventListener")
-                    versionBtn:removeEventListener("tap", versionBtn)
-                end
-                function versionBtn:tap(e)
-                        self.fsm:clickImage(self.epsode, self.selectedVersion)
-                end
-                versionBtn:addEventListener("tap", versionBtn)
-                -- versionBtn.selectedPurchase = selectedPurchase -- chaning from book01 to book01v01
-                -- versionBtn:addEventListener("tap", CMD.gotoScene)
-                    self.versionGroup[selectedPurchase..versions[i]] = nil
-                end
-            end
+            setVersionButtons(button)
+
+            -- local versions = model.epsodes[selectedPurchase].versions
+            -- for k, v in pairs(versions) do print(k, v) end
+            -- for i=1, #versions do
+            --     local versionBtn = self.versionGroup[selectedPurchase..versions[i]]
+            --     print(selectedPurchase..versions[i],versionBtn)
+            --     if versionBtn then
+            --         if versionBtn.tap then
+            --                 print("removeEventListener")
+            --             versionBtn:removeEventListener("tap", versionBtn)
+            --         end
+            --         function versionBtn:tap(e)
+            --                 self.fsm:clickImage(self.epsode, self.selectedVersion)
+            --         end
+            --         versionBtn:addEventListener("tap", versionBtn)
+            --         self.versionGroup[selectedPurchase..versions[i]] = nil
+            --     end
+            -- end
+
         end
     end
     --

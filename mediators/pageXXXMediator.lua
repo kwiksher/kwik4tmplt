@@ -28,7 +28,7 @@ function PageViewMediator:new()
   end
   {{#eventListeners}}
   function mediator:{{myLName}}{{_}}{{layerType}}_{{triggerName}}(event)
-    Runtime:dispatchEvent({name="{{page}}.{{myLName}}{{_}}{{layerType}}_{{triggerName}}", event=event, UI = self.viewInstance.pageUI})
+    Runtime:dispatchEvent({name="{{page}}.{{myLName}}{{_}}{{layerType}}_{{triggerName}}", event=event.parent or event, UI = self.viewInstance.pageUI})
   end
   {{/eventListeners}}
   --

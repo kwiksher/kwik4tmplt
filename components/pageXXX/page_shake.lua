@@ -9,7 +9,7 @@ function _M:allListeners(UI)
   local layer       = UI.layer
     local function shakeMe(e)
      if(e.isShake == true) then
-           UI.scene:dispatchEvent({name="action_{{gcomplete}}", event={UI=UI} })
+           UI.scene:dispatchEvent({name="action_{{gcomplete}}", shake=e })
      end
      return true
     end

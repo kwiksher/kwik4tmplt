@@ -21,7 +21,7 @@ function _M:allListeners(UI)
   self:buildAnim(UI)
 	{{#aplay}}
 		{{#gtDissolve}}
-			transition.resume(_K.trans.{{tm}})
+			_K.trans.{{gtName}}:play()
 		{{/gtDissolve}}
 		{{^gtDissolve}}
 	--	if _K.gt.{{gtName}} then
@@ -231,8 +231,14 @@ function _M:buildAnim(UI)
 	{{gtLayer}}.yScale = {{gtLayer}}.oriYs
 
 	{{#gtDissolve}}
-		_K.trans.{{tm}} = transition.dissolve({{gtLayer}}, layer.{{gtDissolve}},	{{gtDur}}, {{gtDelay}})
-		transition.pause(_K.trans.{{tm}})
+		_K.trans.{{gtName}} = {}
+		_K.trans.{{gtName}}.play = function()
+			transition.dissolve({{gtLayer}}, layer.{{gtDissolve}},	{{gtDur}}, {{gtDelay}})
+		end
+		_K.trans.{{gtName}}.pause = function() print("pause is not supported in dissove") end
+		_K.trans.{{gtName}}.resume = function()
+			transition.dissolve({{gtLayer}}, layer.{{gtDissolve}},	{{gtDur}}, {{gtDelay}})
+		end
 	{{/gtDissolve}}
 	{{^gtDissolve}}
 		local {{gtName}} = function(event)
@@ -428,7 +434,7 @@ end
 --
 function _M:play(UI)
 	{{#gtDissolve}}
-		transition.resume(_K.trans.{{tm}})
+		_K.trans.{{gtName}}:play()
 	{{/gtDissolve}}
 	{{^gtDissolve}}
 		-- _K.gt.{{gtName}}:toBeginning()
@@ -438,7 +444,7 @@ end
 --
 function _M:resume(UI)
 	{{#gtDissolve}}
-		transition.resume(_K.trans.{{tm}})
+		_K.trans.{{gtName}}:resume()
 	{{/gtDissolve}}
 	{{^gtDissolve}}
 		_K.gt.{{gtName}}:play()

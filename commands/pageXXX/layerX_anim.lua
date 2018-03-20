@@ -17,7 +17,7 @@ function AnimationCommand:new()
 			anim:repoHeader(UI)
 			anim:buildAnim(UI)
 		elseif phase=="dispose" then
-			anim:dispose()
+			anim:toDispose()
 		elseif phase=="play" then
 			anim:play()
 		end

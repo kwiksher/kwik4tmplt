@@ -36,7 +36,9 @@ ThumbnailDisplayed
         push(DialogMap::IAPBadger) {
             purchase(id, fromDialog);
         }
-    showThumbnail() nil {}
+    showThumbnail() nil {
+            createThumbnail();        
+    }
     backThumbnail() nil {}
 
 }

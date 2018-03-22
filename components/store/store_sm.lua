@@ -133,6 +133,15 @@ function MainMap.ThumbnailDisplayed:gotoBook (fsm, id)
 end
 
 function MainMap.ThumbnailDisplayed:showThumbnail (fsm)
+    local ctxt = fsm.owner
+    local endState = fsm:getState()
+    fsm:clearState()
+    local r, msg = pcall(
+        function ()
+            ctxt:createThumbnail()
+        end
+    )
+    fsm:setState(endState)
 end
 
 MainMap.DisplayingDialog = MainMap.Default:new('MainMap.DisplayingDialog', 2)
@@ -597,7 +606,7 @@ function storeContext:enterStartState ()
     self:getState():Entry(self)
 end
 
-return
+return 
 storeContext
 -- Local variables:
 --  buffer-read-only: t

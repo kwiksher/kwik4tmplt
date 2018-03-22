@@ -388,12 +388,16 @@ local audacityFile = function(filename )
   local timecodes = {}
   local path = system.pathForFile(currentBook.."/audios/"..filename, system.ApplicationSupportDirectory)
    -- local path = system.pathForFile(filename, system.ResouceDirectory)
-    print(path)
+  --print(path)
    local file = io.open( path, "r" )
    if file then
-      for i in file:lines() do
-      table.insert(timecodes, {i:sub(1, 8), i:sub(10, 17), i:sub(19)})
-      -- print(timecodes[#timecodes][1], timecodes[#timecodes][2], timecodes[#timecodes][3] )
+      for line in file:lines() do
+        local chunks = {}
+        for i in line:gmatch("%S+") do
+            print(i)
+           table.insert(chunks, i)
+        end
+        table.insert(timecodes, chunks)
       end
       io.close(file)
       file = nil
@@ -401,15 +405,18 @@ local audacityFile = function(filename )
    return timecodes
 end
 -- type.tmplt
-M.replaceTimeCodes = function(syncLayer, filename)
+M.replaceTimeCodes = function(syncLayer, filename, layerName)
     local timecodes = audacityFile(filename)
-    print(filename)
+    -- print(filename)
     for i=1, #syncLayer do
-        -- print(syncLayer[i].start, timecodes[i][1])
+        print(syncLayer[i].start, timecodes[i][1])
         if timecodes[i] then
             syncLayer[i].start = timecodes[i][1]*1000
             syncLayer[i].out = timecodes[i][2]*1000
             syncLayer[i].name = timecodes[i][3]
+            if timecodes[i][4] then
+                syncLayer[i].file = layerName.."_"..timecodes[i][4]
+            end
         end
     end
 end

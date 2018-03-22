@@ -60,7 +60,7 @@ function _M:localPos(UI)
   {{#isTmplt}}
   if _K.systemDir == system.ApplicationSupportDirectory then
     local ui = require("components.store.UI")
-    ui.replaceTimeCodes(layer.Text1_txt, "p"..ui.currentPage.."_{{myLName}}.txt")
+    ui.replaceTimeCodes(layer.{{myLName}}_txt, "p"..ui.currentPage.."_{{myLName}}.txt", "{{myLName}}")
   end
   {{/isTmplt}}
 

@@ -76,9 +76,9 @@ function _M:allListeners(UI)
             if ({{glayer}}_lock == 1 and {{glayer}}_posX <= {{gdropb}}) and ({{glayer}}_posY <= {{gdropb}}) then
                dragLayer.x = layer.{{gdrop}}.x
                dragLayer.y = layer.{{gdrop}}.y
-              {{#dropl}}
+              {{#gdropl}}
                  _K.MultiTouch.deactivate(dragLayer)
-              {{/dropl}}
+              {{/gdropl}}
               {{#gdropt}}
                scene:dispatchEvent({name="{{gdropt}}", event={UI=UI} })
               {{/gdropt}}

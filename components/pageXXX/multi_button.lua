@@ -123,7 +123,7 @@ function _M:allListeners(UI)
   {{#button}}
     {{#buyProductHide}}
       --Hide button if purchase was already made
-      local path = system.pathForFile ("{{inApp}}.txt", system.DocumentsDirectory )
+      local path = system.pathForFile ("{{inApp}}.txt", _K.DocumentsDir )
       local file = io.open( path, "r" )
       if file then
          --This page was purchased, do not show the BUY button

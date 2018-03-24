@@ -12,7 +12,7 @@ end
 --
 
 _K.asmModel = {
-  sandboxPath = system.pathForFile( nil, system.DocumentsDirectory ),
+  sandboxPath = system.pathForFile( nil, _K.DocumentsDir ),
   projPath    = _K.kwikDir,
   APNG        = {},
   AGIF        = {}

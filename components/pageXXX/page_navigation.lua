@@ -5,6 +5,9 @@
 local _M = {}
 local Navigation = require("extlib.kNavi")
 local _K = require("Application")
+{{#TV}}
+local kInputDevices = require("extlib.tv.kInputDevices")
+{{/TV}}
 ---------------------
 {{#ultimate}}
 local tw, th = {{tw}}/4, {{th}}/4
@@ -27,6 +30,15 @@ function _M:allListeners(UI)
   local layer       = UI.layer
   local curPage     = UI.curPage
   local numPages    = UI.numPages
+
+  local function naviListener()
+  {{#TV}}
+    kInputDevices:removeEventListener(kInputDevices.defaultExitNaviKey)
+    kInputDevices:setPreviousGroup()
+    kInputDevices:resetStrokeColor()
+  {{/TV}}
+  end
+
   Navigation.new("page", {
   	backColor = { {{bcor}} },
   	{{#man}}
@@ -45,7 +57,8 @@ function _M:allListeners(UI)
 			alpha    = {{bal}},
 			imageDir = _K.thumbDir,
 			dire     = "{{bdir}}",
-			audio    ={ {{audioDisposal}} }} )
+			audio    ={ {{audioDisposal}} }},
+      naviListener )
    Navigation.hide()
 end
 --

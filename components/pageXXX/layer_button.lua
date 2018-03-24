@@ -154,7 +154,14 @@ function _M:buttonLocal(UI)
           if layer.{{myLName}}.enabled == nil or layer.{{myLName}}.enabled then
              layer.{{myLName}}.type = "press"
             -- {{bfun}}(layer.{{myLName}})
-             UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
+            {{#TV}}
+             if layer.{{myLName}}.isKey then
+                UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
+             end
+            {{/TV}}
+            {{^TV}}
+              UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
+            {{/TV}}
            end
         end
         layer.{{myLName}} = widget.newButton {
@@ -175,6 +182,7 @@ function _M:buttonLocal(UI)
         layer.{{myLName}}.alpha    = oriAlpha
         layer.{{myLName}}.oldAlpha = oriAlpha
         layer.{{myLName}}.name     = "{{myLName}}"
+        layer.{{myLName}}.on     = on{{myLName}}Event
         sceneGroup.{{myLName}}     = layer.{{myLName}}
         sceneGroup:insert(layer.{{myLName}})
     {{/Press}}

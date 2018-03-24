@@ -84,29 +84,28 @@ local function displayText(params)
 	  -- to load correct audio file
 
 	  if wordTouch then
-  		 -- name = string.lower(string.gsub(line[i].file, "['., ]", ""))
-  		 name = string.gsub(line[i].file, "['., ]", "")
-  		 --print(name)
-			if (name=="" or name==nil) then
-				print("name is empty for speakWord")
-			else
-			  if (lang=="") then
-			  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3", _K.systemDir)
-			  else
-			  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3", _K.systemDir)
-			  end
-			  words[i].id = i
-			  --  calculate the duration of each word
-			  words[i].dur = line[i].dur
+  		name = string.lower(string.gsub(line[i].file, "['., ]", ""))
+--print("check individual files and languages")
+----print("name: "..name)
+		if (name=="" or name==nil) then
+		else
+		  if (lang=="") then
+		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3")
+		  else
+		  	words[i].snd = audio.loadSound(_K.audioDir.._K.lang.."_"..name ..".mp3")
+		  end
+		  words[i].id = i
+		  --  calculate the duration of each word
+		  words[i].dur = line[i].dur
 
-			  --new in 2.0.11
-			  words[i].fil = line[i].file
-	----print("file: "..words[i].fil)
+		  --new in 2.0.11
+		  words[i].fil = line[i].file
+----print("file: "..words[i].fil)
 
-			  if params.addListner then
-					words[i]:addEventListener( "tap", speakWord )
-			  end
-			end --if name
+		  if params.addListner then
+				words[i]:addEventListener( "tap", speakWord )
+		  end
+		end --if name
 	  end --if wordTouch
 
 	  xOffset = xOffset + words[i].width + space

@@ -47,6 +47,9 @@ _Class.new = function(scene)
   end
   --
   function UI:setVars()
+    {{#extLibCode}}
+      self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/extLibCode}}
     {{#components}}
     self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
@@ -64,6 +67,9 @@ _Class.new = function(scene)
     {{#components}}
     self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#extLibCode}}
+      self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/extLibCode}}
     {{#hide}}
        self.scene:dispatchEvent({name="hide", event = {phase="create"}})
     {{/hide}}
@@ -74,6 +80,9 @@ _Class.new = function(scene)
     {{#components}}
     self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#extLibCode}}
+      self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/extLibCode}}
     {{#hide}}
        self.scene:dispatchEvent({name="hide", event = {phase="didShow"}})
     {{/hide}}
@@ -84,6 +93,9 @@ _Class.new = function(scene)
     {{#components}}
     self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#extLibCode}}
+      self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/extLibCode}}
   end
   --
   function UI:destroy(params)
@@ -91,6 +103,9 @@ _Class.new = function(scene)
     {{#components}}
     self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#extLibCode}}
+      self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/extLibCode}}
   end
   --
   function UI:touch(event)

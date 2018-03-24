@@ -445,7 +445,7 @@ end
 --Inventory adds a layer of protection to the load/save functions.
 
 local json = require("json")
-local DefaultLocation = system.DocumentsDirectory
+local DefaultLocation = _K.DocumentsDir
 local RealDefaultLocation = DefaultLocation
 local ValidLocations = {
    [system.DocumentsDirectory] = true,

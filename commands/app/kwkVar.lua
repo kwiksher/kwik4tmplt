@@ -14,7 +14,7 @@ function _Command:new()
 			local json = require("json")
 			-- Json code for external variable loading
 			local jsonFile = function(filename )
-			   local path = system.pathForFile(filename, system.DocumentsDirectory )
+			   local path = system.pathForFile(filename, _K.DocumentsDir )
 			   local contents
 			   local file = io.open( path, "r" )
 			   if file then
@@ -26,7 +26,7 @@ function _Command:new()
 			end
 			-- Variable saving function
 			local _K              = require("Application")
-			local path = system.pathForFile(_K.appName.. "kwkVars.json", system.DocumentsDirectory )
+			local path = system.pathForFile(_K.appName.. "kwkVars.json", _K.DocumentsDir )
 			local file = io.open( path, "r" )
 			if file == nil then
 			   local file = io.open( path, "w+" )

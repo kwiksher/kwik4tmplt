@@ -31,11 +31,15 @@ local composer = require( "composer" )
 
 local Navigation = {}
 local navShow = 0
+local navItems = nil
 
+Navigation.getItems = function()
+    return navItems
+end
 --local _K.kNavig = nil
 --local _K.kNavigation = nil
 
-Navigation.new = function( obj, params )
+Navigation.new = function( obj, params, naviListener)
 	params = params or {}
     local spacer = 10 --pixels distance between images
 
@@ -161,7 +165,7 @@ Navigation.new = function( obj, params )
        _K.kNavig:insert(naviBackground);
 
 	--create navigation
-	local navItems = display.newGroup()
+    navItems = display.newGroup()
 
 	--controls thumbnails actions
 	local menuItemTap = function ( event )
@@ -196,6 +200,9 @@ Navigation.new = function( obj, params )
 			Navigation.hide()
 			--4.3 removes the current scene from memory
 			--print(togo, params.curPage, "page_"..params.curPage)
+            if naviListener then
+                naviListener()
+            end
 
 			composer.gotoScene( togo )
 			-- composer.removeScene("page_"..params.curPage, true) ymmt

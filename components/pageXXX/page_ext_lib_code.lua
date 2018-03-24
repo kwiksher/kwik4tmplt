@@ -10,6 +10,10 @@ local _K = require "Application"
     local {{name}} = require("{{libname}}")
   {{/extLib}}
 --
+{{#TV}}
+local kInputDevices = require("extlib.tv.kInputDevices")
+{{/TV}}
+
 function _M:localVars(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
@@ -32,10 +36,20 @@ function _M:allListeners(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
 
+    {{#TV}}
+    kInputDevices:initGroup()
+    {{/TV}}
+
     {{#extCodeBtm}}
     {{ccode}}
     {{arqCode}}
     {{/extCodeBtm}}
+
+    {{#TV}}
+    kInputDevices:willShow()
+    kInputDevices:didShow()
+    {{/TV}}
+
 end
 --
 function _M:toDispose(UI)
@@ -45,6 +59,12 @@ function _M:toDispose(UI)
     {{ccode}}
     {{arqCode}}
     {{/extCodeDsp}}
+
+    {{#TV}}
+    kInputDevices:willHide()
+    kInputDevices:didHide()
+    {{/TV}}
+
 end
 --
 return _M

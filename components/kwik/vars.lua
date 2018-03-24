@@ -7,7 +7,7 @@ local json   = require("json")
 local _K              = require("Application")
 --
 -- Variable saving function
-local path = system.pathForFile( _K.appName.."kwkVars.json", system.DocumentsDirectory )
+local path = system.pathForFile( _K.appName.."kwkVars.json", _K.DocumentsDir )
 local file = io.open( path, "r" )
 if file then
     io.close(file)
@@ -20,7 +20,7 @@ else
 end
 -- Json code for external variable loading
 local jsonFile = function(filename )
-   local path = system.pathForFile(filename, system.DocumentsDirectory )
+   local path = system.pathForFile(filename, _K.DocumentsDir )
    local contents
    local file = io.open( path, "r" )
    if file then
@@ -47,7 +47,7 @@ function _Class:kwkVarCheck(variable)
 end
 --save all permanent variables
 function _Class:zeroesKwikVars() --restart the file to save variable content
-	local path = system.pathForFile(_K.appName.. "kwkVars.json", system.DocumentsDirectory )
+	local path = system.pathForFile(_K.appName.. "kwkVars.json", _K.DocumentsDir )
 	local contents
 	local file = io.open( path, "w+b" )
 	if file then
@@ -64,7 +64,7 @@ function _Class:saveKwikVars(toSave) --toSave is a table with contents
 	local jsonString
 
 	--checks if current file is empty or not
-	local path = system.pathForFile(_K.appName.. "kwkVars.json", system.DocumentsDirectory )
+	local path = system.pathForFile(_K.appName.. "kwkVars.json", _K.DocumentsDir )
 	local contents
 	--check if file exists
 	local file = io.open( path, "r" )

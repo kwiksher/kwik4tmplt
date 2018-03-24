@@ -29,7 +29,7 @@ function _M:allListeners(UI)
          UI.{{elContent}} = layer.{{myLName}}.text
       {{/variable}}
       {{^variable}}
-        local path = system.pathForFile( "{{elContent}}", system.DocumentsDirectory )
+        local path = system.pathForFile( "{{elContent}}", _K.DocumentsDir )
         local file = io.open( path, "w+" )
         file:write( layer.{{myLName}}.text )
         io.close( file )

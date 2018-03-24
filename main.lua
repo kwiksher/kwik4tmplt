@@ -40,6 +40,12 @@ local function startThisMug()
 		_K.lang        ="{{use.lang}}"
 		-- _K.stage       = display.getCurrentStage()
 		system.activate("multitouch")
+		if "tvOS" == system.getInfo("platform") then
+		  system.setIdleTimer( false )
+		  _K.DocumentsDir = system.CachesDirectory
+		else
+		  _K.DocumentsDir = system.DocumentsDirectory
+		end
 		_K.appInstance = _K:new(_K.appDir)
 		_K.randomAction  = {}
 		_K.randomAnim  = {}

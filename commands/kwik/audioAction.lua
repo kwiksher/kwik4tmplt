@@ -11,7 +11,7 @@ local allAudios = {}
 
 function _M:recordAudio(duration, mmFile, malfa, sceneGroup, allAudios)
   allAudios.playback  = nil
-  local filePath = system.pathForFile(mmFile, system.DocumentsDirectory )
+  local filePath = system.pathForFile(mmFile, _K.DocumentsDir )
   local r = media.newRecording(filePath)
   sceneGroup.alpha = malfa
   r:startRecording( )
@@ -21,7 +21,7 @@ function _M:recordAudio(duration, mmFile, malfa, sceneGroup, allAudios)
     local file = io.open(filePath, "r")
     if file then
        io.close(file)
-       allAudios.playback = audio.loadStream( mmFile, system.DocumentsDirectory )
+       allAudios.playback = audio.loadStream( mmFile, _K.DocumentsDir )
        audio.play(allAudios.playback, {channel=31})
     end
    end

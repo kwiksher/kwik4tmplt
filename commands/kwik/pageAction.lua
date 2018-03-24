@@ -18,6 +18,7 @@ function _M:autoPlay(curPage)
    composer.gotoScene( "views.page0"..(curPage+1).."Scene"  )
 end
 --
+{{^TV}}
 function _M:showHideNavigation()
   if (_K.kNavig.alpha == 0) then
      Navigation.show()
@@ -25,6 +26,27 @@ function _M:showHideNavigation()
      Navigation.hide()
   end
 end
+{{/TV}}
+--
+{{#TV}}
+function _M:showHideNavigation(NaviBtn)
+    local kInputDevices = require("extlib.tv.kInputDevices")
+    if (NaviBtn.isKey == true) then
+      kInputDevices:setNaviGroup(Navigation.getItems())
+      kInputDevices:setStrokeColor(kInputDevices.defaultStrokeColor)
+      kInputDevices:addEventListener(kInputDevices.defaultExitNaviKey ,NaviBtn )
+      if (_K.kNavig.alpha == 0) then
+        Navigation.show()
+      else
+        kInputDevices:removeEventListener(kInputDevices.defaultExitNaviKey , NaviBtn)
+        kInputDevices:resetStrokeColor()
+        timer.performWithDelay(10,
+          function() kInputDevices:setPreviousGroup() end, 1)
+        Navigation.hide()
+      end
+    end
+end
+{{/TV}}
 --
 function _M:reloadPage(canvas)
 	if canvas then

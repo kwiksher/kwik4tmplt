@@ -56,7 +56,7 @@ local function networkListener(event, deferred, selectedPurchase, version)
             local options = {
                 zipFile = event.response.filename,
                 zipBaseDir = event.response.baseDirectory,
-                -- dstBaseDir = system.DocumentsDirectory,
+                -- dstBaseDir = _K.DocumentsDir,
                 dstBaseDir = system.ApplicationSupportDirectory,
                 listener = function(event) zipListener(event, deferred, selectedPurchase, version) end,
             }
@@ -84,7 +84,7 @@ local function _startDownload(selectedPurchase, version)
             local options = {
                 zipFile = selectedPurchase..version..".zip",
                 zipBaseDir = system.TemporaryDirectory,
-                -- dstBaseDir = system.DocumentsDirectory,
+                -- dstBaseDir = _K.DocumentsDir,
                 dstBaseDir = system.ApplicationSupportDirectory,
                 listener = function(event) zipListener(event, deferred, selectedPurchase, version) end,
             }

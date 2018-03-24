@@ -17,7 +17,6 @@ function M.new()
     --
     --
     local function copyDisplayObject(src, dst, id, group)
-        print( _K.imgDir..src.imagePath)
         local obj = display.newImageRect( _K.imgDir..src.imagePath, _K.systemDir, src.width, src.height)
             if obj == nil then
                 print("copyDisplay object fail", id)

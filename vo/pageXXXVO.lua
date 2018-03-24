@@ -9,6 +9,9 @@ VO.field = "{{field}}" --
 local Const = require("extlib.const")
 VO.const = Const:new{
 	"page_common",
+    {{#extLibCode}}
+		"{{layer}}_{{type}}_{{trigger}}",
+    {{/extLibCode}}
 	{{#components}}
 		"{{layer}}_{{type}}_{{trigger}}",
 	{{/components}}
@@ -18,6 +21,9 @@ VO.const = Const:new{
 VO.new = function(val)
 	local vo = {
 	page_common = val.page_common,
+	    {{#extLibCode}}
+			{{layer}}_{{type}}_{{trigger}} = val.{{layer}}_{{type}}_{{trigger}},
+    	{{/extLibCode}}
 		{{#components}}
 			{{layer}}_{{type}}_{{trigger}} = val.{{layer}}_{{type}}_{{trigger}},
 		{{/components}}

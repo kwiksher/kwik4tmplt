@@ -8,7 +8,7 @@ local _K = require "Application"
 --
 {{#ultimate}}
 local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
-
+local dX, dY = _K.ultimatePosition({{mX}}+15, {{mY}}-30)
 local elpad = {{elpad}}/4
 local elFontSize = {{elFontSize}}/4
 local audioImage = "kAudio.png"
@@ -18,11 +18,12 @@ local speakW, speakH = 60/4, 60/4
 {{^ultimate}}
 local mX = {{mX}}
 local mY = {{mY}}
+local dX, dY = {{mX}}+15, {{mY}}-30
 local elpad = {{elpad}}
 local elFontSize = {{elFontSize}}
 local audioImage = "kAudioHi.png"
 local audioImageHi = "kAudioHi.png"
-local speakW, speakH = 60, 60
+local speakW, speakH = 30, 30
 {{/ultimate}}
 --
 function _M:localPos(UI)
@@ -101,7 +102,7 @@ function _M:localPos(UI)
   sceneGroup:insert(layer.speak{{spe}})
   --
   {{#multLayers}}
-    UI.tab{{um}}["{{dois}}"] = { mX, mY, elpad, allAudios.{{elaudio}}, layer.{{myLName}}_txt, {{sbut}}, {{elFont}}, {{elFontColor}}, elFontSize, {{elColorHi}}, {{elTouch}}, "{{rightLeft}}", {{vchan}} }
+    UI.tab{{um}}["{{dois}}"] = { dX, dY, elpad, allAudios.{{elaudio}}, layer.{{myLName}}_txt, {{sbut}}, {{elFont}}, {{elFontColor}}, elFontSize, {{elColorHi}}, {{elTouch}}, "{{rightLeft}}", {{vchan}} }
     {{^elshow}}
       -- send button out of screen
       layer.speak{{spe}}.x = -500
@@ -109,8 +110,20 @@ function _M:localPos(UI)
   {{/multLayers}}
   {{^multLayers}}
     layer.b_{{myLName}}, layer.{{myLName}} = _K.syncSound.addSentence{
-        x            = mX,
-        y            = mY,
+{{#ultimate}}
+  {{#elshow}}
+        x            = dX + elpad*2,
+        y            = dY,
+  {{/elshow}}
+  {{^elshow}}
+        x            = dX,
+        y            = dY,
+  {{/elshow}}
+{{/ultimate}}
+{{^ultimate}}
+        x            = dX,
+        y            = dY,
+{{/ultimate}}
         padding      = elpad,
         sentence     = allAudios.{{elaudio}},
         volume       = {{avol}},
@@ -128,7 +141,7 @@ function _M:localPos(UI)
         lang         = ""
     }
 
-    layer.{{myLName}}:translate(-layer.{{myLName}}.width/2, 0 )
+    --layer.{{myLName}}:translate(-layer.{{myLName}}.width/2, 0 )
 
     sceneGroup:insert( layer.{{myLName}})
     sceneGroup.{{myLName}} = layer.{{myLName}}

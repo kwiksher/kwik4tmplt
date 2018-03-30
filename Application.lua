@@ -167,5 +167,14 @@ function Application.ultimatePosition(x,y)
 		return x, y
 {{/ultimate}}
 end
+--
+function Application.isUltimateConfig()
+	{{#ultimate}}
+	return true
+	{{/ultimate}}
+	{{^ultimate}}
+	return false
+	{{/ultimate}}
+end
 	--
 return Application

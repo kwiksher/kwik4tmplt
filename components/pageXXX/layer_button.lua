@@ -71,6 +71,10 @@ function _M:localPos(UI)
   self:buttonLocal(UI)
 end
 --
+{{#tabButFunction}}
+local command = require("commands.page0{{docNum}}.{{myLName}}_{{layerType}}_{{triggerName}}"):new()
+{{/tabButFunction}}
+--
 function _M:allListeners(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
@@ -79,9 +83,22 @@ function _M:allListeners(UI)
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end
-    _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
+  {{tabButFunction.obj}}.tap = function(event)
+    if {{tabButFunction.obj}}.enabled == nil or {{tabButFunction.obj}}.enabled then
+      local btaps = {{tabButFunction.btaps}}
+      if btaps and event.numTaps then
+        if event.numTaps == btaps then
+          command:execute{UI=UI}
+        end
+      else
+        command:execute{UI=UI}
+      end
+    end
+  end
+  {{tabButFunction.obj}}:addEventListener( "tap", {{tabButFunction.obj}})
   {{/tabButFunction}}
-    {{#buyProductHide}}
+
+  {{#buyProductHide}}
       --Hide button if purchase was already made
     if IAP.getInventoryValue("unlock_".."{{inApp}}") then
          --This page was purchased, do not show the BUY button
@@ -98,7 +115,7 @@ function _M:toDispose(UI)
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end
-    _M:removeTabButFunction(UI, {obj={{tabButFunction.obj}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
+  {{tabButFunction.obj}}:removeEventListener( "tap", {{tabButFunction.obj}})
   {{/tabButFunction}}
   {{/multLayers}}
 end

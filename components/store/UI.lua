@@ -409,8 +409,8 @@ M.replaceTimeCodes = function(syncLayer, filename, layerName)
     local timecodes = audacityFile(filename)
     -- print(filename)
     for i=1, #syncLayer do
-        print(syncLayer[i].start, timecodes[i][1])
         if timecodes[i] then
+            print(syncLayer[i].name, syncLayer[i].start, timecodes[i][1])
             syncLayer[i].start = timecodes[i][1]*1000
             syncLayer[i].out = timecodes[i][2]*1000
             syncLayer[i].name = timecodes[i][3]

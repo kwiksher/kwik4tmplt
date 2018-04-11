@@ -74,9 +74,9 @@ local function displayText(params)
 		if (name=="" or name==nil) then
 		else
 		  if (lang=="") then
-		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3")
+		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3", _K.systemDir)
 		  else
-			  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3")
+			  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3", _K.systemDir)
 		  end
 		  words[i].id = i
 		  --  calculate the duration of each word
@@ -145,7 +145,7 @@ function saySentence( params )
 		if not params.sentence  then return end
 		local isChannelPlaying = audio.isChannelPlaying(channel)
 		if isChannelPlaying then
-				print("Warning syncSound channel is already using")      --nothing
+				print("Warning syncSound channel is already using", channel)      --nothing
 				return
 		end
 		--
@@ -200,9 +200,9 @@ local function touchSentence(event)
 
 	local isChannelPlaying = audio.isChannelPlaying(channel)
 	if isChannelPlaying then
-		--nothing
+    	print("Warning: channel is playing for touchSentence", channel)
 	else
-    	audio.rewind(channel)
+   	audio.rewind(channel)
 		audio.setVolume(_volume, {channel=channel})
 		audio.play(sentence, {channel=channel})
 		-- fade button so it's not touchable
@@ -243,7 +243,7 @@ function speakWord( event )
  	dur = dur + 2*trans
  	local isChannelPlaying = audio.isChannelPlaying(channel)
     if isChannelPlaying or snd==nil then
-    	print("channel is playing for speakWord")
+    	print("Warning: channel is already playing for speakWord", channel)
     else
        	audio.play(snd, {  channel=channel } )
        	--Moves main and colored words

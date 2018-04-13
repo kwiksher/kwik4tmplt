@@ -162,15 +162,15 @@ M.setDir = function(pageNum)
     return true
 end
 --
--- only type.pages
+-- pages, embedded, tmplt
 --
 M.gotoTOC = function(params)
     if type.pages == model.bookShelfType then
        if setSystemDir[type.pages](model.isIAP(model.tocPage)) then
-    local storeFSM = require("components.store.storeFSM").getInstance()
-    storeFSM:exit()
-        composer.gotoScene("views.page0"..model.tocPage.."Scene", {params = params})
-    end
+            local storeFSM = require("components.store.storeFSM").getInstance()
+            storeFSM:exit()
+            composer.gotoScene("views.page0"..model.tocPage.."Scene", {params = params})
+        end
     elseif type.embedded == model.bookShelfType then
         if master.isEmbedded then
             local storeFSM = require("components.store.storeFSM").getInstance()
@@ -181,7 +181,7 @@ M.gotoTOC = function(params)
         M.gotoSceneBook("TOC", 1)
     end
 end
-
+-- only type.page
 M.gotoPage = function(pageNum, params)
    if setSystemDir[type.pages](model.isIAP(pageNum)) then
     composer.gotoScene("views.page0"..pageNum.."Scene", {params = params})
@@ -269,11 +269,12 @@ M.gotoPreviousScene = function(params)
     end
 end
 -- type.embedded and type.tmplt
-M.gotoSceneBook = function(epsode, page, params)
+M.gotoSceneBook = function(epsode, page, version, params)
+    local _ver = version or ""
     if master.isEmbedded then
         local storeFSM = require("components.store.storeFSM").getInstance()
         storeFSM:exit()
-        Runtime:dispatchEvent({name="changeThisMug", appName=epsode, page=page})
+        Runtime:dispatchEvent({name="changeThisMug", appName=epsode.._ver, page=page})
     else
         if epsode == "TOC" then
             M.currentPage = 1
@@ -285,15 +286,16 @@ M.gotoSceneBook = function(epsode, page, params)
         else
             print("gotoSceneBook ".. model.getPageName(epsode))
             M.currentPage = page
-            readPageJson(epsode)
+            readPageJson(epsode, _ver)
             setSystemDir[type.tmplt](true)
             composer.gotoScene("views.page0"..getPageNum(page).."Scene", {params = params})
         end
     end
 end
 -- type.embedded and type.tmplt
-M.gotoSceneNextBook = function()
+M.gotoSceneNextBook = function(version)
     print("gotoSceneNextBook")
+    local _ver = version or ""
     local store_model
     if master.isEmbedded then
         currentBook = _G.appName
@@ -317,15 +319,15 @@ M.gotoSceneNextBook = function()
     end
     if prev then
         local epname = store_model.epsodes[prev].name
-        if not downloadManager.hasDownloaded(epname) then
+        if not downloadManager.hasDownloaded(epname.._ver) then
             epname ="TOC"
         end
         if master.isEmbedded then
             -- local storeFSM = require("components.store.storeFSM").getInstance()
             -- storeFSM:exit()
-            Runtime:dispatchEvent({name="changeThisMug", appName=epname})
+            Runtime:dispatchEvent({name="changeThisMug", appName=epname.._ver})
         else
-            M.gotoSceneBook(epname, 1)
+            M.gotoSceneBook(epname, 1, _ver)
         end
     else
         if master.isEmbedded then
@@ -333,13 +335,14 @@ M.gotoSceneNextBook = function()
             storeFSM:exit()
             Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
         else
-            M.gotoSceneBook("TOC", 1)
+            M.gotoSceneBook("TOC", 1, _ver)
         end
     end
 end
 -- type.embedded and type.tmplt
-M.gotoScenePreviousBook = function()
+M.gotoScenePreviousBook = function(version)
     print("gotoScenePreviousBook")
+    local _ver = version or ""
     local store_model
     if master.isEmbedded then
         currentBook = _G.appName
@@ -363,15 +366,15 @@ M.gotoScenePreviousBook = function()
     end
     if k then
         local epname = v.name
-        if not downloadManager.hasDownloaded(epname) then
+        if not downloadManager.hasDownloaded(epname.._ver) then
             epname ="TOC"
         end
         if master.isEmbedded then
             -- local storeFSM = require("components.store.storeFSM").getInstance()
             -- storeFSM:exit()
-            Runtime:dispatchEvent({name="changeThisMug", appName=epname})
+            Runtime:dispatchEvent({name="changeThisMug", appName=epname.._ver})
         else
-            M.gotoSceneBook(epname, 1)
+            M.gotoSceneBook(epname, 1, _ver)
         end
     else
         if master.isEmbedded then
@@ -379,7 +382,7 @@ M.gotoScenePreviousBook = function()
             storeFSM:exit()
             Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
         else
-            M.gotoSceneBook("TOC", 1)
+            M.gotoSceneBook("TOC", 1, _ver)
         end
     end
 end
@@ -447,10 +450,11 @@ end
 function M.gotoScene(event, version)
     local epsode =  model.epsodes[event.target.selectedPurchase]
     print("UI.gotoScene ".. epsode.name, version)
+    local _ver = version or ""
     if master.isEmbedded then
         -- local storeFSM = require("components.store.storeFSM").getInstance()
         -- storeFSM:exit()
-        Runtime:dispatchEvent({name="changeThisMug", appName=epsode.name})
+        Runtime:dispatchEvent({name="changeThisMug", appName=epsode.name.._ver})
     elseif bookShelfType == type.tmplt then
         readPageJson(epsode.name, version)
         setSystemDir[type.tmplt](true)

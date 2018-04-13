@@ -30,7 +30,7 @@ function _Command:new()
 					end
 	    else
 	        _K.kBookmark = 0
-					local path = system.pathForFile(_K.appName.. "book.txt", system.DocumentsDirectory )
+					local path = system.pathForFile(_K.appName.. "book.txt",  _K.DocumentsDir  )
 					local file = io.open( path, "r" )
 					if file then
 					   io.close(file)

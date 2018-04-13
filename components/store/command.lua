@@ -60,8 +60,11 @@ function M.new ()
                 package.loaded[page] = require("plugin.KwikShelf."..page)
             end
             model.currentEpsode = {name=epsode.name, isPurchased = event.target.isPurchased}
-            composer.showOverlay(page, options)
-        return true
+            timer.performWithDelay(1, function()
+                composer.showOverlay(page, options)
+            end)
+            print("--- done showOverlay---")
+            return true
         else
             return false
         end

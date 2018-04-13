@@ -41,14 +41,18 @@ function Context:new()
 		end
 	end
 
+	local function onCommand(e)
+		context:onHandleEvent(e)
+	end
+
 	function context:mapCommand(eventName, commandClass)
 		assert(eventName ~= nil, "eventName required.")
 		assert(commandClass ~= nil, "commandClass required.")
-		--print("Context::mapCommand, name: ", eventName, ", commandClass: ", commandClass)
+	--	print("Context::mapCommand, name: ", eventName, ", commandClass: ", commandClass)
 		assert(require(commandClass), "Could not find commandClass")
 		self.commands[eventName] = commandClass
 
-		Runtime:addEventListener(eventName, function(e)context:onHandleEvent(e)end)
+		Runtime:addEventListener(eventName, onCommand)
 	end
 
 	function context:mapMediator(viewClass, mediatorClass)
@@ -144,6 +148,15 @@ function Context:new()
 		end
 		local className = classType:sub(lastStartIndex + 1)
 		return className
+	end
+
+	function context:destroy()
+		print(" ------- context:destroy ---------- ")
+		for k, v in pairs (self.commands) do
+			Runtime:removeEventListener(k, onCommand)
+		end
+		Runtime:removeEventListener("onRobotlegsViewCreated", self)
+		Runtime:removeEventListener("onRobotlegsViewDestroyed", self)
 	end
 
 	context:init()

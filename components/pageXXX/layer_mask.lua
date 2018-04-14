@@ -25,6 +25,12 @@ local imagePath = "p{{docNum}}/{{bn}}"
 local ext       = ".{{fExt}}"
 {{/kwk}}
 --
+function _M:localVars(UI)
+  {{#isTmplt}}
+   mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)
+  {{/isTmplt}}
+end
+--
 function _M:localPos(UI)
     local layer       = UI.layer
     local sceneGroup  = UI.scene.view
@@ -40,14 +46,16 @@ function _M:allListeners(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
     local imageSuffix = display.imageSuffix or ""
-    print( imageSuffix )
-    print(_K.imgDir.. imagePath..imageSuffix..ext)
-    local mask = graphics.newMask(_K.imgDir.. imagePath..imageSuffix..ext )
-    layer.{{targetLayer}}.group:setMask(mask)
-    layer.{{targetLayer}}.group.maskScaleX = {{scaleX}}*0.5
-    layer.{{targetLayer}}.group.maskScaleY = {{scaleY}}*0.5
-    layer.{{targetLayer}}.group.maskX = mX
-    layer.{{targetLayer}}.group.maskY = mY
+    --print( imageSuffix )
+    --print(_K.imgDir.. imagePath..imageSuffix..ext)
+    local mask = graphics.newMask(_K.imgDir.. imagePath..imageSuffix..ext, _K.systemDir )
+    if mask then
+      layer.{{targetLayer}}.group:setMask(mask)
+      layer.{{targetLayer}}.group.maskScaleX = {{scaleX}}*0.5
+      layer.{{targetLayer}}.group.maskScaleY = {{scaleY}}*0.5
+      layer.{{targetLayer}}.group.maskX = mX
+      layer.{{targetLayer}}.group.maskY = mY
+    end
 end
 --
 function _M:toDispose(UI)

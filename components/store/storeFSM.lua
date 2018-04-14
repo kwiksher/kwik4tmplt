@@ -218,7 +218,7 @@ end
 --
 function _Class.purchaseListener(product)
     local self = _Class.getInstance()
-    if model.epsodes[product].versions == 0 then
+    if #model.epsodes[product].versions == 0 then
         self.fsm:startDownload()
     else
         self.fsm:showDialogPurchased()

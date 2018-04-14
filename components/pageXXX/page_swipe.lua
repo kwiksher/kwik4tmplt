@@ -104,8 +104,7 @@ function _M:allListeners(UI)
           end
        else
           ui.gotoTOC(options)
-         end
-      end
+       end
     {{/bookshelf}}
     {{^bookshelf}}
        if tonumber(wPage) ~= tonumber(curPage) then

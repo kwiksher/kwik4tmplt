@@ -9,7 +9,7 @@ local _K = require "Application"
 {{#ultimate}}
 local imageWidth             = {{elW}}/4
 local imageHeight            = {{elH}}
-local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}})
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}} + {{eloffset}} )
 {{#randX}}
 local randXStart = _K.ultimatePosition({{randXStart}})
 local randXEnd = _K.ultimatePosition({{randXEnd}})
@@ -24,7 +24,7 @@ local elFontSize = {{elFontSize}}/4
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
 local mX = {{mX}}
-local mY = {{mY}}
+local mY = {{mY}} + {{eloffset}}
 {{#randX}}
 local randXStart = {{randXStart}}
 local randXEnd = {{randXEnd}}
@@ -52,16 +52,18 @@ function _M:localPos(UI)
   {{^globalVar}}
     local mVar = UI.{{elVar}}
   {{/globalVar}}
+
   {{#multLayers}}
     UI.tab{{um}}["{{dois}}"] = {mVar, imageWidth, imageHeight, mX, mY, oriAlpha, {{elFont}}, elFontSize, {{elFontColor}} }
   {{/multLayers}}
 
   {{^multLayers}}
-  layer.{{myLName}} = display.newText(mVar,  mX, mY, imageWidth, imageHeight, {{elFont}}, elFontSize )
+   local options = { text = mVar, x = mX + imageWidth/2, y = mY, fontSize = elFontSize, font = {{elFont}}, align = "left" }
+  layer.{{myLName}} = display.newText(options)
   if layer.{{myLName}} == nil then return end
   layer.{{myLName}}:setFillColor( {{elR}}, {{elG}}, {{elB}} )
-  layer.{{myLName}}.anchorX = 0
-  layer.{{myLName}}.anchorY = 0;
+  layer.{{myLName}}.anchorX = 0.5
+  layer.{{myLName}}.anchorY = 0.25
   _K.repositionAnchor(layer.{{myLName}},0.5,0);
   {{#randX}}
     layer.{{myLName}}.x = math.random( randXStart, randXEnd)

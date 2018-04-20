@@ -83,7 +83,7 @@ function _M:allListeners(UI)
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end
-  {{tabButFunction.obj}}:tap = function(event)
+  {{tabButFunction.obj}}.tap = function(self, event)
     if {{tabButFunction.obj}}.enabled == nil or {{tabButFunction.obj}}.enabled then
       local btaps = {{tabButFunction.btaps}}
       if btaps and event.numTaps then

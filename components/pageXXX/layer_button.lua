@@ -74,6 +74,14 @@ end
 {{#tabButFunction}}
 local command = require("commands.page0{{docNum}}.{{myLName}}_{{layerType}}_{{triggerName}}"):new()
 {{/tabButFunction}}
+
+{{#bn}}
+{{^multLayers}}
+{{#Press}}
+local command = require("commands.page0{{docNum}}.{{myLName}}_{{layerType}}_{{triggerName}}"):new()
+{{/Press}}
+{{/multLayers}}
+{{/bn}}
 --
 function _M:allListeners(UI)
   local sceneGroup = UI.scene.view
@@ -174,11 +182,11 @@ function _M:buttonLocal(UI)
             -- {{bfun}}(layer.{{myLName}})
             {{#TV}}
              if layer.{{myLName}}.isKey then
-                UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
+			        command:execute{UI=UI}
              end
             {{/TV}}
             {{^TV}}
-              UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
+			        command:execute{UI=UI}
             {{/TV}}
            end
         end

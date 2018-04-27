@@ -94,7 +94,7 @@ function _M:allListeners(UI)
   {{tabButFunction.obj}}.tap = function(self, event)
     if {{tabButFunction.obj}}.enabled == nil or {{tabButFunction.obj}}.enabled then
       local btaps = {{tabButFunction.btaps}}
-      if btaps and event.numTaps then
+      if btaps > 1 and event.numTaps then
         if event.numTaps == btaps then
           command:execute{UI=UI}
         end

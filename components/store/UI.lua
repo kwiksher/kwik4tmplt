@@ -59,12 +59,14 @@ end
 --
 M.readPageJson = readPageJson
 --
-_K.getModel = function(layerName, imagePath, dummy)
+_K.getModel = function(layerName, imagePath, dummy, dX, dY)
+    local _dX = dX or 0
+    local _dY = dY or 0
     local targetPage = dummy or M.currentPage
     local page = currentBookModel[targetPage]
     local layer = page[layerName]
     if layer == nil then layer = {x=0, y=0, width=0, height=0} end
-    local _x, _y = _K.ultimatePosition(layer.x, layer.y)
+    local _x, _y = _K.ultimatePosition(layer.x + _dX, layer.y + _dY)
     local path = nil
     if imagePath then
         local i = string.find(imagePath, "/")
@@ -72,6 +74,7 @@ _K.getModel = function(layerName, imagePath, dummy)
    end
     return _x, _y, layer.width/4, layer.height/4, path
 end
+--
 ----------------------------------
 local setSystemDir = {}
 --

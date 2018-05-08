@@ -157,10 +157,10 @@ function Application.ultimatePosition(x,y)
 	local mX = x and display.contentWidth/2 + (x*0.25 - 480*0.5) or 0
 	local mY = y and display.contentHeight/2 + (y*0.25 - 320*0.5) or 0
 	{{/use.landscape}}
-	{{^use.landscape}}
+	{{#use.portrait}}
 	local mX = x and display.contentWidth/2 + (x*0.25 - 320*0.5) or 0
 	local mY = y and display.contentHeight/2 + (y*0.25 - 480*0.5) or 0
-	{{/use.landscape}}
+	{{/use.portrait}}
 		return mX, mY
 {{/ultimate}}
 {{^ultimate}}

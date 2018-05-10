@@ -71,18 +71,6 @@ function _M:localPos(UI)
   self:buttonLocal(UI)
 end
 --
-{{#tabButFunction}}
-local command = require("commands.page0{{docNum}}.{{myLName}}_{{layerType}}_{{triggerName}}"):new()
-{{/tabButFunction}}
-
-{{#bn}}
-{{^multLayers}}
-{{#Press}}
-local command = require("commands.page0{{docNum}}.{{myLName}}_{{layerType}}_{{triggerName}}"):new()
-{{/Press}}
-{{/multLayers}}
-{{/bn}}
---
 function _M:allListeners(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
@@ -91,23 +79,9 @@ function _M:allListeners(UI)
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end
-  {{tabButFunction.obj}}.tap = function(self, event)
-    if {{tabButFunction.obj}}.enabled == nil or {{tabButFunction.obj}}.enabled then
-      local btaps = {{tabButFunction.btaps}}
-      if btaps > 1 and event.numTaps then
-        if event.numTaps == btaps then
-          command:execute{UI=UI}
-        end
-      else
-        command:execute{UI=UI}
-      end
-    end
-    return true
-  end
-  {{tabButFunction.obj}}:addEventListener( "tap", {{tabButFunction.obj}})
+    _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
   {{/tabButFunction}}
-
-  {{#buyProductHide}}
+    {{#buyProductHide}}
       --Hide button if purchase was already made
     if IAP.getInventoryValue("unlock_".."{{inApp}}") then
          --This page was purchased, do not show the BUY button
@@ -124,7 +98,7 @@ function _M:toDispose(UI)
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end
-  {{tabButFunction.obj}}:removeEventListener( "tap", {{tabButFunction.obj}})
+    _M:removeTabButFunction(UI, {obj={{tabButFunction.obj}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
   {{/tabButFunction}}
   {{/multLayers}}
 end
@@ -182,11 +156,11 @@ function _M:buttonLocal(UI)
             -- {{bfun}}(layer.{{myLName}})
             {{#TV}}
              if layer.{{myLName}}.isKey then
-			        command:execute{UI=UI}
+                UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
              end
             {{/TV}}
             {{^TV}}
-			        command:execute{UI=UI}
+              UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
             {{/TV}}
            end
         end

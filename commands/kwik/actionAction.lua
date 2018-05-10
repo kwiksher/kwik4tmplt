@@ -6,7 +6,7 @@ local _M = {}
 
 function _M:playAction(trigger, params)
 		-- trigger()
-		print(trigger)
+	--print(trigger)
     Runtime:dispatchEvent({name=trigger, event=params.event, UI=params.UI})
 end
 --

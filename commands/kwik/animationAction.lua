@@ -23,8 +23,8 @@ function _M:resumeAnimation(anim)
 end
 --
 function _M:playAnimation(anim)
-	print(anim)
-	for k, v in pairs(_K.trans) do print(k, v) end
+--	print(anim)
+--	for k, v in pairs(_K.trans) do print(k, v) end
   if _K.gt[anim] then
     _K.gt[anim]:toBeginning()
     _K.gt[anim]:play()

@@ -29,7 +29,7 @@ local speakW, speakH = 30, 30
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
+  local allAudios = require("components.page0{{page}}.page_audio_{{isReadme}}{{audio}}"):getAudio(UI)
   --
   {{#daTrigger}}
     _K.s{{trigger}} = function()
@@ -170,7 +170,7 @@ function _M:allListeners(UI)
 {{^multLayers}}
 {{#elaudio}}
 {{#autoPlay}}
-    local allAudios = require("components.page0{{page}}.page_audio_readme_{{audio}}"):getAudio(UI)
+    local allAudios = require("components.page0{{page}}.page_audio_{{isReadme}}{{audio}}"):getAudio(UI)
       _K.timerStash.timer_AP1 = timer.performWithDelay( {{eldelay}},
         function()
         _K.syncSound.saySentence( {

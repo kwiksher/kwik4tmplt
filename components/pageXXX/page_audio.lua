@@ -148,5 +148,20 @@ end
     -- {{/areadme}}
   --/audio
 -- end
+function _M:getAudio(UI)
+  --UI.allAudios or _K.allAudios
+{{#areadme}}
+  if {{atype}}.{{aname}} == nil then
+    {{#alang}}
+     {{atype}}.{{aname}} = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}", _K.systemDir )
+    {{/alang}}
+    {{^alang}}
+     {{atype}}.{{aname}} = audio.{{loadType}}( _K.audioDir.."{{fileName}}" , _K.systemDir)
+    {{/alang}}
+  end
+{{/areadme}}
+  return {{atype}}
+end
+
 
 return _M

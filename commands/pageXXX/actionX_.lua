@@ -244,7 +244,7 @@ function ActionCommand:new()
 			_AC.Readme:playSync({{audiotype}}.{{audioSent}}, layer.{{line}}, layer.{{button}})
 			{{/langSync}}
 			{{#langSync}}
-			_AC.Readme:playSync(UI.tSearch["slide"][4], UI.tSearch["slide"][5], layer.{{button}})
+			_AC.Readme:playSync(UI.tSearch["{{dois}}"][4], UI.tSearch["{{dois}}"][5], layer.{{button}})
 			{{/langSync}}
 		{{/readme.playSync}}
 

@@ -11,7 +11,6 @@ local _K = require("Application")
 --
 function _M:localPos(UI)
   --UI.allAudios or _K.allAudios
-{{#areadme}}
   if {{atype}}.kwk_readMeFile == nil then
     {{#alang}}
      {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}" , _K.systemDir)
@@ -24,17 +23,11 @@ function _M:localPos(UI)
   if a > UI.allAudios.kAutoPlay  then
     UI.allAudios.kAutoPlay = a
   end
-{{/areadme}}
   --  /audio
 end
 
 function _M:allListeners(UI)
   -- #audio
-    {{#areadme}}
-      {{#alang}}
-      {{/alang}}
-      {{^alang}}
-      {{/alang}}
       {{^temSync}}
          if (_K.kwk_readMe == 1 and _K.lang == "{{langID}}") then
         {{#adelay}}
@@ -48,7 +41,6 @@ function _M:allListeners(UI)
         {{/adelay}}
         end
       {{/temSync}}
-    {{/areadme}}
   --  /audio
 end
 
@@ -64,32 +56,15 @@ end
 --
 function _M:toDestroy(UI)
   {{^akeep}}
-    {{#areadme}}
       if ({{atype}}.kwk_readMeFile ~= 0) then
         audio.dispose({{atype}}.kwk_readMeFile)
         {{atype}}.kwk_readMeFile = nil
       end
-    {{/areadme}}
-    {{^areadme}}
-      {{#allowRepeat}}
-        if ({{atype}}.{{aname}}x9 ~= 0) then
-          audio.dispose({{atype}}.{{aname}}x9)
-          {{atype}}.{{aname}}x9 = nil
-        end
-      {{/allowRepeat}}
-      {{^allowRepeat}}
-        if ({{atype}}.{{aname}} ~= 0) then
-          audio.dispose({{atype}}.{{aname}})
-          {{atype}}.{{aname}} = nil
-        end
-        {{/allowRepeat}}
-    {{/areadme}}
   {{/akeep}}
 end
 --
 function _M:getAudio(UI)
   --UI.allAudios or _K.allAudios
-{{#areadme}}
   if {{atype}}.kwk_readMeFile == nil then
     {{#alang}}
      {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}", _K.systemDir )
@@ -98,7 +73,6 @@ function _M:getAudio(UI)
      {{atype}}.kwk_readMeFile = audio.{{loadType}}( _K.audioDir.."{{fileName}}" , _K.systemDir)
     {{/alang}}
   end
-{{/areadme}}
   return {{atype}}
 end
 --

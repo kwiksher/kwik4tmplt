@@ -18,13 +18,15 @@ function _M:localPos(UI)
     {{/alang}}
         end
   -- audio
-      local a = audio.getDuration( {{atype}}.{{aname}} );
-      if a > UI.allAudios.kAutoPlay  then
-        UI.allAudios.kAutoPlay = a
-      end
-      {{#allowRepeat}}
-        {{atype}}.{{aname}}x9 = 0
-      {{/allowRepeat}}
+  if {{atype}}.{{aname}} then
+    local a = audio.getDuration( {{atype}}.{{aname}} );
+    if a > UI.allAudios.kAutoPlay  then
+      UI.allAudios.kAutoPlay = a
+    end
+    {{#allowRepeat}}
+      {{atype}}.{{aname}}x9 = 0
+    {{/allowRepeat}}
+  end
   --/audio
 end
 

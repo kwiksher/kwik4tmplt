@@ -44,7 +44,8 @@ function _M:allListeners(UI)
       fadeDuration = {{afade}},
       wordTouch    = UI.tSearch["{{dois}}"][15],
       readDir      = UI.tSearch["{{dois}}"][16],
-      channel      = UI.tSearch["{{dois}}"][17]
+      channel      = UI.tSearch["{{dois}}"][17],
+      lang         = _K.lang
     }
     sceneGroup:insert( layer.{{myLName}})
     sceneGroup.{{myLName}} = {{myLName}}

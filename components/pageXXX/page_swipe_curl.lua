@@ -294,7 +294,7 @@ function _M:allListeners(UI)
       layer.pageCurl = back
       end
     end
-    timer.performWithDelay( 0, saveWithDelay )
+    timer.performWithDelay( 100, saveWithDelay )
     -- debug mode
     if debug then
       ---[[

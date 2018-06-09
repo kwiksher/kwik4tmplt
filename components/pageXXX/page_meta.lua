@@ -367,8 +367,10 @@ end
 {{/isComic}}
 --
 function _M:toDispose(UI)
-  UI.scrollView:removeSelf()
-  self:cancel()
+  if UI.scrollView then
+    UI.scrollView:removeSelf()
+    self:cancel()
+  end
 end
 --
 function _M:localVars()

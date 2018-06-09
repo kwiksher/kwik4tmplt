@@ -20,10 +20,14 @@ function _Class:_vars(type, layer, custom)
   end
 end
 --
+local typesForPageCurl = {
+  button=true, image=true, filter=true
+}
+--
 function _Class:_create(type, layer, custom)
   self:setMod(layer, custom)
   -- dummy is pageCurl UI creation
-  if self.mod.localPos and (self.dummy == nil) then
+  if self.mod.localPos and (self.dummy == nil or typesForPageCurl[type])  then
     self.mod:localPos(self)
   end
 end

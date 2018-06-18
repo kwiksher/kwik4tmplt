@@ -15,7 +15,7 @@ end
 function _M:localPos()
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   -- UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", phase = "didShow", UI=UI})	}
   self:repoHeader(UI)
   self:buildAnim(UI)

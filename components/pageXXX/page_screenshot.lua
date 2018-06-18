@@ -12,7 +12,7 @@ function _M:localPos(UI)
 	end
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
 	_M.layer = UI.layer
 end
 --

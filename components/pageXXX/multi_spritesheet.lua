@@ -78,7 +78,7 @@ function _M:localPos(UI)
 
 end
 --
-function _M:allListeners()
+function _M:didShow()
 end
 --
 function _M:toDispose()

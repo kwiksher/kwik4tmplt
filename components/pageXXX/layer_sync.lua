@@ -164,7 +164,7 @@ function _M:toDestroy()
   {{/multLayers}}
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
 {{^multLayers}}

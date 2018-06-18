@@ -39,7 +39,7 @@ local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
 {{/kwk}}
 local oriAlpha = {{oriAlpha}}
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   -- Multipliers for {{myLName}}

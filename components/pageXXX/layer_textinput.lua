@@ -8,7 +8,7 @@ local _K = require "Application"
 --
 local Var = require("components.kwik.vars")
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if layer.{{myLName}} == nil then return end

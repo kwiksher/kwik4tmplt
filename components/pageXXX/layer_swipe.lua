@@ -6,7 +6,7 @@ local _M = {}
 --
 local _K = require "Application"
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if layer.{{myLName}} == nil then return end

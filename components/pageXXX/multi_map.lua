@@ -25,7 +25,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
   {{/randY}}
 {{/ultimate}}
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   {{#multLayers}}

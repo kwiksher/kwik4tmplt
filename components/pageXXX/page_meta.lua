@@ -201,7 +201,7 @@ end
 {{/isComic}}
 --
 ---------------
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer = UI.layer
   {{#isComic}}
@@ -334,7 +334,7 @@ function _M:allListeners(UI)
   {{/isComic}}
 end
 -------------------------------------------
--- end of allListeners
+-- end of didShow
 -------------------------------------------
 {{#isComic}}
 --

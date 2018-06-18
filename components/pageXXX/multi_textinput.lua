@@ -28,7 +28,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 local Var = require("components.kwik.vars")
 local _K = require "Application"
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   --

@@ -48,7 +48,7 @@ end
   {{/manual}}
 {{/ultimate}}
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if layer.{{glayer}} == nil then return end

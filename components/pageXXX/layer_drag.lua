@@ -6,7 +6,7 @@ local _M = {}
 --
 local _K = require "Application"
 -- Drag objects
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
   local scene       = UI.scene

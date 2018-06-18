@@ -48,7 +48,7 @@ end
 function _M:localVars(UI)
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   {{#BookShelf}}
   storeFSM.view = view
   {{/BookShelf}}

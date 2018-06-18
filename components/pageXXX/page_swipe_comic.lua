@@ -25,7 +25,7 @@ local pgX, pgY = 768,  1024
 local curlWidth = 400
 {{/ultimate}}
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   local curPage     = UI.curPage

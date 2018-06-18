@@ -28,7 +28,7 @@ function _M:localPos(UI)
   --  /audio
 end
 
-function _M:allListeners(UI)
+function _M:didShow(UI)
   -- #audio
       {{^temSync}}
          if (_K.kwk_readMe == 1 and _K.lang == "{{langID}}") then

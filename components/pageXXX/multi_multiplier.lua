@@ -5,7 +5,7 @@
 local _M = {}
 local _K            = require "Application"
  --
-function _M:allListeners()
+function _M:didShow()
   if UI.tSearch["{{bn}}"] == nil then return end
   -- Multipliers for {{myLName}}
   layer.{{myLName}}              = {}

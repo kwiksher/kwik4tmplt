@@ -30,7 +30,7 @@ function _M:localPos(UI)
   --/audio
 end
 
-function _M:allListeners(UI)
+function _M:didShow(UI)
   -- audio
       {{#aplay}}
         {{#adelay}}

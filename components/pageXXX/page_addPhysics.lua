@@ -10,7 +10,7 @@ function _M:localPos(UI)
     local layer       = UI.layer
 end
 --
-function _M:allListeners()
+function _M:didShow()
     {{#addPhysics}}
     physics.start(true)
     {{/addPhysics}}

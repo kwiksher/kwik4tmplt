@@ -17,7 +17,7 @@ local pSpa =  {{pSpa}}/4
 local pSpa  = {{pSpa}}
 {{/ultimate}}
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   local curPage     = UI.curPage

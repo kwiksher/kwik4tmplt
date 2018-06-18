@@ -21,7 +21,7 @@ function _M:localPos(UI)
   view:init(sceneGroup, layer, storeFSM.fsm)
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
   storeFSM.view = view

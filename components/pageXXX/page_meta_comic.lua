@@ -199,7 +199,7 @@ end
 ---------------
 --
 ---------------
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local panels  = UI.layerSet_panels
   local ballons = UI.layer.ballons

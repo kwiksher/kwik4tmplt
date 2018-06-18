@@ -34,7 +34,7 @@ function _M:localPos(UI)
   local layer       = UI.layer
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if UI.tSearch["{{bn}}"] == nil then return end

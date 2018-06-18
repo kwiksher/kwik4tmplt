@@ -8,7 +8,7 @@ local _K = require "Application"
 --
 local particleDesigner = require("extlib.particleDesigner")
 --
-function _M:allListeners()
+function _M:didShow()
 end
 --
 function _M:toDispose()

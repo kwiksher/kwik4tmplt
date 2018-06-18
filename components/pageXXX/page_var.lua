@@ -31,7 +31,7 @@ function _M:localPos(UI)
   {{/after}}
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   {{#after}}
   {{#vtype}}
       {{#vsave}}

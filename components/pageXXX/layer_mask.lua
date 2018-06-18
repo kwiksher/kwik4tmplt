@@ -42,7 +42,7 @@ function _M:localPos(UI)
     --sceneGroup:remove(layer.{{targetLayer}})
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
     local imageSuffix = display.imageSuffix or ""

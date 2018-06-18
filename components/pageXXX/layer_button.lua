@@ -71,7 +71,7 @@ function _M:localPos(UI)
   self:buttonLocal(UI)
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
   local self       = UI.scene

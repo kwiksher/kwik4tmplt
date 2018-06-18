@@ -63,7 +63,7 @@ function _M:localPos(UI)
 {{/Table}}
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
 end
 --
 function _M:toDispose(UI)

@@ -29,7 +29,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 function _M:localPos(UI)
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if UI.tSearch["{{dois}}"] == nil then return end

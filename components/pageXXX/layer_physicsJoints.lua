@@ -57,7 +57,7 @@ end
     {{/rotationx}}
 {{/ultimate}}
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if layer.{{bname}} == nil then return end

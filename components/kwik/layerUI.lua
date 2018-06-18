@@ -34,8 +34,8 @@ end
 --
 function _Class:_didShow(type, layer, custom)
   self:setMod(layer, custom)
-  if self.mod.allListeners then
-    self.mod:allListeners(self)
+  if self.mod.didShow then
+    self.mod:didShow(self)
   end
 end
 --

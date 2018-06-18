@@ -14,7 +14,7 @@ function _M:localPos(UI)
 		{{/nativeobj}}
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
 	local layer       = UI.layer
 		{{#dispobj}}
 	layer.{{gname}}.alpha = 0

@@ -32,7 +32,7 @@ function _M:localPos(UI)
     {{/extCodeMid}}
 end
 --
-function _M:allListeners(UI)
+function _M:didShow(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
 

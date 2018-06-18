@@ -12,7 +12,7 @@ local adX, adY = _K.ultimatePosition({{adX}}, {{adY}})
 local adX, adY = {{adX}}, {{adY}}
 {{/ultimate}}
 
-function _M:allListeners()
+function _M:didShow()
   {{#addShow}}
     -- Monetization with Ads
     ads.show("banner", { x=adX, y=adY } )

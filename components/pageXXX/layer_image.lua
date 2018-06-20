@@ -295,8 +295,8 @@ function _M:localPos(UI)
     sheetContentWidth = imageWidth,
     sheetContentHeight = imageHeight
   }
-  local widthDiff = options.sheetContentWidth - 681/2
-  local heightDiff = options.sheetContentHeight - 964/2
+  local widthDiff = options.sheetContentWidth - {{mX}}/2
+  local heightDiff = options.sheetContentHeight - {{mY}}/2
   --
   for i=1, #layerSet_{{mySet}} do
     local target = layerSet_{{mySet}}[i]

@@ -8,8 +8,8 @@ local widget = require( "widget" )
 --
 --
 local _Duration        = 3000
-local _SheetWidth      = 1656
-local _SheetHeight     = 2200
+local _SheetWidth      = 1440 -- iPhone X
+local _SheetHeight     = 2772 -- iPhone X
 local _ContentWidth    = 1280
 local _ContentHeight   = 1920
 local _BackgroundColor = { 0.8, 0.8, 0.8 }
@@ -209,8 +209,10 @@ function _M:didShow(UI)
   -------------------------------
   local options = {
    frames ={},
-    sheetContentWidth = _SheetWidth/4,
-    sheetContentHeight = _SheetHeight/4
+    -- sheetContentWidth = _SheetWidth/4,
+    -- sheetContentHeight = _SheetHeight/4
+    sheetContentWidth = layer.background.width,
+    sheetContentHeight = layer.background.height
   }
   --
   local widthDiff = options.sheetContentWidth - _ContentWidth/4

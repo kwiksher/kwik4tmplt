@@ -11,10 +11,10 @@ local _K = require("Application")
 function _M:localPos(UI)
   if {{atype}}.{{aname}} == nil then
     {{#alang}}
-     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}")
+     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}", _K.systemDir)
     {{/alang}}
     {{^alang}}
-     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.."{{fileName}}")
+     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.."{{fileName}}", _K.systemDir)
     {{/alang}}
         end
   -- audio
@@ -91,10 +91,10 @@ function _M:getAudio(UI)
   --UI.allAudios or _K.allAudios
   if {{atype}}.{{aname}} == nil then
     {{#alang}}
-     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}")
+     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.._K.lang.."{{fileName}}", _K.systemDir)
     {{/alang}}
     {{^alang}}
-     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.."{{fileName}}")
+     {{atype}}.{{aname}} =  audio.{{loadType}}( _K.audioDir.."{{fileName}}", _K.systemDir)
     {{/alang}}
   end
   return {{atype}}

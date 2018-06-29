@@ -13,7 +13,7 @@ function M.new()
     VIEW.downloadGroup = {}
     VIEW.versionGroup  = {}
     VIEW.sceneGroup    = nil
-    VIEW.epsode        = nil
+    VIEW.episode        = nil
     --
     --
     local function copyDisplayObject(src, dst, id, group)
@@ -39,21 +39,21 @@ function M.new()
     --
     function VIEW:createThumbnail()
         print("--- VIEW create ---")
-        for k, epsode in pairs( model.epsodes) do
-            -- print(epsode.name)
-            local button = self.layer[epsode.name.."Icon"]
+        for k, episode in pairs( model.episodes) do
+            -- print(episode.name)
+            local button = self.layer[episode.name.."Icon"]
             if button then
-                button.selectedPurchase = epsode.name
-                self.downloadGroup[epsode.name] = button
-                --If the user has purchased the epsode before, change the button
-                button.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, button, epsode.name, self.sceneGroup)
+                button.selectedPurchase = episode.name
+                self.downloadGroup[episode.name] = button
+                --If the user has purchased the episode before, change the button
+                button.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, button, episode.name, self.sceneGroup)
                 if model.URL then
-                    button.downloadBtn = copyDisplayObject(self.layer.downloadBtn, button, epsode.name, self.sceneGroup)
-                    button.savingTxt   = copyDisplayObject(self.layer.savingTxt, button, epsode.name, self.sceneGroup)
+                    button.downloadBtn = copyDisplayObject(self.layer.downloadBtn, button, episode.name, self.sceneGroup)
+                    button.savingTxt   = copyDisplayObject(self.layer.savingTxt, button, episode.name, self.sceneGroup)
                 end
-                button.savedBtn = copyDisplayObject(self.layer.savedBtn, button, epsode.name, self.sceneGroup)
+                button.savedBtn = copyDisplayObject(self.layer.savedBtn, button, episode.name, self.sceneGroup)
                 if model.bookShelfType  == 0 then -- pages
-                    if cmd.hasDownloaded(epsode.name) then
+                    if cmd.hasDownloaded(episode.name) then
                         button.savedBtn.alpha = 1
                     else
                     button.purchaseBtn.alpha = 1
@@ -62,20 +62,20 @@ function M.new()
                 --
                 -- button image
                 --
-                cmd:setButtonImage(button, epsode.name)
+                cmd:setButtonImage(button, episode.name)
             end
         end
         --
     end
     --
     function VIEW:controlThumbnail()
-        for k, epsode in pairs( model.epsodes) do
-            -- print(epsode.name)
-            local button = self.layer[epsode.name.."Icon"]
+        for k, episode in pairs( model.episodes) do
+            -- print(episode.name)
+            local button = self.layer[episode.name.."Icon"]
             if button then
-                button.epsode = epsode
+                button.episode = episode
                 function button:tap(e)
-                    VIEW.fsm:clickImage(self.epsode)
+                    VIEW.fsm:clickImage(self.episode)
                 end
                 button:addEventListener("tap", button)
                 --
@@ -88,14 +88,14 @@ function M.new()
                         --cmd.onDownload(self.selectedPurchase)
                     end
                     function button.savedBtn:tap(e)
-                        VIEW.fsm:gotoBook(self.epsode)
+                        VIEW.fsm:gotoBook(self.episode)
                     end
-                    button.purchaseBtn.selectedPurchase = epsode.name
-                    button.downloadBtn.selectedPurchase = epsode.name
-                    button.savedBtn.selectedPurchase = epsode.name
-                    button.purchaseBtn.epsode = epsode
-                    button.downloadBtn.epsode = epsode
-                    button.savedBtn.epsode = epsode
+                    button.purchaseBtn.selectedPurchase = episode.name
+                    button.downloadBtn.selectedPurchase = episode.name
+                    button.savedBtn.selectedPurchase = episode.name
+                    button.purchaseBtn.episode = episode
+                    button.downloadBtn.episode = episode
+                    button.savedBtn.episode = episode
                     button.purchaseBtn:addEventListener( "tap", button.purchaseBtn)
                     button.downloadBtn:addEventListener( "tap", button.downloadBtn)
                     button.savedBtn:addEventListener( "tap", button.savedBtn)
@@ -112,13 +112,13 @@ function M.new()
     --
     function VIEW:refreshThumbnail()
         print("VIEW refreshThumbnail")
-        for k, epsode in pairs( model.epsodes) do
-            local button = self.layer[epsode.name.."Icon"]
+        for k, episode in pairs( model.episodes) do
+            local button = self.layer[episode.name.."Icon"]
             if button then
                 button.purchaseBtn.alpha = 0
                 button.downloadBtn = 0
                 button.savedBtn.alpha = 0
-                if cmd.hasDownloaded(epsode.name) then
+                if cmd.hasDownloaded(episode.name) then
                     button.purchaseBtn.alpha = 0
                     button.downloadBtn = 0
                     button.savedBtn.alpha = 1
@@ -131,43 +131,43 @@ function M.new()
         end
     end
     ---
-    function VIEW:createDialog(epsode, isPurchased, isDownloaded)
-        self.epsode = epsode
+    function VIEW:createDialog(episode, isPurchased, isDownloaded)
+        self.episode = episode
         local bookXXIcon = self.layer["bookXXIcon"]
         if model.bookShelfType == 0 then
-            bookXXIcon = self.layer[epsode.name.."Icon"]
+            bookXXIcon = self.layer[episode.name.."Icon"]
         end
         if bookXXIcon then
-            self.downloadGroup[epsode.name] = bookXXIcon
+            self.downloadGroup[episode.name] = bookXXIcon
             bookXXIcon.versions = {}
-            bookXXIcon.selectedPurchase = epsode.name
-            print("createDialog with", epsode.name)
-            --If the user has purchased the epsode before, change the bookXXIcon
-            bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, nil, epsode, self.sceneGroup)
-            bookXXIcon.purchaseBtn.selectedPurchase = epsode.name
+            bookXXIcon.selectedPurchase = episode.name
+            print("createDialog with", episode.name)
+            --If the user has purchased the episode before, change the bookXXIcon
+            bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, nil, episode, self.sceneGroup)
+            bookXXIcon.purchaseBtn.selectedPurchase = episode.name
             if model.URL then
-                if epsode.versions == nil or #epsode.versions == 0 then
-                    bookXXIcon.downloadBtn = copyDisplayObject(self.layer.downloadBtn, nil, epsode, self.sceneGroup)
-                    bookXXIcon.savingTxt   = copyDisplayObject(self.layer.savingTxt, nil, epsode, self.sceneGroup)
+                if episode.versions == nil or #episode.versions == 0 then
+                    bookXXIcon.downloadBtn = copyDisplayObject(self.layer.downloadBtn, nil, episode, self.sceneGroup)
+                    bookXXIcon.savingTxt   = copyDisplayObject(self.layer.savingTxt, nil, episode, self.sceneGroup)
                 end
             end
-            bookXXIcon.savedBtn = copyDisplayObject(self.layer.savedBtn, nil, self.epsode, self.sceneGroup)
+            bookXXIcon.savedBtn = copyDisplayObject(self.layer.savedBtn, nil, self.episode, self.sceneGroup)
             --
             -- bookXXIcon image then
             --
-            cmd:setButtonImage(bookXXIcon, epsode.name)
+            cmd:setButtonImage(bookXXIcon, episode.name)
             --
-            if epsode.versions then
-                for i=1, #epsode.versions do
-                    if self.layer["version_"..epsode.versions[i]] and string.len(epsode.versions[i]) > 1 then
-                        local versionBtn = copyDisplayObject(self.layer["version_"..epsode.versions[i]], nil, epsode.name..self.epsode.versions[i], self.sceneGroup)
-                        print(epsode.versions[i])
+            if episode.versions then
+                for i=1, #episode.versions do
+                    if self.layer["version_"..episode.versions[i]] and string.len(episode.versions[i]) > 1 then
+                        local versionBtn = copyDisplayObject(self.layer["version_"..episode.versions[i]], nil, episode.name..self.episode.versions[i], self.sceneGroup)
+                        print(episode.versions[i])
                         versionBtn.alpha = 1
-                        versionBtn.epsode = epsode
-                        versionBtn.selectedPurchase = epsode.name
-                        versionBtn.selectedVersion  = epsode.versions[i]
+                        versionBtn.episode = episode
+                        versionBtn.selectedPurchase = episode.name
+                        versionBtn.selectedVersion  = episode.versions[i]
                         table.insert(bookXXIcon.versions, versionBtn)
-                        self.versionGroup[epsode.name..epsode.versions[i]]  =  versionBtn
+                        self.versionGroup[episode.name..episode.versions[i]]  =  versionBtn
                     end
                 end
             end
@@ -184,16 +184,16 @@ function M.new()
                     function versionBtn:tap(e)
                         print("versionBtn tap for gotoScene")
                         --self.gotoScene
-                        VIEW.fsm:clickImage(self.epsode, self.selectedVersion)
+                        VIEW.fsm:clickImage(self.episode, self.selectedVersion)
                         return true
                     end
                     versionBtn:addEventListener("tap", versionBtn)
                 else
                     print(versionBtn.selectedVersion.."(not saved)")
-                    -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _epsode.versions[i]})
+                    -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _episode.versions[i]})
                     function versionBtn:tap(e)
                         print("versionBtn tap for download")
-                        VIEW.fsm:startDownload(self.epsode, self.selectedVersion)
+                        VIEW.fsm:startDownload(self.episode, self.selectedVersion)
                     end
                     versionBtn:addEventListener("tap", versionBtn)
                 end
@@ -204,22 +204,22 @@ function M.new()
      end
     --
     --
-    function VIEW:controlDialog(epsode, isPurchased, isDownloaded)
+    function VIEW:controlDialog(episode, isPurchased, isDownloaded)
         local bookXXIcon = self.layer["bookXXIcon"]
         if model.bookShelfType == 0 then
-            bookXXIcon = self.layer[epsode.name.."Icon"]
+            bookXXIcon = self.layer[episode.name.."Icon"]
         end
         if bookXXIcon then
-            bookXXIcon.epsode = epsode
+            bookXXIcon.episode = episode
             if isPurchased then
-                print(epsode.name.."(purchased)")
+                print(episode.name.."(purchased)")
                 if bookXXIcon.versions ==nil or #bookXXIcon.versions == 0 then
                     if isDownloaded then
                         -- bookXXIcon.savedBtn:addEventListener("tap", function(e)
-                        --     VIEW.fsm:clickImage(_epsode)
+                        --     VIEW.fsm:clickImage(_episode)
                         --     end)
                         function bookXXIcon:tap(e)
-                            VIEW.fsm:clickImage(self.epsode)
+                            VIEW.fsm:clickImage(self.episode)
                         end
                         bookXXIcon:addEventListener("tap", bookXXIcon)
                         if model.URL then
@@ -227,9 +227,9 @@ function M.new()
                         end
                         -- bookXXIcon.savedBtn.alpha = 1
                     else
-                        print(epsode.name.."(saving)")
+                        print(episode.name.."(saving)")
                         bookXXIcon.savingTxt.alpha = 1
-                        Runtime:dispatchEvent({name = "cmd:purchaseCompleted", target = epsode})
+                        Runtime:dispatchEvent({name = "cmd:purchaseCompleted", target = episode})
                     end
                 else
                 -----------------
@@ -237,15 +237,15 @@ function M.new()
                     setVersionButtons(bookXXIcon)
                 end
             else
-                print(epsode.name.."(not purchased)")
-                --Otherwise add a tap listener to the bookXXIcon that unlocks the epsode
+                print(episode.name.."(not purchased)")
+                --Otherwise add a tap listener to the bookXXIcon that unlocks the episode
                 bookXXIcon.purchaseBtn.alpha = 1
                 function bookXXIcon.purchaseBtn:tap(e)
                     print("tap purchaseBtn", self.selectedPurchase, e.target.selectedPurchase)
                     VIEW.fsm:clickPurchase(self.selectedPurchase, true)
                 end
                 bookXXIcon.purchaseBtn:addEventListener("tap", bookXXIcon.purchaseBtn)
-                --Otherwise add a tap listener to the button that unlocks the epsode
+                --Otherwise add a tap listener to the button that unlocks the episode
                 -----------
                 --
                 if bookXXIcon.versions then
@@ -271,7 +271,7 @@ function M.new()
             self.layer.hideOverlayBtn:addEventListener("tap", self.layer.hideOverlayBtn)
         end
         if self.layer.infoTxt then
-            self.layer.infoTxt.text = model.epsodes[epsode.name].info
+            self.layer.infoTxt.text = model.episodes[episode.name].info
             self.layer.infoTxt.x = self.layer.infoTxt.oriX
             self.layer.infoTxt.y = self.layer.infoTxt.oriY
             self.layer.infoTxt.anchorX = 0
@@ -292,7 +292,7 @@ function M.new()
     --
     function VIEW:updateDialog(selectedPurchase)
        local button = VIEW.downloadGroup[selectedPurchase]
-       --self.epsode  = selectedPurchase
+       --self.episode  = selectedPurchase
         print("VIEW.updateDialog", selectedPurchase)
         -- button.text.text=selectedPurchase.."(saved)"
         if button and (#button.versions == 0) then
@@ -306,7 +306,7 @@ function M.new()
                 button.downloadBtn:removeEventListener("tap", button)
             end
             function button:tap(e)
-                VIEW.fsm:clickImage(self.epsode)
+                VIEW.fsm:clickImage(self.episode)
             end
             button:addEventListener("tap", button)
         else
@@ -327,7 +327,7 @@ function M.new()
             -- not found. It means it is a version button
             setVersionButtons(button)
 
-            -- local versions = model.epsodes[selectedPurchase].versions
+            -- local versions = model.episodes[selectedPurchase].versions
             -- for k, v in pairs(versions) do print(k, v) end
             -- for i=1, #versions do
             --     local versionBtn = self.versionGroup[selectedPurchase..versions[i]]
@@ -338,7 +338,7 @@ function M.new()
             --             versionBtn:removeEventListener("tap", versionBtn)
             --         end
             --         function versionBtn:tap(e)
-            --                 self.fsm:clickImage(self.epsode, self.selectedVersion)
+            --                 self.fsm:clickImage(self.episode, self.selectedVersion)
             --         end
             --         versionBtn:addEventListener("tap", versionBtn)
             --         self.versionGroup[selectedPurchase..versions[i]] = nil
@@ -355,8 +355,8 @@ function M.new()
     --
     function VIEW:destroyThumbnail()
         print("VIEW:destroyThumbnail")
-        for k, epsode in pairs( model.epsodes) do
-            local button = self.layer[epsode.name.."Icon"]
+        for k, episode in pairs( model.episodes) do
+            local button = self.layer[episode.name.."Icon"]
             if button then
                 if button.purchaseBtn then
                 button.purchaseBtn:removeEventListener("tap", button.purchaseBtn)
@@ -382,11 +382,11 @@ function M.new()
     --
     function VIEW:refresh()
         cmd:init(self)
-        for k, epsode in pairs( model.epsodes) do
-            local button = self.layer[epsode.name.."Icon"]
+        for k, episode in pairs( model.episodes) do
+            local button = self.layer[episode.name.."Icon"]
             if button then
                 print("-------- refresh ---------", self,  button)
-                self.downloadGroup[epsode.name] = button
+                self.downloadGroup[episode.name] = button
                 button.purchaseBtn.alpha      = 0
                 if model.URL then
                     if button.savingTxt then

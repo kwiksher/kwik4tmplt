@@ -75,9 +75,9 @@ local function _startDownload(selectedPurchase, version)
     if fh then
         io.close( fh )
         if M.hasDownloaded(selectedPurchase, version) then
-            local epsode = selectedPurchase
+            local episode = selectedPurchase
             timer.performWithDelay(50, function()
-                onDownloadComplete(epsode, version)
+                onDownloadComplete(episode, version)
                 deferred:resolve()
                 end )
         else
@@ -108,11 +108,11 @@ local function _startDownload(selectedPurchase, version)
     return deferred:promise()
 end
 
-function M.hasDownloaded(epsode, version)
-    print(epsode, version)
+function M.hasDownloaded(episode, version)
+    print(episode, version)
     if not model.URL then return true end
     local _ver = version or ""
-    local path = system.pathForFile( model.epsodes[epsode].dir.._ver, system.ApplicationSupportDirectory )
+    local path = system.pathForFile( model.episodes[episode].dir.._ver, system.ApplicationSupportDirectory )
     -- io.open opens a file at path. returns nil if no file found
     local fh, reason = io.open( path.."/copyright.txt", "r" )
     if fh then
@@ -143,8 +143,8 @@ function M.isDownloadQueue()
     return downloadQueue:poll()
 end
 
-function M:startDownload(epsode, version)
-    local selectedPurchase = epsode
+function M:startDownload(episode, version)
+    local selectedPurchase = episode
     local _version = version or ""
 
     if selectedPurchase == nil then
@@ -169,7 +169,7 @@ function M:startDownload(epsode, version)
     end
 end
 --
-M.setButtonImage = function (_button, epsode)
+M.setButtonImage = function (_button, episode)
     local params = {}
     local button = _button
     params.progress = true
@@ -201,10 +201,10 @@ M.setButtonImage = function (_button, epsode)
             }
         end
     end
-    print(URL..epsode.."/"..backgroundImg)
+    print(URL..episode.."/"..backgroundImg)
     --
     network.download(
-        URL..epsode.."/"..backgroundImg,
+        URL..episode.."/"..backgroundImg,
         "GET",
         buttonImageListener,
         params,

@@ -16,8 +16,8 @@ function scene:create( event )
 
     UI:init(sceneGroup)
     CMD:init(UI)
-	UI:createBuyButton(model.epsode02, _W/2, _H/2, 150, 50)
-    UI:createBuyButton(model.epsode03, _W/2, _H/2 + 50, 150, 50)
+	UI:createBuyButton(model.episode02, _W/2, _H/2, 150, 50)
+    UI:createBuyButton(model.episode03, _W/2, _H/2 + 50, 150, 50)
     UI:createRestoreButton(_W/2, _H/2+100, 150, 50)
     CMD:startDownload()
 end

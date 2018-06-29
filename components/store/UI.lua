@@ -132,14 +132,14 @@ end
 --
 M.setDir = function(pageNum)
     if bookShelfType == type.pages then
-        if next(model.epsodes) == nil or model.URL == nil then
+        if next(model.episodes) == nil or model.URL == nil then
             return true
         end
         --
         local epname = model.isIAP(pageNum)
         local isDL   = setSystemDir[type.pages](epname)
         if not isDL then
-            local infoPage = model.epsodes[epname].info:sub(2)
+            local infoPage = model.episodes[epname].info:sub(2)
             if string.len(infoPage) > 0 then
                 _K.systemDir = system.ResourceDirectory
                 _K.imgDir = "assets/images/"
@@ -148,7 +148,7 @@ M.setDir = function(pageNum)
                 _K.thumbDir    = "assets/thumbnails/"
                 _K.videoDir    = "assets/videos/"
                 _K.particleDir = "assets/particles/"
-                composer.gotoScene("views.page0"..model.epsodes[epname].info:sub(2).."Scene")
+                composer.gotoScene("views.page0"..model.episodes[epname].info:sub(2).."Scene")
             else
                 local infoString = "The page is not found."
                 local function onComplete( event )
@@ -206,7 +206,7 @@ end
 M.showView = function(curPage, wPage, options)
     print(curPage, wPage)
     if bookShelfType == type.pages then
-        for k, v in pairs(model.epsodes) do
+        for k, v in pairs(model.episodes) do
             if curPage >= v.startPage and curPage <= v.startPage + v.numOfPages -1 then
                 if wPage < v.startPage or wPage > v.startPage + v.numOfPages -1 then
                     M.gotoTOC(options)
@@ -272,14 +272,14 @@ M.gotoPreviousScene = function(params)
     end
 end
 -- type.embedded and type.tmplt
-M.gotoSceneBook = function(epsode, page, version, params)
+M.gotoSceneBook = function(episode, page, version, params)
     local _ver = version or ""
     if master.isEmbedded then
         local storeFSM = require("components.store.storeFSM").getInstance()
         storeFSM:exit()
-        Runtime:dispatchEvent({name="changeThisMug", appName=epsode.._ver, page=page})
+        Runtime:dispatchEvent({name="changeThisMug", appName=episode.._ver, page=page})
     else
-        if epsode == "TOC" then
+        if episode == "TOC" then
             M.currentPage = 1
             setSystemDir[type.tmplt](false)
 
@@ -287,9 +287,9 @@ M.gotoSceneBook = function(epsode, page, version, params)
             storeFSM:exit()
             composer.gotoScene("views.page01Scene", {params = params})
         else
-            print("gotoSceneBook ".. model.getPageName(epsode))
+            print("gotoSceneBook ".. model.getPageName(episode))
             M.currentPage = page
-            readPageJson(epsode, _ver)
+            readPageJson(episode, _ver)
             setSystemDir[type.tmplt](true)
             composer.gotoScene("views.page0"..getPageNum(page).."Scene", {params = params})
         end
@@ -311,7 +311,7 @@ M.gotoSceneNextBook = function(version)
 
     while true do
         prev = k
-        k, v = next(store_model.epsodes, k)
+        k, v = next(store_model.episodes, k)
         print(k, v.name)
         if k==nil or currentBook == v.name then
             if k==nil then
@@ -321,7 +321,7 @@ M.gotoSceneNextBook = function(version)
         end
     end
     if prev then
-        local epname = store_model.epsodes[prev].name
+        local epname = store_model.episodes[prev].name
         if not downloadManager.hasDownloaded(epname.._ver) then
             epname ="TOC"
         end
@@ -357,11 +357,11 @@ M.gotoScenePreviousBook = function(version)
     local k, v, prev = nil, nil, nil
 
     while true do
-     k, v = next(store_model.epsodes, k)
+     k, v = next(store_model.episodes, k)
         print(k, v.name)
         if k==nil or currentBook == v.name then
             if k~=nil then
-                k, v = next(store_model.epsodes, k)
+                k, v = next(store_model.episodes, k)
                 print(k)
             end
             break
@@ -427,10 +427,10 @@ M.replaceTimeCodes = function(syncLayer, filename, layerName)
     end
 end
 
-function M.hasDownloaded(epsode)
+function M.hasDownloaded(episode)
     IAP:init(model.catalogue, nil, nil, model.debug)
-    if (IAP.getInventoryValue("unlock_"..epsode)==true) then
-        if downloadManager.hasDownloaded(epsode) then
+    if (IAP.getInventoryValue("unlock_"..episode)==true) then
+        if downloadManager.hasDownloaded(episode) then
             return true
         else
             return false
@@ -442,31 +442,31 @@ end
 
 function M.isPageReady(num)
     if bookShelfType == 0 then -- pages
-        local epsode =  model.isIAP(num)
-        if epsode then
-            return M.hasDownloaded(epsode)
+        local episode =  model.isIAP(num)
+        if episode then
+            return M.hasDownloaded(episode)
         end
     end
     return true
 end
 
 function M.gotoScene(event, version)
-    local epsode =  model.epsodes[event.target.selectedPurchase]
-    print("UI.gotoScene ".. epsode.name, version)
+    local episode =  model.episodes[event.target.selectedPurchase]
+    print("UI.gotoScene ".. episode.name, version)
     local _ver = version or ""
     if master.isEmbedded then
         -- local storeFSM = require("components.store.storeFSM").getInstance()
         -- storeFSM:exit()
-        Runtime:dispatchEvent({name="changeThisMug", appName=epsode.name.._ver})
+        Runtime:dispatchEvent({name="changeThisMug", appName=episode.name.._ver})
     elseif bookShelfType == type.tmplt then
-        readPageJson(epsode.name, version)
+        readPageJson(episode.name, version)
         setSystemDir[type.tmplt](true)
         M.currentPage = 1
         --print("views.page0"..getPageNum(1).."Scene")
         composer.gotoScene("views.page0"..getPageNum(1).."Scene")
     else
-        setSystemDir[type.pages](epsode.name)
-        composer.gotoScene(model.getPageName(epsode.name) , {effect=model.gotoSceneEffect})
+        setSystemDir[type.pages](episode.name)
+        composer.gotoScene(model.getPageName(episode.name) , {effect=model.gotoSceneEffect})
     end
     return true
 end

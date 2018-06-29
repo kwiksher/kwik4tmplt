@@ -18,7 +18,7 @@ function _M:buyProduct(product)
 	local IAP = require("components.store.IAP")
 	if IAP.canMakePurchases() then
 			local event = {target={selectedPurchase=product}}
-			IAP.buyEpsode(event)
+			IAP.buyEpisode(event)
 	  -- store.purchase(product)
 	else
 	  native.showAlert("Alert", "Store purchases are not available, please try again later",  { "OK" } )

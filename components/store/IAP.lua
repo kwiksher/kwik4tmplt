@@ -26,7 +26,7 @@ function M:init(catalogue, restoreAlert, purchaseAlert, errorListener, debug)
     self.debug         = debug
     local iapOptions = {
         catalogue         = catalogue,
-        filename          = "epsodes_inventory.txt",
+        filename          = "episodes_inventory.txt",
         --Salt for the hashing algorithm
         salt              = "something tr1cky to gue55!",
             failedListener    = failedListener,
@@ -60,8 +60,8 @@ end
 --Most of the code in this function places a spinner on screen to prevent any further user interaction with
 --the screen.  The actual code to initiate the purchase is the single line iap.purchase("removeAds"...)
 --
-function M.buyEpsode(event)
-    print ("IAP buyEpsode", event.target.selectedPurchase)
+function M.buyEpisode(event)
+    print ("IAP buyEpisode", event.target.selectedPurchase)
     local selectedPurchase = event.target.selectedPurchase
     spinner:show(iap.getStoreName())
     --Tell IAP to initiate a purchase

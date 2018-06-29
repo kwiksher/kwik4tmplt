@@ -44,22 +44,22 @@ function M.new ()
     end
     --
     function CMD.showOverlay(event)
-        local epsode =  event.target.epsode
+        local episode =  event.target.episode
         local options = {
             isModal = true,
             effect = model.showOverlayEffect,
             time = 200,
-            params = {selectedPurchase=epsode.name}
+            params = {selectedPurchase=episode.name}
         }
         local page = model.INFO_PAGE
         if  bookShelfType == type.pages then
-             page = model.getPageInfo(epsode.name)
+             page = model.getPageInfo(episode.name)
         end
         if page then
             if master.isEmbedded then
                 package.loaded[page] = require("plugin.KwikShelf."..page)
             end
-            model.currentEpsode = {name=epsode.name, isPurchased = event.target.isPurchased}
+            model.currentEpisode = {name=episode.name, isPurchased = event.target.isPurchased}
             timer.performWithDelay(1, function()
                 composer.showOverlay(page, options)
             end)
@@ -77,8 +77,8 @@ function M.new ()
     end
 
     function CMD.restore(event)
-        for k, epsode in pairs (model.epsodes) do
-            local button = CMD.view.layer[epsode.name.."Icon"]
+        for k, episode in pairs (model.episodes) do
+            local button = CMD.view.layer[episode.name.."Icon"]
             if button then
             button:removeEventListener("tap", CMD.gotoScene)
             button.savedBtn:removeEventListener("tap", CMD.gotoScene)
@@ -96,11 +96,11 @@ function M.new ()
     end
 
     function CMD.buyBook(e)
-        IAP.buyEpsode(e)
+        IAP.buyEpisode(e)
     end
 
     function CMD.onPurchase(name)
-        IAP.buyEpsode({target = {selectedPurchase = name}})
+        IAP.buyEpisode({target = {selectedPurchase = name}})
     end
 
     function CMD.onDownload(name)
@@ -122,12 +122,12 @@ function M.onPurchaseComplete(event)
     print("CMD onPurchaseComplete", selectedPurchase)
     --
     if button and button.purchaseBtn.removeEventListener then
-        button.purchaseBtn:removeEventListener("tap", IAP.buyEpsode)
+        button.purchaseBtn:removeEventListener("tap", IAP.buyEpisode)
         --
         if (event.actionType == "purchase") then
             -- button.text.text="saving"
             if model.URL then
-                if #model.epsodes[selectedPurchase].versions == 0 then
+                if #model.episodes[selectedPurchase].versions == 0 then
                 print("startDownload")
                 downloadManager:startDownload(event.product)
                 else

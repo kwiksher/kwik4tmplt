@@ -13,7 +13,7 @@ local pages = {
 {{/BookTmplt}}
 
 {{#BookEmbedded}}
-local pages = {isDownloadable = {{isDownloadable}}, pageNum={{pageNum}} }
+local pages = {isDownloadable = {{isDownloadable}}, pageNum={{pageNum}}, isIAP = {{isIAP}} }
 {{/BookEmbedded}}
 
 {{#BookPages}}

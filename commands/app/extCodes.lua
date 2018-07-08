@@ -5,7 +5,7 @@
 local _Command = {}
 -----------------------------
 {{#extlib}}
-local {{name}} = require("{{libname}}")
+local {{name}} = requireKwik("{{libname}}")
 {{/extlib}}
 -----------------------------
 function _Command:new()

@@ -22,7 +22,7 @@ function _M:didShow(UI)
     {{/circle}}
     {{#bshape}}
       {{#PE}}
-        local physicsData = (require "{{re}}").physicsData(1.0)
+        local physicsData = (requireKwik("{{re}}")).physicsData(1.0)
         {{#static}}
           physics.addBody(layer.{{bname}}, "static", physicsData:get("{{bnameLower}}"))
         {{/static}}

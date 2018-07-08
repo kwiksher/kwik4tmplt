@@ -56,17 +56,21 @@ function _M:reloadPage(canvas)
 end
 --
 {{#bookshelf}}
+{{#IAP}}
 local ui = require("components.store.UI")
 local model = require("components.store.model")
+{{/IAP}}
 --
 function _M:gotoPage(pnum, ptrans, delay)
   {{#isTmplt}}
   ui.currentPage = pnum-1
   {{/isTmplt}}
   local myClosure_switch= function()
+   {{#IAP}}
     if model.bookShelfType ==0 and model.tocPage == pnum then
         ui.gotoTOC(ptrans)
     else
+   {{/IAP}}
       if nil~= composer.getScene("views.page0"..pnum.."Scene") then
           composer.removeScene("views.page0"..pnum.."Scene", true)
         end
@@ -75,7 +79,9 @@ function _M:gotoPage(pnum, ptrans, delay)
       else
          composer.gotoScene( "views.page0"..pnum.."Scene" )
       end
+   {{#IAP}}
     end
+   {{/IAP}}
   end
   if delay > 0 then
     _K.timerStash.pageAction = timer.performWithDelay(delay, myClosure_switch, 1)

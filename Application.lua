@@ -7,6 +7,14 @@ require("extlib.Callbacks")
 _W = display.contentWidth
 _H = display.contentHeight
 
+function requireKwik(mod)
+    if _G and _G.appName then
+        return require("App.".._G.appName.."."..mod)
+    else
+        return require(mod)
+    end
+end
+
 local AppContext  = require("contexts.ApplicationContext")
 local composer = require("composer")
 ------------------------------------------------------

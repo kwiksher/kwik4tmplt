@@ -1,4 +1,4 @@
--- Template Version 2018.0025
+-- Template Version 2018.0026
 -- Code created by Kwik - Copyright: kwiksher.com {{year}}
 -- Version: {{vers}}
 -- Project: {{ProjName}}

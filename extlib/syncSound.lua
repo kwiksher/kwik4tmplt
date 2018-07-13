@@ -198,6 +198,8 @@ local function touchSentence(event)
 	local sentence, line, delay1, delay2, trans1, trans2 = button.sentence, button.line, 0,0,fadeInDur,fadeOutDur
 	if button.alpha < 1 then return true end
 
+    if button.enabled ~=nil and button.enabled == false then return true end
+
 	local isChannelPlaying = audio.isChannelPlaying(channel)
 	if isChannelPlaying then
     	print("Warning: channel is playing for touchSentence", channel)

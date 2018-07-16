@@ -41,7 +41,7 @@ function _M:localPos(UI)
 {{/BookShelf}}
 {{#simpleLock}}
     view:init(sceneGroup, layer)
-    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, model.debug)
+    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, function(e) print("IAP cancelled") end, model.debug)
 {{/simpleLock}}
 end
 --F

@@ -419,6 +419,7 @@ function _M:buildAnim(UI)
 					newAngle = {{gtNewAngle}}
 					{{/gtNewAngle}}
 					})
+				_K.gt.path_star.pathAnim = true
 			{{/gtTypePath}}
 				{{^aplay}}
 				_K.gt.{{gtName}}:pause()

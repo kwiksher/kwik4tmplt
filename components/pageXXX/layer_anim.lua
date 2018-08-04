@@ -381,7 +381,7 @@ function _M:buildAnim(UI)
 				{
 					ease			 = _K.gtween.easing.{{gtEase}},
 					repeatCount = {{gtLoop}},
-					reflect		 = {{gtReverse}},
+					reflect		 = {{gtReverse}}{{gtSwipes}},
 					delay			 = {{gtDelay}},
 					onComplete = onEnd_{{gtComplete}}
 					{{#gtBread}}
@@ -419,7 +419,7 @@ function _M:buildAnim(UI)
 					newAngle = {{gtNewAngle}}
 					{{/gtNewAngle}}
 					})
-				_K.gt.path_star.pathAnim = true
+				_K.gt.{{gtName}}.pathAnim = true
 			{{/gtTypePath}}
 				{{^aplay}}
 				_K.gt.{{gtName}}:pause()

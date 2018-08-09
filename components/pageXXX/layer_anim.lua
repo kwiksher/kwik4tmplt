@@ -210,6 +210,11 @@ function _M:repoHeader(UI)
 end
 --
 {{#ultimate}}
+local function getPath(t)
+    local _t = {}
+    _t.x, _t.y =  _K.ultimatePosition(t.x, t.y)
+    return _t
+end
 {{#gtBread}}
 local gtbw = {{gtbw}}/4
 local gtbh = {{gtbh}}/4

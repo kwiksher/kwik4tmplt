@@ -420,18 +420,31 @@ function new(target, duration, values, props)
 			end
 
 			-- Flip
-    	local _scaleX = self.values.xScale or 1.0
-    	local _scaleY = self.values.YScale or 1.0
-      if self.reflect and self.xSwipe and math.floor(self.position / self.duration) % 2 ~= 0 and not self.pathAnim then
-        		self:forceValue("xScale",-_scaleX)
-      		elseif self.reflect and self.xSwipe then
-        		self:forceValue("xScale", _scaleX)
+			local _scaleX = self.values.xScale or 1.0
+			local _scaleY = self.values.YScale or 1.0
+  			if not self.pathAnim then
+				if self.reflect and self.xSwipe and math.floor(self.position / self.duration) % 2 ~= 0 then
+					self:forceValue("xScale", -_scaleX)
+				elseif self.reflect and self.xSwipe then
+					self:forceValue("xScale", _scaleX)
+				end
+				if self.reflect and self.ySwipe and math.floor(self.position / self.duration) % 2 ~= 0 then
+					self:forceValue("yScale", -_scaleY)
+				elseif self.reflect and self.ySwipe then
+					self:forceValue("yScale", _scaleY)
+				end
+			else
+				if self.reflect and self.xSwipe and math.floor(self.position / self.duration) % 2 ~= 0 and self.values.rotation == 0 then
+					self:forceValue("xScale", -_scaleX)
+				elseif self.reflect and self.xSwipe then
+					self:forceValue("xScale", _scaleX)
+				end
+				if self.reflect and self.ySwipe and math.floor(self.position / self.duration) % 2 ~= 0 and self.values.rotation == 0  then
+					self:forceValue("yScale", -_scaleY)
+				elseif self.reflect and self.ySwipe then
+					self:forceValue("yScale", _scaleY)
+				end
 			end
-			if self.reflect and self.ySwipe and math.floor(self.position / self.duration) % 2 ~= 0 and not self.pathAnim then
-        		self:forceValue("yScale",-_scaleY)
-      		elseif self.reflect and self.ySwipe then
-        		self:forceValue("yScale",_scaleY)
-	  		end
 
 		end
 

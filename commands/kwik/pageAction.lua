@@ -61,7 +61,7 @@ local ui = require("components.store.UI")
 local model = require("components.store.model")
 {{/IAP}}
 --
-function _M:gotoPage(pnum, ptrans, delay)
+function _M:gotoPage(pnum, ptrans, delay, _time)
   {{#isTmplt}}
   ui.currentPage = pnum-1
   {{/isTmplt}}
@@ -75,7 +75,7 @@ function _M:gotoPage(pnum, ptrans, delay)
           composer.removeScene("views.page0"..pnum.."Scene", true)
         end
       if ptrans and ptrans ~="" then
-         composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans} )
+         composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans, time= _time} )
       else
          composer.gotoScene( "views.page0"..pnum.."Scene" )
       end
@@ -92,13 +92,13 @@ end
 {{/bookshelf}}
 {{^bookshelf}}
 --
-function _M:gotoPage(pnum, ptrans, delay)
+function _M:gotoPage(pnum, ptrans, delay, _time)
   local myClosure_switch= function()
       if nil~= composer.getScene("views.page0"..pnum.."Scene") then
           composer.removeScene("views.page0"..pnum.."Scene", true)
         end
       if ptrans and ptrans ~="" then
-         composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans} )
+         composer.gotoScene( "views.page0"..pnum.."Scene", { effect = ptrans,  time= _time} )
       else
          composer.gotoScene( "views.page0"..pnum.."Scene" )
       end

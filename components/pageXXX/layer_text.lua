@@ -66,7 +66,7 @@ function _M:localPos(UI)
     layer.{{myLName}}:setFillColor ({{elR}}, {{elG}}, {{elB}})
     {{#ultimate}}
     layer.{{myLName}}.x = layer.{{myLName}}.x + imageWidth/2
-    layer.{{myLName}}.x = layer.{{myLName}}.y - imageHeight/2
+    layer.{{myLName}}.y = layer.{{myLName}}.y - imageHeight/2
     {{/ultimate}}
     {{#epadV}}
       layer.{{myLName}}.y = layer.{{myLName}}.y + epadV

@@ -19,21 +19,24 @@ function _M:didShow(UI)
   if target == nil then return end
   _K.Gesture.activate( target, {{dbounds}} )
   _K.{{myLName}}Swipe = function (event )
-  {{#all}}
-    if event.phase == "ended" and event.direction ~= nil then
-  {{/all}}
-  {{#horizontal}}
-    if event.phase == "ended" and event.direction == "right" or  event.direction == "left" then
-  {{/horizontal}}
-  {{#vertical}}
-    if event.phase == "ended" and event.direction == "up" or  event.direction == "down" then
-  {{/vertical}}
-  {{#direction}}
-    if event.phase == "ended" and event.direction == "{{direction}}"  then
-  {{/direction}}
-      {{#gcomplete}}
-         UI.scene:dispatchEvent({name="{{gcomplete}}", swip=event })
-      {{/gcomplete}}
+   if event.phase == "ended" and event.direction ~= nil then
+       if event.direction == "up" then
+      {{#gcompleteUp}}
+         UI.scene:dispatchEvent({name="{{gcompleteUp}}", swip=event })
+      {{/gcompleteUp}}
+      elseif event.direction =="down" then
+      {{#gcompleteDown}}
+         UI.scene:dispatchEvent({name="{{gcompleteDown}}", swip=event })
+      {{/gcompleteDown}}
+      elseif event.direction =="left" then
+      {{#gcompleteLeft}}
+         UI.scene:dispatchEvent({name="{{gcompleteLeft}}", swip=event })
+      {{/gcompleteLeft}}
+      elseif event.direction=="right" then
+      {{#gcompleteRight}}
+         UI.scene:dispatchEvent({name="{{gcompleteRight}}", swip=event })
+      {{/gcompleteRight}}
+      end
     end
     return true
   end

@@ -68,6 +68,7 @@ function _M:toDestroy(UI)
       {{#allowRepeat}}
         if ({{atype}}.{{aname}}x9 ~= 0) then
           audio.dispose({{atype}}.{{aname}})
+          {{atype}}.{{aname}} = nil
           {{atype}}.{{aname}}x9 = 0
         end
       {{/allowRepeat}}

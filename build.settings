@@ -1,10 +1,12 @@
 settings =
 {
+  {{#splashCtl}}
     splashScreen =
     {
         enable = true,
         image = "mySplashScreen.png"
     },
+  {{/splashCtl}}
   plugins  =
   {
     {{#iap}}
@@ -68,10 +70,10 @@ settings =
     usesFeatures =
     {
       {{#camera}}
-        { name="android.hardware.camera", required=true },
+        { name="android.hardware.camera", required=false },
       {{/camera}}
       {{#recordAudio}}
-        { name="android.hardware.microphone", required=true },
+        { name="android.hardware.microphone", required=false },
       {{/recordAudio}}
       {{#location}}
         { name = "android.hardware.location", required = false },

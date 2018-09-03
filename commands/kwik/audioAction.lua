@@ -45,7 +45,7 @@ function _M:playAudio(vaudio, vchan, vrepeat, vdelay, vloop, toFade, vvol, tm)
       audio.setVolume(vvol, {channel=vchan} )
       audio.play( vaudio, {channel=vchan, loops = vloop, fadein = tofade } )
     else
-      _M.x9[vaudio] = audio.play( vaudio, {loops = vloop, fadein = tofade } )
+      _M.x9[vaudio] = audio.play( vaudio, {channel=vchan, loops = vloop, fadein = tofade } )
       audio.setVolume(vvol, {channel=_M.x9[vaudio]} )
     end
   end

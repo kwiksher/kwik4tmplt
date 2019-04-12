@@ -143,6 +143,7 @@ function _M:localPos(UI)
     {{#randY}}
         layer.{{myLName}}.y = math.random( randXStart , randXEnd)
     {{/randY}}
+    layer.{{myLName}}:scale(imageWidth/layer.{{myLName}}.width, imageHeight/layer.{{myLName}}.height)
     {{#scaleW}}
         layer.{{myLName}}.xScale = {{scaleW}}
     {{/scaleW}}

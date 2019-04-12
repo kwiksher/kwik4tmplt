@@ -7,6 +7,8 @@ local _M = {}
 local _K = require "Application"
 --
 {{#ultimate}}
+local imageWidth = {{elW}}/4
+local imageHeight = {{elH}}/4
 {{#randX}}
 local randXStart = _K.ultimatePosition({{randXStart}})
 local randXEnd = _K.ultimatePosition({{randXEnd}})
@@ -17,6 +19,8 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 {{/randY}}
 {{/ultimate}}
 {{^ultimate}}
+  local imageWidth = {{elW}}
+  local imageHeight = {{elH}}
   {{#randX}}
   local randXStart = {{randXStart}}
   local randXEnd = {{randXEnd}}
@@ -52,6 +56,7 @@ function _M:localPos(UI)
     {{#randY}}
         layer.{{myLName}}.y = math.random( randXStart , randXEnd)
     {{/randY}}
+    layer.{{myLName}}:scale(imageWidth/layer.{{myLName}}.width, imageHeight/layer.{{myLName}}.height)
     {{#scaleW}}
         layer.{{myLName}}.xScale = {{scaleW}}
     {{/scaleW}}

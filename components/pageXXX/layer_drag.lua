@@ -34,6 +34,8 @@ function _M:didShow(UI)
         {{/gfocus}}
         t.oriBodyType = t.bodyType
         t.bodyType ="kinematic"
+        UI.dragLayer = nil
+        UI.dropLayer = nil
 
       elseif event.phase == "moved" then
         {{#gFlip}}
@@ -51,8 +53,9 @@ function _M:didShow(UI)
           cr_{{glayer}} = dragLayer.{{xyx}}
         {{/gFlip}}
         {{#gdrop}}
-            {{glayer}}_posX = dragLayer.x - layer.{{gdrop}}.x
-            {{glayer}}_posY = dragLayer.y - layer.{{gdrop}}.y
+            function hitTest(dropLayer)
+                {{glayer}}_posX = dragLayer.x - dropLayer.x
+                {{glayer}}_posY = dragLayer.y - dropLayer.y
             if ({{glayer}}_posX < 0) then
               {{glayer}}_posX = {{glayer}}_posX * -1
             end
@@ -60,14 +63,17 @@ function _M:didShow(UI)
               {{glayer}}_posY = {{glayer}}_posY * -1
             end
             if ({{glayer}}_posX <= {{gdropb}}) and ({{glayer}}_posY <= {{gdropb}}) then  --in position\r\n'
-              dragLayer.x = layer.{{gdrop}}.x
-              dragLayer.y = layer.{{gdrop}}.y
+                  dragLayer.x = dropLayer.x
+                  dragLayer.y = dropLayer.y
               {{glayer}}_lock = 1
             else
               {{glayer}}_lock = 0
             end
+            end
+            hitTest(layer.{{gdrop}})
         {{/gdrop}}
         {{#gdragging}}
+           UI.dragLayer = dragLayer
            scene:dispatchEvent({name="{{gdragging}}", event={UI=UI} })
         {{/gdragging}}
         elseif event.phase == "ended" or event.phase == "cancelled" then
@@ -80,6 +86,8 @@ function _M:didShow(UI)
                  _K.MultiTouch.deactivate(dragLayer)
               {{/gdropl}}
               {{#gdropt}}
+              UI.dragLayer = dragLayer
+              UI.dropLayer = dropLayer
                scene:dispatchEvent({name="{{gdropt}}", event={UI=UI} })
               {{/gdropt}}
             {{#gback}}
@@ -91,12 +99,14 @@ function _M:didShow(UI)
         {{/gdrop}}
       {{#gdropr}}
           {{#gcomplete}}
+          UI.dragLayer = dragLayer
            scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
           {{/gcomplete}}
       {{/gdropr}}
       {{^gdropr}}
           {{#gcomplete}}
               if ({{glayer}}_lock == 0) then
+              UI.dragLayer = dragLayer
                scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
               end
           {{/gcomplete}}

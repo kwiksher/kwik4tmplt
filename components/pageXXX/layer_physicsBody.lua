@@ -11,6 +11,18 @@ end
 --
 function _M:localPos()
 end
+
+{{#ultimate}}
+{{#bradius}}
+local bradius = {{bradius}}/4
+{{/bradius}}
+{{/ultimate}}
+{{^ultimate}}
+{{#bradius}}
+local bradius = {{bradius}}
+{{/bradius}}
+{{/ultimate}}
+
 --
 function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
@@ -18,7 +30,7 @@ function _M:didShow(UI)
   local curPage = UI.curPage
   if layer.{{bname}} == nil then return end
     {{#circle}}
-      physics.addBody(layer.{{bname}}, "{{btype}}", {density={{bdensity}}, friction={{bfriction}}, bounce={{bbounce}}, radius={{bradius}} })
+      physics.addBody(layer.{{bname}}, "{{btype}}", {density={{bdensity}}, friction={{bfriction}}, bounce={{bbounce}}, radius=bradius })
     {{/circle}}
     {{#bshape}}
       {{#PE}}

@@ -1,15 +1,15 @@
 settings =
 {
-  {{#splashCtl}}
+  {{if(options.splashCtl)}}
     splashScreen =
     {
         enable = true,
         image = "mySplashScreen.png"
     },
-  {{/splashCtl}}
+  {{/if}}
   plugins  =
   {
-    {{#iap}}
+    {{if(options.iap)}}
         ["plugin.zip"] =
         {
             publisherId = "com.coronalabs",
@@ -25,142 +25,141 @@ settings =
             publisherId = "com.coronalabs",
             supportedPlatforms = { ["android-kindle"]=true }
         },
-    {{/iap}}
-    {{#adMob}}
+    {{/if}}
+    {{if(options.adMob)}}
       ["plugin.google.play.services"] =
       {
          publisherId = "com.coronalabs",
          supportedPlatforms = { android =true }
       },
-    {{/adMob}}
+    {{/if}}
   },
 
   android  =
   {
-    {{#expansion}}
+    {{if(options.expansion)}}
       usesExpansionFile  = true,
-    {{/expansion}}
+    {{/if}}
     usesPermissions  =
     {
-      {{#recordAudio}}
+      {{if(options.recordAudio)}}
       "android.permission.RECORD_AUDIO",
-      {{/recordAudio}}
+      {{/if}}
       "android.permission.WRITE_EXTERNAL_STORAGE",
-      {{#iap}}
+      {{if(options.iap)}}
         "com.android.vending.BILLING",
-      {{/iap}}
-      {{#hasWeb}}
+      {{/if}}
+      {{if(options.hasWeb)}}
         "android.permission.INTERNET",
-      {{/hasWeb}}
-      {{#adMob}}
+      {{/if}}
+      {{if(options.adMob)}}
         "android.permission.ACCESS_NETWORK_STATE",
         "android.permission.READ_PHONE_STATE",
-      {{/adMob}}
-      {{#expansion}}
+      {{/if}}
+      {{if(options.expansion)}}
         "com.android.vending.CHECK_LICENSE",
-      {{/expansion}}
-      {{#camera}}
+      {{/if}}
+      {{if(options.camera)}}
       "android.permission.CAMERA",
-      {{/camera}}
-      {{#location}}
+      {{/if}}
+      {{if(options.location)}}
       "android.permission.ACCESS_FINE_LOCATION",
       "android.permission.ACCESS_COARSE_LOCATION",
-      {{/location}}
+      {{/if}}
     },
     usesFeatures =
     {
-      {{#camera}}
+      {{if(options.camera)}}
         { name="android.hardware.camera", required=false },
-      {{/camera}}
-      {{#recordAudio}}
+      {{/if}}
+      {{if(options.recordAudio)}}
         { name="android.hardware.microphone", required=false },
-      {{/recordAudio}}
-      {{#location}}
+      {{/if}}
+      {{if(options.location)}}
         { name = "android.hardware.location", required = false },
         { name = "android.hardware.location.gps", required = false },
         { name = "android.hardware.location.network", required = false }
-      {{/location}}
+      {{/if}}
     },
   },
   orientation =
   {
   default = "{{ori}}",
-  {{#portraitUpsideDown}}
+  {{if(options.portraitUpsideDown)}}
     supported = { "portrait", "portraitUpsideDown" },
-  {{/portraitUpsideDown}}
-  {{#landscapeUpsideDown}}
+  {{/if}}
+  {{if(options.landscapeUpsideDown)}}
     supported = { "landscapeLeft", "landscapeRight" },
-  {{/landscapeUpsideDown}}
+  {{/if}}
   },
   iphone =
   {
     xcassets = "Images.xcassets",
     plist=
     {
-      {{#impFont}}
+      {{if(options.impFont)}}
         UIAppFonts  =
         {
-          {{#fileArr}}
+          {{if(options.fileArr)}}
             "{{fileName}}",
-          {{/fileArr}}
+          {{/if}}
         },
-      {{/impFont}}
-      {{#suspend}}
+      {{/if}}
+      {{if(options.suspend)}}
         UIApplicationExitsOnSuspend = true,
-      {{/suspend}}
-      {{^suspend}}
+      {{#else}}
         UIApplicationExitsOnSuspend = false,
-      {{/suspend}}
-      {{#exceptionDomains}}
+      {{/if}}
+      {{if(options.exceptionDomains)}}
       NSAppTransportSecurity = {
           NSExceptionDomains = {
-            {{#domainArr}}
+            {{if(options.domainArr)}}
               ["{{domain}}"] = {
                   NSIncludesSubdomains = true,
                   NSThirdPartyExceptionAllowsInsecureHTTPLoads = true
               },
-            {{/domainArr}}
+            {{/if}}
           }
       },
-      {{/exceptionDomains}}
+      {{/if}}
       UIStatusBarHidden = true,
       UILaunchStoryboardName = "LaunchScreen",
-      {{#lang}}
+  {{if(options.lang)}}
       CFBundleLocalizations =
       {
-        {{#langArr}}
+        {{if(options.langArr)}}
           "{{langID}}",
-        {{/langArr}}
+        {{/if}}
       },
 
       CFBundleDisplayName = "{{AppName}}",
       CFBundleName = "{{AppName}}",
 
-      {{#accel}}
+      {{if(options.accel)}}
       NSMotionUsageDescription = "This app would like to access the accelerometer.",
-      {{/accel}}
+      {{/if}}
 
-      {{#location}}
+      {{if(options.location)}}
       NSLocationAlwaysUsageDescription = "This app would like to use location services.",
       NSLocationWhenInUseUsageDescription = "This app would like to use location services.",
-      {{/location}}
+      {{/if}}
 
-      {{#recordAudio}}
+      {{if(options.recordAudio)}}
       NSMicrophoneUsageDescription = "This app would like to access the microphone.",
-      {{/recordAudio}}
+      {{/if}}
 
-      {{#camera}}
+      {{if(options.camera)}}
       NSCameraUsageDescription = "This app would like to access the camera.",
       NSPhotoLibraryUsageDescription = "This app would like to access the photo library.",
       NSPhotoLibraryAddUsageDescription = "This app would like to add the photo library.",
-      {{/camera}}
+      {{/if}}
 
-      {{#video}}
+      {{if(options.video)}}
       NSCameraUsageDescription = "This app would like to access the camera.",
       NSPhotoLibraryUsageDescription = "This app would like to access the photo library.",
       NSPhotoLibraryAddUsageDescription = "This app would like to add the photo library.",
-      {{/video}}
-      {{/lang}}
+      {{/if}}
+   {{/if}}
     },
   },
   excludeFiles =

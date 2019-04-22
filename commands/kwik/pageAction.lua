@@ -8,17 +8,17 @@ local composer = require("composer")
 local Navigation = require("extlib.kNavi")
 --
 function _M:autoPlay(curPage)
-{{#isTmplt}}
+{{if(options.isTmplt)}}
   local ui = require("components.store.UI")
   ui.currentPage = curPage
-{{/isTmplt}}
+{{/if}}
     if nil~= composer.getScene("views.page0"..(curPage+1).."Scene" ) then
     	composer.removeScene( "views.page0"..(curPage+1).."Scene"  , true)
     end
    composer.gotoScene( "views.page0"..(curPage+1).."Scene"  )
 end
 --
-{{^TV}}
+{{if(!options.hasOwnProperty('TV'))}}
 function _M:showHideNavigation()
   if (_K.kNavig.alpha == 0) then
      Navigation.show()
@@ -26,9 +26,9 @@ function _M:showHideNavigation()
      Navigation.hide()
   end
 end
-{{/TV}}
+{{/if}}
 --
-{{#TV}}
+{{if(options.TV)}}
 function _M:showHideNavigation(NaviBtn)
     local kInputDevices = require("extlib.tv.kInputDevices")
     if (NaviBtn.isKey == true) then
@@ -46,7 +46,7 @@ function _M:showHideNavigation(NaviBtn)
       end
     end
 end
-{{/TV}}
+{{/if}}
 --
 function _M:reloadPage(canvas)
 	if canvas then
@@ -55,22 +55,22 @@ function _M:reloadPage(canvas)
 	composer.gotoScene("extlib.page_reload")
 end
 --
-{{#bookshelf}}
-{{#IAP}}
+{{if(options.bookshelf)}}
+{{if(options.IAP)}}
 local ui = require("components.store.UI")
 local model = require("components.store.model")
-{{/IAP}}
+{{/if}}
 --
 function _M:gotoPage(pnum, ptrans, delay, _time)
-  {{#isTmplt}}
+  {{if(options.isTmplt)}}
   ui.currentPage = pnum-1
-  {{/isTmplt}}
+  {{/if}}
   local myClosure_switch= function()
-   {{#IAP}}
+   {{if(options.IAP)}}
     if model.bookShelfType ==0 and model.tocPage == pnum then
         ui.gotoTOC(ptrans)
     else
-   {{/IAP}}
+   {{/if}}
       if nil~= composer.getScene("views.page0"..pnum.."Scene") then
           composer.removeScene("views.page0"..pnum.."Scene", true)
         end
@@ -79,9 +79,9 @@ function _M:gotoPage(pnum, ptrans, delay, _time)
       else
          composer.gotoScene( "views.page0"..pnum.."Scene" )
       end
-   {{#IAP}}
+   {{if(options.IAP)}}
     end
-   {{/IAP}}
+   {{/if}}
   end
   if delay > 0 then
     _K.timerStash.pageAction = timer.performWithDelay(delay, myClosure_switch, 1)
@@ -89,8 +89,8 @@ function _M:gotoPage(pnum, ptrans, delay, _time)
     myClosure_switch()
   end
 end
-{{/bookshelf}}
-{{^bookshelf}}
+{{/if}}
+{{if(!options.hasOwnProperty('bookshelf'))}}
 --
 function _M:gotoPage(pnum, ptrans, delay, _time)
   local myClosure_switch= function()
@@ -109,6 +109,6 @@ function _M:gotoPage(pnum, ptrans, delay, _time)
     myClosure_switch()
   end
 end
-{{/bookshelf}}
+{{/if}}
 --
 return _M

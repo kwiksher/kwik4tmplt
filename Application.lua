@@ -53,22 +53,22 @@ function Application:new(appDir)
     Runtime:dispatchEvent({name="app.loadLib", event="init"})
 		--
     Runtime:dispatchEvent({name="app.statsuBar", event="init"})
-		{{#use.coronaViewer}}
+		{{if(options.use.coronaViewer)}}
 		-- please disable for commercial release --
     Runtime:dispatchEvent({name="app.coronaViewer", event="init"})
-		{{/use.coronaViewer}}
+		{{/if}}
 		--
-		{{#use.ads}}
+		{{if(options.use.ads)}}
     Runtime:dispatchEvent({name="app.Ads", event="init"})
-		{{/use.ads}}
+		{{/if}}
 		--
     Runtime:dispatchEvent({name="app.versionCheck", event="init"})
 		--
     Runtime:dispatchEvent({name="app.expDir", event="init"})
 		--
-		{{#use.lang}}
+		{{if(options.use.lang)}}
 	  Runtime:dispatchEvent({name="app.lang", event="init"})
-		{{/use.lang}}
+		{{/if}}
 		--
 	  Runtime:dispatchEvent({name="app.droidHWKey", event="init"})
 		--
@@ -76,17 +76,17 @@ function Application:new(appDir)
 		--
 	  Runtime:dispatchEvent({name="app.bookmark", event="init", bookmark ={{use.bookmark}} })
 		--
-		{{#use.suspend}}
+		{{if(options.use.suspend)}}
 	  Runtime:dispatchEvent({name="app.suspend", event="init"})
-		{{/use.suspend}}
+		{{/if}}
 		--
-		{{#use.memoryTrack}}
+		{{if(options.use.memoryTrack)}}
 	  Runtime:dispatchEvent({name="app.memoryCheck", event="init"})
-		{{/use.memoryTrack}}
+		{{/if}}
 
-		{{#use.extCode}}		--
+		{{if(options.use.extCode)}}--
 	  Runtime:dispatchEvent({name="app.extCodes", event="init"})
-		{{/use.extCode}}		--
+		{{/if}}		--
 		-- ApplicationMediator.onRegister shows the top page
 		Runtime:dispatchEvent({name="onRobotlegsViewCreated", target=self})
 	end
@@ -160,29 +160,27 @@ function Application.cancelAllTransitions()
 end
 --
 function Application.ultimatePosition(x,y)
-{{#ultimate}}
-	{{#use.landscape}}
+{{if(options.ultimate)}}
+	{{if(options.use.landscape)}}
 	local mX = x and display.contentWidth/2 + (x*0.25 - 480*0.5) or 0
 	local mY = y and display.contentHeight/2 + (y*0.25 - 320*0.5) or 0
-	{{/use.landscape}}
-	{{#use.portrait}}
+	{{/if}}
+	{{if(options.use.portrait)}}
 	local mX = x and display.contentWidth/2 + (x*0.25 - 320*0.5) or 0
 	local mY = y and display.contentHeight/2 + (y*0.25 - 480*0.5) or 0
-	{{/use.portrait}}
+	{{/if}}
 		return mX, mY
-{{/ultimate}}
-{{^ultimate}}
+{{#else}}
 		return x, y
-{{/ultimate}}
+{{/if}}
 end
 --
 function Application.isUltimateConfig()
-	{{#ultimate}}
+	{{if(options.ultimate)}}
 	return true
-	{{/ultimate}}
-	{{^ultimate}}
+	{{#else}}
 	return false
-	{{/ultimate}}
+	{{/if}}
 end
 	--
 return Application

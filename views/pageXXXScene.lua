@@ -21,10 +21,10 @@ function scene:show( event )
   local sceneGroup = self.view
   if event.phase == "did" then
      self.pageUI:didShow(self, event.params)
-    {{#scrnSave}}
+    {{if(options.scrnSave)}}
       local _AC = require("commands.kwik.actionCommand")
       _AC.Screenshot:saveToFile({{delay}}, sceneGroup, "page0{{pageNum}}",  {{numFrames}} )
-    {{/scrnSave}}
+    {{/if}}
   end
 end
 --

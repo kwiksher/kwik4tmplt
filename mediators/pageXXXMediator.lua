@@ -11,26 +11,26 @@ function PageViewMediator:new()
     local view = self.viewInstance
     -- Scene
     view:addEventListener("hide", self)
-    {{#eventListeners}}
+    {{if(options.eventListeners)}}
     view:addEventListener("{{myLName}}{{_}}{{layerType}}_{{triggerName}}", self)
-    {{/eventListeners}}
+    {{/if}}
   end
   --
   function mediator:onRemove()
     local view = self.viewInstance
-    {{#eventListeners}}
+    {{if(options.eventListeners)}}
     view:removeEventListener("{{myLName}}{{_}}{{layerType}}_{{triggerName}}", self)
-    {{/eventListeners}}
+    {{/if}}
   end
   --
   function mediator:hide(event)
     Runtime:dispatchEvent({name="{{page}}.hide", event=event, UI = self.viewInstance.pageUI})
   end
-  {{#eventListeners}}
+  {{if(options.eventListeners)}}
   function mediator:{{myLName}}{{_}}{{layerType}}_{{triggerName}}(event)
     Runtime:dispatchEvent({name="{{page}}.{{myLName}}{{_}}{{layerType}}_{{triggerName}}", event=event.parent or event, UI = self.viewInstance.pageUI})
   end
-  {{/eventListeners}}
+  {{/if}}
   --
   return mediator
 end

@@ -12,11 +12,11 @@ function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
   -- Page properties
-  {{#xScale}}
+  {{if(options.xScale)}}
     sceneGroup.xScale = {{xScale}}
     sceneGroup.yScale = {{yScale}}
     sceneGroup.alpha = {{alpha}}
-  {{/xScale}}
+  {{/if}}
 end
 --
 function _M:didShow(UI)
@@ -43,31 +43,31 @@ function _M:didShow(UI)
        local function act_autoPlay(event)
          if(curPage < numPages) then
             if nil~= composer.getScene( "views.page0"..(curPage+1).."Scene") then composer.removeScene( "views.page0"..(curPage+1).."Scene", true) end
-            {{^pageCurl}}
+            {{if(!options.hasOwnProperty('pageCurl'))}}
             if(_K.kBidi == false) then
               composer.gotoScene( "views.page0"..(curPage+1).."Scene", { effect = "fromRight"} )
             else
               composer.gotoScene( "views.page0"..(curPage-1).."Scene", { effect = "fromLeft"} )
             end
-            {{/pageCurl}}
-            {{#pageCurl}}
+            {{/if}}
+            {{if(options.pageCurl)}}
             if(_K.kBidi == false) then
               composer.gotoScene( "views.page0"..(curPage+1).."Scene" )
             else
               composer.gotoScene( "views.page0"..(curPage-1).."Scene" )
             end
-            {{/pageCurl}}
+            {{/if}}
          end
        end
-       {{^pageCurl}}
+       {{if(!options.hasOwnProperty('pageCurl'))}}
        if (UI.allAudios.kAutoPlay > _K.kAutoPlay*1000) then
            _K.timerStash.timer_AP = timer.performWithDelay(
              UI.allAudios.kAutoPlay + _Delay, act_autoPlay, 1 )
        else
            _K.timerStash.timer_AP = timer.performWithDelay( _K.kAutoPlay*1000, act_autoPlay, 1 )
        end
-       {{/pageCurl}}
-       {{#pageCurl}}
+       {{/if}}
+       {{if(options.pageCurl)}}
        if (UI.allAudios.kAutoPlay > _K.kAutoPlay*1000) then
            _K.timerStash.timer_AP = timer.performWithDelay(
              UI.allAudios.kAutoPlay + _Delay ,
@@ -80,19 +80,19 @@ function _M:didShow(UI)
               UI.autoPlayCurl(act_autoPlay)
             end , 1 )
        end
-      {{/pageCurl}}
+      {{/if}}
      end
 
-    {{^pageCurl}}
-    {{#preload}}
+    {{if(!options.hasOwnProperty('pageCurl'))}}
+    {{if(options.preload)}}
        -- Preloads next scene. Must be off to use page curl
       if not _K.exportCurrent then
        _K.timerStash.timer_pl = timer.performWithDelay( 5000, function()
           composer.loadScene( "views.page0{{nextScene}}Scene")
        end)
        end
-    {{/preload}}
-    {{/pageCurl}}
+    {{/if}}
+    {{/if}}
 end
 --
 function _M:toDispose()

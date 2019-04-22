@@ -9,20 +9,19 @@ local function startThisMug()
 		display.setStatusBar(display.HiddenStatusBar)
 		_K.appName     = "{{appName}}"
 		_K.appDir      = "{{appName}}"
-		{{#use.expDir}}
+		{{if(options.use && options.use.expDir)}}
 		_K.imgDir      = "assets/images/"
 		_K.spriteDir   = "assets/sprites/"
 		_K.thumbDir    = "assets/thumbnails/"
 		_K.audioDir    =  "assets/audios/"
 		_K.videoDir    =  "assets/videos/"
-		{{/use.expDir}}
-		{{^use.expDir}}
+		{{#else}}
 		_K.imgDir      = "assets/"
 		_K.spriteDir   = "assets/"
 		_K.audioDir    =  "assets/"
 		_K.videoDir    =  "assets/"
 		_K.thumbDir    = "assets/thumbnails/"
-		{{/use.expDir}}
+		{{/if}}
 		_K.particleDir = "assets/particles/"
 		_K.systemDir   = system.ResourceDirectory
 		_K.trans       = {}
@@ -76,7 +75,7 @@ timer.performWithDelay(100, startThisMug)
 local log = require("extlib.log")
 local path = system.pathForFile("log.db", system.DocumentsDirectory)
 db = sqlite3.open(path)
-log:set(db, "support@kwiksher.com")
+log:set(db, "support{{kwiksher.com")
 ]]
 
 d = {}

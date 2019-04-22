@@ -5,10 +5,10 @@
 local _M = {}
 --
 local _K = require "Application"
-{{#isComic}}
-{{#mySet}}
+{{if(options.isComic)}}
+  {{if(options.mySet)}}
 local layerSet_{{mySet}} = {
-  {{#layerSet}}
+  {{if(options.layerSet)}}
     {
       myLName = "{{myLName}}",
       x       = {{mX}},
@@ -16,7 +16,7 @@ local layerSet_{{mySet}} = {
       width   = {{elW}},
       height  = {{elH}},
       frameSet = {
-      {{#frameSet}}
+      {{if(options.frameSet)}}
       {
         myLName = "{{myLName}}",
         x       = {{mX}},
@@ -24,14 +24,14 @@ local layerSet_{{mySet}} = {
         width   = {{elW}},
         height  = {{elH}},
       },
-      {{/frameSet}}
+      {{/if}}
       }
     },
-  {{/layerSet}}
+  {{/if}}
   }
-{{/mySet}}
-{{/isComic}}
-{{#infinity}}
+  {{/if}}
+{{/if}}
+{{if(options.infinity)}}
 -- Infinity background animation
 local function infinityBack(self, event)
      local xd, yd = self.x,self.y
@@ -72,63 +72,60 @@ local function infinityBack(self, event)
         end
      end
 end
-{{/infinity}}
+{{/if}}
 --
 function _M:myMain()
 end
 -- not
 
-{{#ultimate}}
+{{if(options.ultimate)}}
 local imageWidth             = {{elW}}/4
 local imageHeight            = {{elH}}/4
 local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}})
-{{#randX}}
-local randXStart = _K.ultimatePosition({{randXStart}})
-local randXEnd = _K.ultimatePosition({{randXEnd}})
-{{/randX}}
-{{#randY}}
-local dummy, randYStart = _K.ultimatePosition(0, {{randYStart}})
-local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
-{{/randY}}
-{{#idist}}
-local idist     = {{idist}}/4
-{{/idist}}
-{{/ultimate}}
-{{^ultimate}}
+  {{if(options.randX)}}
+  local randXStart = _K.ultimatePosition({{randXStart}})
+  local randXEnd = _K.ultimatePosition({{randXEnd}})
+  {{/if}}
+  {{if(options.randY)}}
+  local dummy, randYStart = _K.ultimatePosition(0, {{randYStart}})
+  local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
+  {{/if}}
+  {{if(options.idist)}}
+  local idist     = {{idist}}/4
+  {{/if}}
+{{#else}}
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
 local mX = {{mX}}
 local mY = {{mY}}
-{{#randX}}
-local randXStart = {{randXStart}}
-local randXEnd = {{randXEnd}}
-{{/randX}}
-{{#randY}}
-local randYStart = {{randYStart}}
-local randYEnd = {{randYEnd}}
-{{/randY}}
-{{#idist}}
-local idist     = {{idist}}
-{{/idist}}
-{{/ultimate}}
+  {{if(options.randX)}}
+  local randXStart = {{randXStart}}
+  local randXEnd = {{randXEnd}}
+  {{/if}}
+  {{if(options.randY)}}
+  local randYStart = {{randYStart}}
+  local randYEnd = {{randYEnd}}
+  {{/if}}
+  {{if(options.idist)}}
+  local idist     = {{idist}}
+  {{/if}}
+{{/if}}
 local oriAlpha = {{oriAlpha}}
 --
-{{#kwk}}
+{{if(options.kwk)}}
 local imagePath = "{{bn}}.{{fExt}}"
-{{/kwk}}
-{{^kwk}}
+{{#else}}
 local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
-{{/kwk}}
+{{/if}}
 --
 function _M:localVars(UI)
-  {{#isTmplt}}
+  {{if(options.isTmplt)}}
    mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)
-  {{/isTmplt}}
-  {{#multLayers}}
+  {{/if}}
+  {{if(options.multLayers)}}
     UI.tab{{um}}["{{dois}}"] = {imagePath, imageWidth, imageHeight, mX, mY, oriAlpha}
-  {{/multLayers}}
-  {{^multLayers}}
-  {{/multLayers}}
+  {{#else}}
+  {{/if}}
 end
 --
 --[[
@@ -152,7 +149,7 @@ end
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  {{^multLayers}}
+  {{if(options.multLayers)}}
   local function myNewImage()
     layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
     -- layer.{{myLName}} = newImageRect({{bn}}, imageWidth, imageHeight )
@@ -163,35 +160,34 @@ function _M:localPos(UI)
     layer.{{myLName}}.alpha = oriAlpha
     layer.{{myLName}}.oldAlpha = oriAlpha
     layer.{{myLName}}.blendMode = "{{bmode}}"
-    {{#randX}}
+    {{if(options.randX)}}
       layer.{{myLName}}.x = math.random( randXStart, randXEnd)
-    {{/randX}}
-    {{#randY}}
+    {{/if}}
+    {{if(options.randY)}}
       layer.{{myLName}}.y = math.random( randYStart, randYEnd)
-    {{/randY}}
-    {{#scaleW}}
+    {{/if}}
+    {{if(options.scaleW)}}
       layer.{{myLName}}.xScale = {{scaleW}}
-    {{/scaleW}}
-    {{#scaleH}}
+    {{/if}}
+    {{if(options.scaleH)}}
       layer.{{myLName}}.yScale = {{scaleH}}
-    {{/scaleH}}
-    {{#rotate}}
+    {{/if}}
+    {{if(options.rotate)}}
       layer.{{myLName}}:rotate( {{rotate}} )
-    {{/rotate}}
+    {{/if}}
     layer.{{myLName}}.oriX = layer.{{myLName}}.x
     layer.{{myLName}}.oriY = layer.{{myLName}}.y
     layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
     layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
     layer.{{myLName}}.name = "{{myLName}}"
     sceneGroup.{{myLName}} = layer.{{myLName}}
-    {{#layerAsBg}}
+    {{if(options.layerAsBg)}}
       sceneGroup:insert( 1, layer.{{myLName}})
-    {{/layerAsBg}}
-    {{^layerAsBg}}
+    {{#else}}
       sceneGroup:insert( layer.{{myLName}})
-    {{/layerAsBg}}
+    {{/if}}
     --
-    {{#infinity}}
+    {{if(options.infinity)}}
       layer.{{myLName}}_2 = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
         -- layer.{{myLName}}_2 = newImageRect({{bn}}, imageWidth, imageHeight )
       if layer.{{myLName}}_2 == nil then return end
@@ -204,92 +200,88 @@ function _M:localPos(UI)
       layer.{{myLName}}_2.anchorX = 0
       layer.{{myLName}}_2.anchorY = 0;
       _K.repositionAnchor(layer.{{myLName}}_2, 0,0)
-      {{#up}}
+      {{if(options.up)}}
         layer.{{myLName}}.x = layer.{{myLName}}.oriX
         layer.{{myLName}}.y = 0;
-        {{#idist}}
+        {{if(options.idist)}}
           layer.{{myLName}}_2.y = layer.{{myLName}}.height + {{idist}}
           layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
           layer.{{myLName}}.distance = {{idist}}
           layer.{{myLName}}_2.distance = {{idist}}
-        {{/idist}}
-        {{^idist}}
+        {{#else}}
           layer.{{myLName}}_2.y = layer.{{myLName}}.height
           layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
-        {{/idist}}
+        {{/if}}
           layer.{{myLName}}.enterFrame = infinityBack
           layer.{{myLName}}.speed = {{infinitySpeed}}
           layer.{{myLName}}.direction = "{{idir}}"
           layer.{{myLName}}_2.enterFrame = infinityBack
           layer.{{myLName}}_2.speed = {{infinitySpeed}}
           layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/up}}
-      {{#down}}
+      {{/if}}
+      {{if(options.down)}}
         layer.{{myLName}}.x = layer.{{myLName}}.oriX
         layer.{{myLName}}.y = 0;
-        {{#idist}}
+        {{if(options.idist)}}
           layer.{{myLName}}_2.y = -layer.{{myLName}}.height - {{idist}}
           layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
           layer.{{myLName}}.distance = idist
           layer.{{myLName}}_2.distance = idist
-        {{/idist}}
-        {{^idist}}
+        {{#else}}
           layer.{{myLName}}_2.y = -layer.{{myLName}}.height
           layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
-        {{/idist}}
+        {{/if}}
           layer.{{myLName}}.enterFrame = infinityBack
           layer.{{myLName}}.speed = {{infinitySpeed}}
           layer.{{myLName}}.direction = "{{idir}}"
           layer.{{myLName}}_2.enterFrame = infinityBack
           layer.{{myLName}}_2.speed = {{infinitySpeed}}
           layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/down}}
-      {{#right}}
+      {{/if}}
+      {{if(options.right)}}
         layer.{{myLName}}.x = 0
         layer.{{myLName}}.y = layer.{{myLName}}.oriY;
-        {{#idist}}
+        {{if(options.idist)}}
           layer.{{myLName}}_2.x = -layer.{{myLName}}.width + {{idist}}
           layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
           layer.{{myLName}}.distance = idist
           layer.{{myLName}}_2.distance = idist
-        {{/idist}}
-        {{^idist}}
+        {{#else}}
           layer.{{myLName}}_2.x = -layer.{{myLName}}.width
           layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
-        {{/idist}}
+        {{/if}}
         layer.{{myLName}}.enterFrame = infinityBack
         layer.{{myLName}}.speed = {{infinitySpeed}}
         layer.{{myLName}}.direction = "{{idir}}"
         layer.{{myLName}}_2.enterFrame = infinityBack
         layer.{{myLName}}_2.speed = {{infinitySpeed}}
         layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/right}}
-      {{#left}}
+      {{/if}}
+      {{if(options.left)}}
         layer.{{myLName}}.x = 0
         layer.{{myLName}}.y = layer.{{myLName}}.oriY;
-        {{#idist}}
+        {{if(options.idist)}}
           layer.{{myLName}}_2.x = layer.{{myLName}}.width + {{idist}}
           layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
                 layer.{{myLName}}.distance = idist
                 layer.{{myLName}}_2.distance = idist
-        {{/idist}}
-        {{^idist}}
+        {{#else}}
           layer.{{myLName}}_2.x = layer.{{myLName}}.width
           layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
-        {{/idist}}
+        {{/if}}
           layer.{{myLName}}.enterFrame = infinityBack
           layer.{{myLName}}.speed = {{infinitySpeed}}
           layer.{{myLName}}.direction = "{{idir}}"
           layer.{{myLName}}_2.enterFrame = infinityBack
           layer.{{myLName}}_2.speed = {{infinitySpeed}}
           layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/left}}
-    {{/infinity}}
+      {{/if}}
+    {{/if}}
    end
-  {{/multLayers}}
+  {{/if}}
 
-{{#isComic}}
-  {{#mySet}}
+{{if(options.isComic)}}
+  {{if(options.mySet)}}
   local options = {
    frames ={},
     sheetContentWidth = imageWidth,
@@ -336,15 +328,15 @@ function _M:localPos(UI)
   layer.{{myLName}}.alpha = oriAlpha
   layer.{{myLName}}.oldAlpha = oriAlpha
   layer.{{myLName}}.blendMode = "{{bmode}}"
-  {{#scaleW}}
+  {{if(options.scaleW)}}
     layer.{{myLName}}.xScale = {{scaleW}}
-  {{/scaleW}}
-  {{#scaleH}}
+  {{/if}}
+  {{if(options.scaleH)}}
     layer.{{myLName}}.yScale = {{scaleH}}
-  {{/scaleH}}
-  {{#rotate}}
+  {{/if}}
+  {{if(options.rotate)}}
     layer.{{myLName}}:rotate( {{rotate}} )
-  {{/rotate}}
+  {{/if}}
   layer.{{myLName}}.oriX = layer.{{myLName}}.x
   layer.{{myLName}}.oriY = layer.{{myLName}}.y
   layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
@@ -352,41 +344,40 @@ function _M:localPos(UI)
   layer.{{myLName}}.name = "{{myLName}}"
   sceneGroup.{{myLName}} = layer.{{myLName}}
   sceneGroup:insert( layer.{{myLName}})
-  {{/mySet}}
-  {{^mySet}}
+  {{#else}}
     myNewImage()
-  {{/mySet}}
-{{/isComic}}
-{{^multLayers}}
-{{^isComic}}
+  {{/if}}
+{{#else}}
+  {{if(! options.hasOwnProperty('multLayers'))}}
   myNewImage()
-{{/isComic}}
-{{/multLayers}}
+  {{/if}}
+{{/if}}
 end
 --
 function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  {{^multLayers}}
-    {{#infinity}}
+  {{if(! options.hasOwnProperty('multLayers'))}}
+    {{if(options.infinity)}}
        -- Infinity background
        if layer.{{myLName}} == nil  or layer.{{myLName}}_2 == nil then return end
        Runtime:addEventListener("enterFrame", layer.{{myLName}})
        Runtime:addEventListener("enterFrame", layer.{{myLName}}_2)
-    {{/infinity}}
-  {{/multLayers}}
+    {{/if}}
+  {{/if}}
 end
 --
 function _M:toDispose(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  {{^multLayers}}
-    {{#infinity}}
+  {{if(! options.hasOwnProperty('multLayers'))}}
+    {{if(options.infinity)}}
       if layer.{{myLName}} == nil  or layer.{{myLName}}_2 == nil then return end
       Runtime:removeEventListener("enterFrame", layer.{{myLName}})
       Runtime:removeEventListener("enterFrame", layer.{{myLName}}_2)
-    {{/infinity}}
-  {{/multLayers}}
+    {{/if}}
+    --test
+  {{/if}}
 end
 --
 function  _M:toDestory()

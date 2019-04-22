@@ -2,7 +2,7 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
-{{#ultimate}}
+{{if(options.ultimate)}}
 --calculate the aspect ratio of the device:
 local aspectRatio = display.pixelHeight / display.pixelWidth
 application = {
@@ -16,7 +16,7 @@ application = {
          ["@4x"] = 3.0,
       },
    },
-    {{#expansion}}
+    {{if(options.expansion)}}
    license  =
    {
         google  =
@@ -24,15 +24,14 @@ application = {
             key  = "{{googleKey}}"
         },
     },
-    {{/expansion}}
+    {{/if}}
 }
-{{/ultimate}}
-{{^ultimate}}
+{{#else}}
 local kScale = "{{kk}}"
 if ( string.sub( system.getInfo("model"), 1, 4 ) == "iPad" and display.pixelHeight == 1024) then     -- all iPads checking
   application =
   {
-    {{#expansion}}
+    {{if(options.expansion)}}
         license  =
         {
           google  =
@@ -40,7 +39,7 @@ if ( string.sub( system.getInfo("model"), 1, 4 ) == "iPad" and display.pixelHeig
               key  = "{{googleKey}}"
           },
         },
-    {{/expansion}}
+    {{/if}}
     content  =
     {
        width = {{myW}},
@@ -55,7 +54,7 @@ if ( string.sub( system.getInfo("model"), 1, 4 ) == "iPad" and display.pixelHeig
 elseif ( display.pixelHeight > 1024 ) then  -- iPhone 5 (and all other high-res devices) checking - uses the iPad Air Retina image
   application =
   {
-    {{#expansion}}
+    {{if(options.expansion)}}
       license  =
       {
         google  =
@@ -63,7 +62,7 @@ elseif ( display.pixelHeight > 1024 ) then  -- iPhone 5 (and all other high-res 
             key  = "{{googleKey}}"
         },
       },
-    {{/expansion}}
+    {{/if}}
     content  =
     {
        width = {{myW}},
@@ -75,7 +74,7 @@ elseif ( display.pixelHeight > 1024 ) then  -- iPhone 5 (and all other high-res 
 else  -- all other devices
   application =
   {
-    {{#expansion}}
+    {{if(options.expansion)}}
       license  =
       {
         google  =
@@ -83,7 +82,7 @@ else  -- all other devices
           key  = "{{googleKey}}"
         },
       },
-    {{/expansion}}
+    {{/if}}
     content  =
     {
        width = {{myW}},
@@ -96,4 +95,4 @@ else  -- all other devices
     },
   }
 end
-{{/ultimate}}
+{{/if}}

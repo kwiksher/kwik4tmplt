@@ -9,17 +9,17 @@ local _Class = {}
 function _Class:new()
 	local context = Context:new()
 	context.Router = {}
-{{#pages}}
+{{if(options.pages)}}
 	_Class.page0{{pageNum}}Context = require("{{custom}}contexts.page0{{pageNum}}Context")
-{{/pages}}
+{{/if}}
 	--
 	function context:init()
 		------------------------------------------------------------
 		------------------------------------------------------------
-	{{#pages}}
+	{{if(options.pages)}}
 	    self.context0{{pageNum}} = _Class.page0{{pageNum}}Context:new(self)
 	    self.context0{{pageNum}}:init()
-	{{/pages}}
+	{{/if}}
 
 		-- app init command
 		self:mapCommand("app.Ads",          "commands.app.Ads")
@@ -29,9 +29,9 @@ function _Class:new()
 		-- self:mapCommand("app.expDir",       "commands.app.expDir")
 		self:mapCommand("app.extCodes",     "commands.app.extCodes")
 		self:mapCommand("app.kwkVar",       "commands.app.kwkVar")
-		{{#use.lang}}
+		{{if(options.use && options.use.lang)}}
 		self:mapCommand("app.lang",         "commands.app.lang")
-		{{/use.lang}}
+		{{/if}}
 		-- self:mapCommand("app.loadLib",      "commands.app.loadLib")
 		-- self:mapCommand("app.memoryCheck",  "commands.app.memoryCheck")
 		self:mapCommand("app.statusBar",    "commands.app.statusBar")

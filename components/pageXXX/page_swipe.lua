@@ -8,18 +8,17 @@ local _K = require "Application"
 local composer = require("composer")
 local Navigation = require("extlib.kNavi")
 --
-{{#ultimate}}
+{{if(options.ultimate)}}
 local xFactor = display.contentWidth/1920
 local yFactor = display.contentHeight/1280
 local pSpa =  {{pSpa}}/4
-{{/ultimate}}
-{{^ultimate}}
+{{#else}}
 local pSpa  = {{pSpa}}
-{{/ultimate}}
+{{/if}}
 
-{{#isTmplt}}
+{{if(options.isTmplt)}}
 local ui  = require("components.store.UI")
-{{/isTmplt}}
+{{/if}}
 
 --
 function _M:didShow(UI)
@@ -30,11 +29,11 @@ function _M:didShow(UI)
 
   if layer.{{backLayer}} == nil then return end
   _K.Gesture.activate( layer.{{backLayer}}, {swipeLength= pSpa }) --why
-  {{#infinity}}
+  {{if(options.infinity)}}
     if layer.{{backLayer}}_2 == nil then return end
     _K.Gesture.activate( layer.{{backLayer}}_2, {swipeLength= pSpa })
-  {{/infinity}}
-{{#isTmplt}}
+  {{/if}}
+{{if(options.isTmplt)}}
   _K.pageSwap = function (event )
     local options
     if event.phase == "ended" and event.direction ~= nil then
@@ -62,19 +61,18 @@ function _M:didShow(UI)
             ui.gotoPreviousScene({ effect = "fromLeft"})
           end
        end
-        {{#hasShake}}
+        {{if(options.hasShake)}}
         Runtime:removeEventListener("accelerometer", _K.shakeMe);
-        {{/hasShake}}
-        {{#invert}}
+        {{/if}}
+        {{if(options.invert)}}
         Runtime:removeEventListener("orientation", _K.kOrientation_act);
-        {{/invert}}
-        {{#navigation}}
+        {{/if}}
+        {{if(options.navigation)}}
           Navigation.hide()
-        {{/navigation}}
+        {{/if}}
      end
    end
-{{/isTmplt}}
-{{^isTmplt}}
+{{#else}}
   _K.pageSwap = function (event )
     local options
     if event.phase == "ended" and event.direction ~= nil then
@@ -96,7 +94,7 @@ function _M:didShow(UI)
           if wPage < 1 then wPage = 1 end
           options = { effect = "fromLeft"}
        end
-    {{#bookshelf}}
+    {{if(options.bookshelf)}}
       local ui           = require("components.store.UI")
        if tonumber(wPage) ~= tonumber(curPage) then
           if ui.setDir(wPage) then
@@ -105,37 +103,36 @@ function _M:didShow(UI)
        else
           ui.gotoTOC(options)
        end
-    {{/bookshelf}}
-    {{^bookshelf}}
+    {{#else}}
        if tonumber(wPage) ~= tonumber(curPage) then
-          {{#hasShake}}
+          {{if(options.hasShake)}}
           Runtime:removeEventListener("accelerometer", _K.shakeMe);
-          {{/hasShake}}
-          {{#invert}}
+          {{/if}}
+          {{if(options.invert)}}
           Runtime:removeEventListener("orientation", _K.kOrientation_act);
-          {{/invert}}
-          {{#navigation}}
+          {{/if}}
+          {{if(options.navigation)}}
             Navigation.hide()
-          {{/navigation}}
+          {{/if}}
           _K.appInstance:showView("views.page0"..wPage.."Scene", options)
          end
-    {{/bookshelf}}
+    {{/if}}
     end
   end
-{{/isTmplt}}
+{{/if}}
     layer.{{backLayer}}:addEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
-    {{#infinity}}
+    {{if(options.infinity)}}
       layer.{{backLayer}}_2:addEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
-    {{/infinity}}
+    {{/if}}
 end
 --
 function _M:toDispose(UI)
     local layer       = UI.layer
     if  layer.{{backLayer}} and _K.pageSwap  then
       layer.{{backLayer}}:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
-      {{#infinity}}
+      {{if(options.infinity)}}
         layer.{{backLayer}}_2:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
-      {{/infinity}}
+      {{/if}}
    end
   --_K.Gesture.deactivate(layer.{{myLName+') ;
 end

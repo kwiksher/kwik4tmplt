@@ -21,100 +21,99 @@ _Class.new = function(scene)
     UI.allAudios = {}
     UI.allAudios.kAutoPlay = 0
     UI.tSearch   = nil
-    {{#language}}
-      {{#lang}}
+    {{if(options.language)}}
+      {{if(options.lang)}}
       UI.tab{{langID}} = {}
-      {{/lang}}
+      {{/if}}
       UI.tSearch   = nil
-    {{/language}}
+    {{/if}}
     UI.numPages = {{numPages}}   -- number of pages in the project
-    {{#lockPage}}
+    {{if(options.lockPage)}}
     --K.systemDir = system.ApplicationSupportDirectory
-    {{/}}
-    {{^lockPage}}
+    {{#else}}
     --_K.systemDir = system.ResourceDirectory
-    {{/lockPage}}
+    {{/if}}
   function UI:setLanguge()
-      {{#language}}
+      {{if(options.language)}}
       if _K.lang == "" then _K.lang = "en" end
-      {{#lang}}
+      {{if(options.lang)}}
         -- Language switch
         if (_K.lang=="{{langID}}") then
           self.tSearch = self.tab{{langID}}
         end
-      {{/lang}}
-    {{/language}}
+      {{/if}}
+    {{/if}}
   end
   --
   function UI:setVars()
-    {{#extLibCode}}
+    {{if(options.extLibCode)}}
       self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/extLibCode}}
-    {{#components}}
+    {{/if}}
+    {{if(options.components)}}
     self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/components}}
+    {{/if}}
   end
   --
   function UI:create()
-   {{#isTmplt}}
+   {{if(options.isTmplt)}}
     _K.systemDir = system.ResourceDirectory
     _K.imgDir = "assets/images/"
     _K.audioDir = "assets/audios/"
-   {{/isTmplt}}
+   {{/if}}
     self:_create("common",  const.page_common, {{custom}})
     self:setVars()
     self:setLanguge()
-    {{#components}}
+    {{if(options.components)}}
     self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/components}}
-    {{#extLibCode}}
+    {{/if}}
+    {{if(options.extLibCode)}}
       self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/extLibCode}}
-    {{#hide}}
+    {{/if}}
+    {{if(options.hide)}}
        self.scene:dispatchEvent({name="hide", event = {phase="create"}})
-    {{/hide}}
+    {{/if}}
   end
   --
   function UI:didShow(params)
     self:_didShow("common",  const.page_common, {{custom}})
-    {{#components}}
+    {{if(options.components)}}
     self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/components}}
-    {{#extLibCode}}
+    {{/if}}
+    {{if(options.extLibCode)}}
       self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/extLibCode}}
-    {{#hide}}
+    {{/if}}
+    {{if(options.hide)}}
        self.scene:dispatchEvent({name="hide", event = {phase="didShow"}})
-    {{/hide}}
+    {{/if}}
   end
   --
   function UI:didHide(params)
     self:_didHide("common",  const.page_common, {{custom}})
-    {{#components}}
+    {{if(options.components)}}
     self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/components}}
-    {{#extLibCode}}
+    {{/if}}
+    {{if(options.extLibCode)}}
       self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/extLibCode}}
+    {{/if}}
   end
   --
   function UI:destroy(params)
     self:_destroy("common",  const.page_common)
-    {{#components}}
+    {{if(options.components)}}
     self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/components}}
-    {{#extLibCode}}
+    {{/if}}
+    {{if(options.extLibCode)}}
       self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/extLibCode}}
+    {{/if}}
   end
   --
   function UI:touch(event)
       print("event.name: "..event.name)
   end
   function UI:resume(params)
-    {{#components}}
+    {{if(options.components)}}
     self:_resume("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/components}}
+    {{/if}}
   end
 
   --

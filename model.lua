@@ -1,23 +1,23 @@
  -- {{book}}
-{{#BookTmplt}}
+{{if(options.BookTmplt)}}
 local pages = {
-{{#pages}}
+{{if(options.pages)}}
 {
     page = {{page}}, alias="{{alias}}", isTmplt={{isTmplt}},
-    {{#layers}}
+    {{if(options.layers)}}
     {{layer}} ={ x = {{x}}, y = {{y}} , width = {{width}}, height = {{height}},  alpha = {{alpha}} , ext = "{{ext}}" },
-    {{/layers}}
+    {{/if}}
 },
-{{/pages}}
+{{/if}}
 }
-{{/BookTmplt}}
+{{/if}}
 
-{{#BookEmbedded}}
+{{if(options.BookEmbedded)}}
 local pages = {isDownloadable = {{isDownloadable}}, pageNum={{pageNum}}, isIAP = {{isIAP}} }
-{{/BookEmbedded}}
+{{/if}}
 
-{{#BookPages}}
+{{if(options.BookPages)}}
 local pages = {}
-{{/BookPages}}
+{{/if}}
 
 return pages

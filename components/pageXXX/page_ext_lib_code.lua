@@ -36,7 +36,7 @@ function _M:localPos(UI)
     {{arqCode}}
     {{/each}}
     {{/if}}
-  }
+
 end
 --
 function _M:didShow(UI)

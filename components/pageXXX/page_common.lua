@@ -35,7 +35,7 @@ function _M:didShow(UI)
      if (tonumber(_K.kBookmark) == 1) then
         local path = system.pathForFile(_K.appName.. "book.txt", _K.DocumentsDir )
         local file = io.open( path, "w+" )
-        file:write ( curPage.. _C.LN.. "1" ) // LN is linefeed
+        file:write ( curPage.. _C.LN.. "1" ) -- LN is linefeed
         io.close( file )
      end
 

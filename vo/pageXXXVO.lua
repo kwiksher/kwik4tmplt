@@ -10,11 +10,11 @@ local Const = require("extlib.const")
 VO.const = Const:new{
 	"page_common",
     {{if(options.extLibCode)}}
-		"{{layer}}_{{type}}_{{trigger}}",
+		"{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}}",
     {{/if}}
-	{{if(options.components)}}
-		"{{layer}}_{{type}}_{{trigger}}",
-	{{/if}}
+	{{each(options.components)}}
+		"{{@this.layer}}_{{@this.type}}_{{@this.trigger}}",
+	{{/each}}
 }
 ---------------------
 ---------------------
@@ -22,11 +22,11 @@ VO.new = function(val)
 	local vo = {
 	page_common = val.page_common,
 	    {{if(options.extLibCode)}}
-			{{layer}}_{{type}}_{{trigger}} = val.{{layer}}_{{type}}_{{trigger}},
+			{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}} = val.{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}},
     	{{/if}}
-		{{if(options.components)}}
-			{{layer}}_{{type}}_{{trigger}} = val.{{layer}}_{{type}}_{{trigger}},
-		{{/if}}
+		{{each(options.components)}}
+			{{@this.layer}}_{{@this.type}}_{{@this.trigger}} = val.{{@this.layer}}_{{@this.type}}_{{@this.trigger}},
+		{{/each}}
 	}
 	--
 	function vo:copyFrom(copyVO)

@@ -4,9 +4,9 @@
 --
 local _Command = {}
 -----------------------------
-{{if(options.extlib)}}
-local {{name}} = requireKwik("{{libname}}")
-{{/if}}
+{{each(options.extlib)}}
+local {{@this.name}} = requireKwik("{{@this.libname}}")
+{{/each}}
 -----------------------------
 function _Command:new()
 	local command = {}
@@ -16,8 +16,10 @@ function _Command:new()
 		if event=="init" then
 			-- Adding external code
 			{{if(options.extCode)}}
-			    {{ccode}}
-			    {{arqCode}}
+			{{each(options.extCode)}}
+			    {{@this.ccode}}
+			    {{@this.arqCode}}
+			{{/each}}
 			{{/if}}
 		end
 	end

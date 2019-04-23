@@ -16,7 +16,6 @@ function ApplicationMediator:new()
     --
     -- now let's load top page
     --
-		-- self.viewInstance:showView("{{showView}}", {})
 		self.viewInstance:showView("views.page0".._K.goPage.."Scene", {})
 	end
 	--

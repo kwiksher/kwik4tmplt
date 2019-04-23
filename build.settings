@@ -132,8 +132,8 @@ settings =
         {{/if}}
       },
 
-      CFBundleDisplayName = "{{AppName}}",
-      CFBundleName = "{{AppName}}",
+      CFBundleDisplayName = "{{appName}}",
+      CFBundleName = "{{appName}}",
 
       {{if(options.accel)}}
       NSMotionUsageDescription = "This app would like to access the accelerometer.",

@@ -6,65 +6,77 @@ local _M = {}
 ---------------------
 -- External libraries
 local _K = require "Application"
-  {{#extLib}}
-    local {{name}} = requireKwik("{{libname}}")
-  {{/extLib}}
+  {{each(options.extLib)}}
+    local {{@this.name}} = requireKwik("{{@this.libname}}")
+  {{/each}}
 --
-{{#TV}}
+{{if(options.TV)}}
 local kInputDevices = require("extlib.tv.kInputDevices")
-{{/TV}}
+{{/if}}
 
 function _M:localVars(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
-    {{#extCodeTop}}
+    
+    {{if(options.extCodeTop)}}
+    {{each(options.extCodeTop)}}
     {{ccode}}
     {{arqCode}}
-    {{/extCodeTop}}
+    {{/each}}
+    {{/if}}
 end
 --
 function _M:localPos(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
-    {{#extCodeMid}}
+    
+    {{if(options.extCodeMid)}}
+    {{each(options.extCodeMid)}}
     {{ccode}}
     {{arqCode}}
-    {{/extCodeMid}}
+    {{/each}}
+    {{/if}}
+  }
 end
 --
 function _M:didShow(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
 
-    {{#TV}}
+    {{if(options.TV)}}
     kInputDevices:initGroup()
-    {{/TV}}
+    {{/if}}
 
-    {{#extCodeBtm}}
+    {{if(options.extCodeBtm)}} 
+    {{each(options.extCodeBtm)}}
     {{ccode}}
     {{arqCode}}
-    {{/extCodeBtm}}
+    {{/each}}
+    {{/if}}
 
-    {{#TV}}
+    {{if(options.TV)}}
     kInputDevices:willShow()
     kInputDevices:didShow()
-    {{/TV}}
+    {{/if}}
 
 end
 --
 function _M:toDispose(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
-    {{#extCodeDsp}}
+
+    {{if(options.extCodeDsp)}}
+    {{each(options.extCodeDsp)}}
     {{ccode}}
     {{arqCode}}
-    {{/extCodeDsp}}
+    {{/each}}
+    {{/if}}
 
-    {{#TV}}
+    {{if(options.TV)}}
     kInputDevices:willHide()
     kInputDevices:didHide()
-    {{/TV}}
+    {{/if}}
 
 end
---
+
 return _M

@@ -22,9 +22,9 @@ _Class.new = function(scene)
     UI.allAudios.kAutoPlay = 0
     UI.tSearch   = nil
     {{if(options.language)}}
-      {{if(options.lang)}}
-      UI.tab{{langID}} = {}
-      {{/if}}
+      {{each(options.lang)}}
+      UI.tab{{@this.langID}} = {}
+      {{/each}}
       UI.tSearch   = nil
     {{/if}}
     UI.numPages = {{numPages}}   -- number of pages in the project
@@ -36,22 +36,22 @@ _Class.new = function(scene)
   function UI:setLanguge()
       {{if(options.language)}}
       if _K.lang == "" then _K.lang = "en" end
-      {{if(options.lang)}}
+      {{each(options.lang)}}
         -- Language switch
-        if (_K.lang=="{{langID}}") then
-          self.tSearch = self.tab{{langID}}
+        if (_K.lang=="{{@this.langID}}") then
+          self.tSearch = self.tab{{@this.langID}}
         end
-      {{/if}}
+      {{/each}}
     {{/if}}
   end
   --
   function UI:setVars()
     {{if(options.extLibCode)}}
-      self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+      self:_vars("{{extLibCode.type}}",  const.{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}}, {{extLibCode.custom}})
     {{/if}}
-    {{if(options.components)}}
-    self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/if}}
+    {{each(options.components)}}
+    self:_vars("{{@this.type}}",  const.{{@this.layer}}_{{@this.type}}_{{@this.trigger}}, {{@this.custom}})
+    {{/each}}
   end
   --
   function UI:create()
@@ -63,11 +63,11 @@ _Class.new = function(scene)
     self:_create("common",  const.page_common, {{custom}})
     self:setVars()
     self:setLanguge()
-    {{if(options.components)}}
-    self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/if}}
+    {{each(options.components)}}
+    self:_create("{{@this.type}}",  const.{{@this.layer}}_{{@this.type}}_{{@this.trigger}}, {{@this.custom}})
+    {{/each}}
     {{if(options.extLibCode)}}
-      self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+      self:_create("{{extLibCode.type}}",  const.{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}}, {{extLibCode.custom}})
     {{/if}}
     {{if(options.hide)}}
        self.scene:dispatchEvent({name="hide", event = {phase="create"}})
@@ -76,11 +76,11 @@ _Class.new = function(scene)
   --
   function UI:didShow(params)
     self:_didShow("common",  const.page_common, {{custom}})
-    {{if(options.components)}}
-    self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/if}}
+    {{each(options.components)}}
+    self:_didShow("{{@this.type}}",  const.{{@this.layer}}_{{@this.type}}_{{@this.trigger}}, {{@this.custom}})
+    {{/each}}
     {{if(options.extLibCode)}}
-      self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+      self:_didShow("{{extLibCode.type}}",  const.{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}}, {{extLibCode.custom}})
     {{/if}}
     {{if(options.hide)}}
        self.scene:dispatchEvent({name="hide", event = {phase="didShow"}})
@@ -89,21 +89,21 @@ _Class.new = function(scene)
   --
   function UI:didHide(params)
     self:_didHide("common",  const.page_common, {{custom}})
-    {{if(options.components)}}
-    self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/if}}
+    {{each(options.components)}}
+    self:_didHide("{{@this.type}}",  const.{{@this.layer}}_{{@this.type}}_{{@this.trigger}}, {{@this.custom}})
+    {{/each}}
     {{if(options.extLibCode)}}
-      self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+      self:_didHide("{{extLibCode.type}}",  const.{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}}, {{extLibCode.custom}})
     {{/if}}
   end
   --
   function UI:destroy(params)
     self:_destroy("common",  const.page_common)
-    {{if(options.components)}}
-    self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/if}}
+    {{each(options.components)}}
+    self:_destroy("{{@this.type}}",  const.{{@this.layer}}_{{@this.type}}_{{@this.trigger}}, {{@this.custom}})
+    {{/each}}
     {{if(options.extLibCode)}}
-      self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+      self:_destroy("{{extLibCode.type}}",  const.{{extLibCode.layer}}_{{extLibCode.type}}_{{extLibCode.trigger}}, {{extLibCode.custom}})
     {{/if}}
   end
   --
@@ -111,9 +111,9 @@ _Class.new = function(scene)
       print("event.name: "..event.name)
   end
   function UI:resume(params)
-    {{if(options.components)}}
-    self:_resume("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
-    {{/if}}
+    {{each(options.components)}}
+    self:_resume("{{@this.type}}",  const.{{@this.layer}}_{{@this.type}}_{{@this.trigger}}, {{@this.custom}})
+    {{/each}}
   end
 
   --

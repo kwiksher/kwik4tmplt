@@ -10,14 +10,14 @@ function _Class:new(super)
 	function context:init()
 ------------------------------------------------------------
 ------------------------------------------------------------
-		{{if(options.mediators)}}
-		self:mapMediator("{{view}}", "{{custom}}{{mediator}}")
-		{{/if}}
+		{{each(options.mediators)}}
+		self:mapMediator("{{@this.view}}", "{{@this.custom}}{{@this.mediator}}")
+		{{/each}}
 		--
         _K = require("Application")
-		{{if(options.commands)}}
-		self:mapCommand("{{event}}", _K.appDir.."{{custom}}{{command}}")
-		{{/if}}
+		{{each(options.commands)}}
+		self:mapCommand("{{@this.event}}", _K.appDir.."{{@this.custom}}{{@key.command}}")
+		{{/each}}
 		--
 	end
   --

@@ -3,6 +3,7 @@
 -- Project: {{ProjName}}
 --
 local _M = {}
+local _C = require("Const")
 local _K = require("Application")
 local composer = require("composer")
 local _Delay = 0 -- Kwik3 was 1000
@@ -34,7 +35,7 @@ function _M:didShow(UI)
      if (tonumber(_K.kBookmark) == 1) then
         local path = system.pathForFile( "book.txt", system.DocumentsDirectory )
         local file = io.open( path, "w+" )
-        file:write ( curPage.."\n1" )
+        file:write ( curPage.._C.LN .."1" )
         io.close( file )
      end
 

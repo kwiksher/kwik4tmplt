@@ -1,10 +1,10 @@
 [
-{{if(options.pages)}}
+{{each(options.pages)}}
 {
-    "page":{{page}}, "alias":"{{alias}}", "isTmplt":{{isTmplt}},
-    {{if(options.layers)}}
-    "{{layer}}":{ "x":{{x}}, "y":{{y}}, "width":{{width}}, "height":{{height}}, "alpha" :{{alpha}} , "ext":"{{ext}}" },
-    {{/if}}
+    "page":{{@this.page}}, "alias":"{{@this.alias}}", "isTmplt":{{@this.isTmplt}},
+    {{each(@this.layers)}}
+    "{{@this.layer}}":{ "x":{{@this.x}}, "y":{{@this.y}}, "width":{{@this.width}}, "height":{{@this.height}}, "alpha" :{{@this.alpha}} , "ext":"{{@this.ext}}" },
+    {{/each}}
 },
-{{/if}}
+{{/each}}
 ]

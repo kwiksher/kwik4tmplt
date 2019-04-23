@@ -34,7 +34,9 @@ local function startThisMug()
 		_K.MultiTouch  = require("extlib.dmc_multitouch")
 		_K.syncSound   = require("extlib.syncSound")
 		_K.kBidi       = false
+		--
 		_K.goPage      = {{curPage}}
+		--
 		_K.kAutoPlay   = 0
 		_K.lang        ="{{use.lang}}"
 		-- _K.stage       = display.getCurrentStage()

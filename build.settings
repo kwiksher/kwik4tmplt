@@ -133,8 +133,8 @@ settings =
         {{/langArr}}
       },
 
-      CFBundleDisplayName = "{{AppName}}",
-      CFBundleName = "{{AppName}}",
+      CFBundleDisplayName = "{{appName}}",
+      CFBundleName = "{{appName}}",
 
       {{#accel}}
       NSMotionUsageDescription = "This app would like to access the accelerometer.",

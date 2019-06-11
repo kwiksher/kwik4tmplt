@@ -30,7 +30,7 @@ _Class.new = function(scene)
     UI.numPages = {{numPages}}   -- number of pages in the project
     {{#lockPage}}
     --K.systemDir = system.ApplicationSupportDirectory
-    {{/}}
+    {{/lockPage}}
     {{^lockPage}}
     --_K.systemDir = system.ResourceDirectory
     {{/lockPage}}

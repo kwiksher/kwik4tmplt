@@ -166,7 +166,8 @@ settings =
   excludeFiles =
     {
         -- Exclude all files at all paths which end with "secret.txt"
-        all = { "*.vbs", "*.bat", "*.command" },
+        all = {  "Icon*.png", "Images.xcassets", "Icon*.ico", "Icon*.icns", "*.vbs", "*.bat", "*.command" },
+        android = { "LaunchScreen.storyboardc" },
     },
 }
 

@@ -86,7 +86,7 @@ function ActionCommand:new()
 		{{/audio.muteUnmute}}
 
 		{{#audio.playAudio}}
-			_AC.Audio:playAudio({{audiotype}}.allAudios.{{vaudio}}, {{vchan}}, {{vrepeat}}, {{vdelay}}, {{vloop}}, {{toFade}}, {{vvol}}, "{{tm}}")
+			_AC.Audio:playAudio({{audiotype}}.allAudios.{{vaudio}}, {{vchan}}, {{vrepeat}}, {{vdelay}}, {{vloop}}, {{toFade}}, {{vvol}}, "{{tm}}", "{{trigger}}", params)
 		{{/audio.playAudio}}
 
 		{{#audio.rewindAudio}}

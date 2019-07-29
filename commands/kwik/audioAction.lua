@@ -41,7 +41,7 @@ end
 --
 function _M:playAudio(vaudio, vchan, vrepeat, vdelay, vloop, toFade, vvol, tm, trigger, params)
   local listener = nil
-  if act and string.len(act) > 0 then
+  if trigger and string.len(trigger) > 0 then
     listener = function()
       Runtime:dispatchEvent({name=trigger, event=params.event, UI=params.UI})
     end
@@ -50,9 +50,17 @@ function _M:playAudio(vaudio, vchan, vrepeat, vdelay, vloop, toFade, vvol, tm, t
   local myClosure = function()
     if not vrepeat then
       audio.setVolume(vvol, {channel=vchan} )
-        audio.play( vaudio, {channel=vchan, loops = vloop, fadein = tofade, onComplete = listener } )
+      if toFade > 0 then
+        audio.play( vaudio, {channel=vchan, loops = vloop, fadein = toFade, onComplete = listener } )
+      else
+        audio.play( vaudio, {channel=vchan, loops = vloop,  onComplete = listener } )
+      end
     else
-      _M.x9[vaudio] = audio.play( vaudio, {channel=vchan, loops = vloop, fadein = tofade, onComplete = listener } )
+      if toFade  > 0 then
+        _M.x9[vaudio] = audio.play( vaudio, {channel=vchan, loops = vloop, fadein = toFade, onComplete = listener } )
+      else
+        _M.x9[vaudio] = audio.play( vaudio, {channel=vchan, loops = vloop, onComplete = listener } )
+      end
       audio.setVolume(vvol, {channel=_M.x9[vaudio]} )
     end
   end

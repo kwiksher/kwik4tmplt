@@ -34,25 +34,32 @@ end
 function _M:localPos(UI)
     local layer       = UI.layer
     local sceneGroup  = UI.scene.view
-    local group = display.newGroup()
-    group:insert(layer.{{targetLayer}})
-    sceneGroup.{{targetLayer}} = layer.{{targetLayer}}
-    layer.{{targetLayer}}.group = group
-    sceneGroup:insert(group)
     --sceneGroup:remove(layer.{{targetLayer}})
 end
 --
 function _M:didShow(UI)
     local sceneGroup  = UI.scene.view
     local layer       = UI.layer
-    local imageSuffix = display.imageSuffix or ""
+    --
+    local group = display.newGroup()
+    group:insert(layer.{{targetLayer}})
+    sceneGroup.{{targetLayer}} = layer.{{targetLayer}}
+    layer.{{targetLayer}}.group = group
+    sceneGroup:insert(group)
     --print( imageSuffix )
     --print(_K.imgDir.. imagePath..imageSuffix..ext)
-    local mask = graphics.newMask(_K.imgDir.. imagePath..imageSuffix..ext, _K.systemDir )
+    local suffix = display.imageSuffix or ""
+    {{#ultimate}}
+    local maskName = "{{bn}}".. "_mask.jpg"
+    {{/ultimate}}
+    {{^ultimate}}
+    local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
+    {{/ultimate}}
+    local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName)
     if mask then
       layer.{{targetLayer}}.group:setMask(mask)
-      layer.{{targetLayer}}.group.maskScaleX = {{scaleX}}*0.5
-      layer.{{targetLayer}}.group.maskScaleY = {{scaleY}}*0.5
+      layer.{{targetLayer}}.group.maskScaleX = {{scaleX}}
+      layer.{{targetLayer}}.group.maskScaleY = {{scaleY}}
       layer.{{targetLayer}}.group.maskX = mX
       layer.{{targetLayer}}.group.maskY = mY
     end

@@ -102,6 +102,19 @@ function _M:didShow(UI)
        onRelease   = on{{myLName}}Event, -- UI.tSearch["{{dois}}"][7
        baseDir     = _K.systemDir
     }
+    --
+    {{#mask}}
+    local suffix = display.imageSuffix or ""
+     {{#ultimate}}
+      local maskName = "{{bn}}".. "_mask.jpg"
+     {{/ultimate}}
+     {{^ultimate}}
+      local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
+     {{/ultimate}}
+    local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName, _K.systemDir)
+    layer.{{myLName}}:setMask( mask )
+    {{/mask}}
+    --
     layer.{{myLName}}.x        = UI.tSearch["{{dois}}"][4]
     layer.{{myLName}}.y        = UI.tSearch["{{dois}}"][5]
     layer.{{myLName}}.oriX     = UI.tSearch["{{dois}}"][4]
@@ -117,6 +130,12 @@ function _M:didShow(UI)
 
   --
   {{#tabButFunction}}
+    {{#mask}}
+    local suffix = display.imageSuffix or ""
+    local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
+    local mask = graphics.newMask(_K.imgDir.."p1/"..maskName)
+    layer.{{myLName}}:setMask( mask )
+    {{/mask}}
     _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName=UI.tSearch["{{dois}}"][7]})
   {{/tabButFunction}}
   --

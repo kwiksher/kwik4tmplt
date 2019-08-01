@@ -79,6 +79,17 @@ function _M:didShow(UI)
   {{^multLayers}}
   {{#tabButFunction}}
   if {{tabButFunction.obj}} == nil then return end
+    {{#mask}}
+    local suffix = display.imageSuffix or ""
+   {{#ultimate}}
+    local maskName = "{{bn}}".. "_mask.jpg"
+   {{/ultimate}}
+   {{^ultimate}}
+    local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
+   {{/ultimate}}
+    local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName, _K.systemDir )
+    layer.{{myLName}}:setMask( mask )
+    {{/mask}}
     _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
   {{/tabButFunction}}
     {{#buyProductHide}}
@@ -173,6 +184,19 @@ function _M:buttonLocal(UI)
            onRelease   = on{{myLName}}Event,
            baseDir     = _K.systemDir
         }
+        --
+        {{#mask}}
+        local suffix = display.imageSuffix or ""
+         {{#ultimate}}
+          local maskName = "{{bn}}".. "_mask.jpg"
+         {{/ultimate}}
+         {{^ultimate}}
+          local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
+         {{/ultimate}}
+        local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName, _K.systemDir)
+        layer.{{myLName}}:setMask( mask )
+        {{/mask}}
+        --
         layer.{{myLName}}.x        = mX
         layer.{{myLName}}.y        = mY
         layer.{{myLName}}.oriX     = mX

@@ -38,9 +38,13 @@ local oriAlpha = {{oriAlpha}}
 {{#kwik3Tp}}
 {{#newImageSheet}}
     {{#arq}}
+    {{#TexturePacker}}
         local {{myLName}}_options = {
             {{arq}}
         }
+    {{/TexturePacker}}
+        {{#Animate}}
+        {{/Animate}}
     {{/arq}}
     {{^arq}}
         local {{myLName}}_options = {
@@ -58,10 +62,42 @@ local oriAlpha = {{oriAlpha}}
 {{#newImageSheet}}
     {{#arq}}
         local {{myLName}}_options = {}
+        {{#TexturePacker}}
         local newSheetInfo = function()
             {{arq}}
         end
         {{myLName}}_options = newSheetInfo().sheet
+        {{/TexturePacker}}
+        {{#Animate}}
+        local jsonFileName = "{{arq}}"
+        local newSheetInfo = function()
+            local sheetInfo = {}
+            sheetInfo.frames = {}
+            local jsonFile = function(filename )
+               local path = system.pathForFile(_K.spriteDir..filename, _K.systemDir )
+               local contents
+               local file = io.open( path, "r" )
+               if file then
+                  contents = file:read("*a")
+                  io.close(file)
+                  file = nil
+               end
+               return contents
+            end
+            --
+            local animateJson = json.decode( jsonFile(jsonFileName) )
+            --print (jsonFileName, #animateJson.frames)
+            for i=1, #animateJson.frames do
+                local frame = animateJson.frames[i].frame
+                local spriteSourceSize = animateJson.frames[i].spriteSourceSize
+                sheetInfo.frames[i] = {x=frame.x, y=frame.y, width=frame.w, height= frame.h, sourceX = spriteSourceSize.x, sourceY = spriteSourceSize.y, sourceWidth = spriteSourceSize.w, sourceHeight = spriteSourceSize.h}
+            end
+            sheetInfo.sheetContentWidth = animateJson.meta.size.w
+            sheetInfo.sheetContentHeight = animateJson.meta.size.h
+            return sheetInfo
+        end
+        {{myLName}}_options = newSheetInfo()
+        {{/Animate}}
     {{/arq}}
     {{^arq}}
         local {{myLName}}_options = {

@@ -5,6 +5,7 @@
  local _M = {}
 --
 local _K = require "Application"
+local json   = require("json")
 --
 {{#ultimate}}
 local imageWidth = {{elW}}/4

@@ -415,10 +415,10 @@ function _M:buildAnim(UI)
 					rotation={{rotation}},
 					{{/rotation}}
 					{{#scalW}}
-					xScale={{scalW}},
+					xScale={{scalW}} * {{gtLayer}}.xScale,
 					{{/scalW}}
 					{{#scalH}}
-					yScale={{scalH}},
+					yScale={{scalH}} * {{gtLayer}}.yScale,
 					{{/scalH}}
 					{{#gtNewAngle}}
 					newAngle = {{gtNewAngle}}

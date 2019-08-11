@@ -146,6 +146,7 @@ function _M:buttonLocal(UI)
       layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
       layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
       layer.{{myLName}}.name  = "{{myLName}}"
+      layer.{{myLName}}.blendMode = "{{bmode}}"
       sceneGroup.{{myLName}}  = layer.{{myLName}}
       sceneGroup:insert(layer.{{myLName}})
     {{/Press}}

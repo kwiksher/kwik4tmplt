@@ -37,6 +37,18 @@ local randYEnd = {{randYEnd}}
 {{/randY}}
 {{/ultimate}}
 local oriAlpha = {{oriAlpha}}
+
+--
+local singleNames = {"PagePrevM", "PageNextM"}
+--
+local function isSingleton(layerName)
+  for i=1, #singleNames do
+    if layerName == singleNames[i] then
+      return true
+    end
+  end
+  return false
+end
 --
 function _M:localPos(UI)
   {{#multLayers}}
@@ -50,8 +62,17 @@ function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   {{^multLayers}}
+  if isSingleton("{{myLName}}") then
+    if _K.layer["{{myLName}}"] == nil or _K.layer["{{myLName}}"].play == nil then
+       print("singleton:newVideo")
+      _K.layer.{{myLName}} = native.newVideo( mX, mY, imageWidth, imageHeight )
+      _K.layer.{{myLName}}.isLoaded = false
+    end
+    layer.{{myLName}} = _K.layer.{{myLName}}
+  else
     layer.{{myLName}} = native.newVideo( mX, mY, imageWidth, imageHeight )
-
+  end
+  --
     {{#randX}}
       layer.{{myLName}}.x = math.random( randXStart,randXEnd)
     {{/randX}}
@@ -74,17 +95,32 @@ function _M:didShow(UI)
 
     layer.{{myLName}}.alpha = oriAlpha
     layer.{{myLName}}.oldAlpha = oriAlpha
+  if isSingleton("{{myLName}}") then
+    if not  _K.layer.{{myLName}}.isLoaded then
     {{#elLocal}}
       layer.{{myLName}}:load( _K.videoDir.."{{elURL}}", _K.systemDir )
     {{/elLocal}}
     {{^elLocal}}
       layer.{{myLName}}:load( "{{elURL}}", media.RemoteSource )
     {{/elLocal}}
+      _K.layer.{{myLName}}.isLoaded = true;
+    else
+      layer.{{myLName}}:seek(0)  --rewind video after play
+      layer.{{myLName}}:pause()
+    end
+  else
+    {{#elLocal}}
+      layer.{{myLName}}:load( _K.videoDir.."{{elURL}}", _K.systemDir )
+    {{/elLocal}}
+    {{^elLocal}}
+      layer.{{myLName}}:load( "{{elURL}}", media.RemoteSource )
+    {{/elLocal}}
+  end
     {{#elPlay}}
       layer.{{myLName}}:play()
     {{/elPlay}}
     {{#elTriggerElLoop}}
-      local function videoListener_{{myLName}}(event)
+    UI.videoListener_{{myLName}} = function(event)
         if event.phase == "ended" then
           {{#elRewind}}
             layer.{{myLName}}:seek(0)  --rewind video after play
@@ -97,7 +133,7 @@ function _M:didShow(UI)
           {{/elTrigger}}
          end
       end
-      layer.{{myLName}}:addEventListener( "video", videoListener_{{myLName}} )
+    layer.{{myLName}}:addEventListener( "video", UI.videoListener_{{myLName}} )
     {{/elTriggerElLoop}}
     layer.{{myLName}}.name = "{{myLName}}"
     sceneGroup:insert( layer.{{myLName}})
@@ -110,10 +146,22 @@ function _M:toDispose(UI)
   local layer       = UI.layer
   {{^multLayers}}
   if layer.{{myLName}} ~= nil then
+    if isSingleton("{{myLName}}") then
+      for i=1, 32 do
+        if audio.isChannelActive(i) then
+         --   print('channel '..i..' is active')
+          -- audio.setVolume( 0.01, {channel=i}  )
+        end
+      end
+    else
      layer.{{myLName}}:pause()
      layer.{{myLName}}:removeSelf()
      layer.{{myLName}} = nil
   end
+  end
+  {{#elTriggerElLoop}}
+  layer.{{myLName}}:removeEventListener( "video", UI.videoListener_{{myLName}} )
+  {{/elTriggerElLoop}}
   {{/multLayers}}
 end
 --
@@ -121,5 +169,13 @@ function _M:localVars()
   {{#multLayers}}
   {{/multLayers}}
 end
+
+function _M:toDestroy(UI)
+  local sceneGroup  = UI.scene.view
+  local layer       = UI.layer
+  {{^multLayers}}
+  {{/multLayers}}
+end
+
 --
 return _M

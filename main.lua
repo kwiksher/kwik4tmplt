@@ -38,6 +38,7 @@ local function startThisMug()
 		_K.goPage      = {{curPage}}
 		_K.kAutoPlay   = 0
 		_K.lang        ="{{use.lang}}"
+		_K.layer      = {}
 		-- _K.stage       = display.getCurrentStage()
 		system.activate("multitouch")
 		if "tvOS" == system.getInfo("platform") then

@@ -154,13 +154,17 @@ function _M:toDispose(UI)
         end
       end
     else
-     layer.{{myLName}}:pause()
-     layer.{{myLName}}:removeSelf()
-     layer.{{myLName}} = nil
-  end
+        if layer.{{myLName}} then
+             layer.{{myLName}}:pause()
+             layer.{{myLName}}:removeSelf()
+             layer.{{myLName}} = nil
+        end
+    end
   end
   {{#elTriggerElLoop}}
-  layer.{{myLName}}:removeEventListener( "video", UI.videoListener_{{myLName}} )
+  if layer.{{myLName}} then
+      layer.{{myLName}}:removeEventListener( "video", UI.videoListener_{{myLName}} )
+  end
   {{/elTriggerElLoop}}
   {{/multLayers}}
 end

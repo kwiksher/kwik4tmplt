@@ -48,6 +48,7 @@ function _M:localPos(UI)
   local layer       = UI.layer
 
   layer.{{myLName}} = display.newGroup()
+  layer.{{myLName}}.player = player
   player:init(png_prefix, num_of_pngs, mX, mY, imageWidth, imageHeight, layer.{{myLName}} ) -- group
   sceneGroup:insert(layer.{{myLName}})
   sceneGroup.{{myLName}} = layer.{{myLName}}
@@ -82,7 +83,7 @@ function _M:didShow(UI)
     layer.{{myLName}}.oldAlpha = oriAlpha
 
     {{#elTriggerElLoop}}
-         UI.videoListener_{{myLName}} = function(event)
+         layer.{{myLName}}.videoListener = function(event)
         if event.phase == "ended" then
           {{#elRewind}}
           {{/elRewind}}
@@ -98,12 +99,12 @@ function _M:didShow(UI)
        {{#elLoop}}
             _loop = -1
       {{/elLoop}}
-
+      layer.{{myLName}}.loop = _loop
       player:play({loop=_loop, onComplete = function()
           print("completed")
           player:stop()
         {{#elTriggerElLoop}}
-          UI.videoListener_{{myLName}}({phase ="ended"})
+          layer.{{myLName}}.videoListener({phase ="ended"})
         {{/elTriggerElLoop}}
         end
       })
@@ -116,7 +117,7 @@ function _M:toDispose(UI)
   local layer       = UI.layer
   {{#elTriggerElLoop}}
   if layer.{{myLName}} then
-      UI.videoListener_{{myLName}} = nil
+      layer.{{myLName}}.videoListener = nil
   end
   {{/elTriggerElLoop}}
 end

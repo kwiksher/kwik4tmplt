@@ -38,6 +38,7 @@ local randYEnd = {{randYEnd}}
 local oriAlpha = {{oriAlpha}}
 
 local png_prefix = _K.videoDir .. "{{elURL}}/{{prefix}}" -- "img/test_HTML5 Canvas" --test_HTML5 Canvas0001.png
+local prefix_num = "{{preNum}}"
 local num_of_pngs = {{numOfPngs}}
 
 function _M:localVars(UI)
@@ -49,7 +50,8 @@ function _M:localPos(UI)
 
   layer.{{myLName}} = display.newGroup()
   layer.{{myLName}}.player = player
-  player:init(png_prefix, num_of_pngs, mX, mY, imageWidth, imageHeight, layer.{{myLName}} ) -- group
+  player:init(png_prefix, prefix_num,  num_of_pngs, mX, mY, imageWidth, imageHeight, layer.{{myLName}} ) -- group
+
   sceneGroup:insert(layer.{{myLName}})
   sceneGroup.{{myLName}} = layer.{{myLName}}
 end

@@ -40,7 +40,7 @@ local function _init(self) --set sequence
     local _len = string.len(self.preNum)
     if string.find(self.preNum, "1") then
     for i=1, self.clipNum do
-        local j = self.preNum .. i
+        local j = "00000000" .. i
         j = j:sub(-_len)
         clip[i] = self.prefix..j..".png"
     end

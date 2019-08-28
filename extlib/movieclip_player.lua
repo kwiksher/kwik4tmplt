@@ -18,7 +18,7 @@ local clipNum    = 35
 local movie      = nil --MC.new(bufferNum, _W/2, _H/2, _W, _H) -- x, y, width, height
 local buff       = nil --MC.new(bufferNum, _W/2, _H/2, _W, _H)
 
----[[
+--[[
 local FPSCalculator = require("extlib.FPSCalculator")
 local fpsCalculator = FPSCalculator.new(
     function(fps, fpsRatio)

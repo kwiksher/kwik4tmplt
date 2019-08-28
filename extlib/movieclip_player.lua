@@ -18,6 +18,20 @@ local clipNum    = 35
 local movie      = nil --MC.new(bufferNum, _W/2, _H/2, _W, _H) -- x, y, width, height
 local buff       = nil --MC.new(bufferNum, _W/2, _H/2, _W, _H)
 
+---[[
+local FPSCalculator = require("extlib.FPSCalculator")
+local fpsCalculator = FPSCalculator.new(
+    function(fps, fpsRatio)
+        print("fps = " .. fps .. ", ratio = " .. fpsRatio)
+        -- Do things here to handle a drop in frame rate, such as disable animations
+    end,
+    {
+        fpsRatioWarningThreshold = 0.95,
+        timeBetweenCalculationsMs = 10000,
+    }
+)
+fpsCalculator:start()
+--]]
 -----------------------------
 -- MOVIE
 -----------------------------
@@ -123,6 +137,7 @@ function _M:play(option)
     _init()
 	--Event Listener
 	self.playing = function ( event )
+		--print( display.fps )
 		if self.movie.group.alpha == 1 then
             --print( self.movie:currentFrame(), self.movie:totalFrames())
 			if self.movie:currentFrame() == self.movie:totalFrames() * 0.5 then

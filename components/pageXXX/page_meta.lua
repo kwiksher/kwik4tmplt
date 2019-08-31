@@ -19,7 +19,7 @@ local _Scale           = 1.5
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  --
+{{#isComic}}  --
   UI.layerSet_{{mySet}} = {
   {{#layerSet}}
     {
@@ -28,9 +28,6 @@ function _M:localPos(UI)
       y       = {{mY}},
       width   = {{elW}},
       height  = {{elH}},
-      delay   = 1,
-      time    = 2,
-      ease    = _K.gtween.easing.Linear,
       frameSet = {
       {{#frameSet}}
       {
@@ -45,6 +42,35 @@ function _M:localPos(UI)
     },
   {{/layerSet}}
   }
+{{/isComic}}
+{{^isComic}}  --
+  UI.layerSet_{{mySet}} = {
+  {{#layerSet}}
+    {
+      myLName = "{{myLName}}",
+      x       = {{mX}},
+      y       = {{mY}},
+      width   = {{elW}},
+      height  = {{elH}},
+      delay   = {{delay}},
+      time    = {{time}},
+      ease    = _K.gtween.easing.{{ease}},
+      frameSet = {
+      {{#frameSet}}
+      {
+        myLName = "{{myLName}}",
+        x       = {{mX}},
+        y       = {{mY}},
+        width   = {{elW}},
+        height  = {{elH}},
+      },
+      {{/frameSet}}
+      }
+    },
+  {{/layerSet}}
+  }
+{{/isComic}}
+
 end
 ---------------
 {{#isComic}}

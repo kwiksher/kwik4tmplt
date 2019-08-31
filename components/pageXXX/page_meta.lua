@@ -28,6 +28,9 @@ function _M:localPos(UI)
       y       = {{mY}},
       width   = {{elW}},
       height  = {{elH}},
+      delay   = 1,
+      time    = 2,
+      ease    = _K.gtween.easing.Linear,
       frameSet = {
       {{#frameSet}}
       {
@@ -334,7 +337,93 @@ function _M:didShow(UI)
    self._reset, 1)
   table.insert(self.timer, t)
   {{/isComic}}
+  {{^isComic}}
+  self.layer = UI.layer
+  self.sceneGroup = UI.scene.view
+  self.sceneGroup.oriWidth = UI.layer.background.width
+  self.sceneGroup.oriHeight = UI.layer.background.height
+
+   function playAnim(index, frames)
+        local deferred = Deferred()
+        local function _success(data) deferred:resolve(data) end
+        local function _fail(err) deferred:reject(err) end
+        self:buildAnim(index, frames, _success, _fail)
+        return deferred:promise()
+    end
+
+    local start
+    start = function(i)
+      myRequest = playAnim(i, UI.layerSet_frames)
+          :done(function(index)
+            print(index)
+            start(index+1)
+            end)
+          :fail(function(err)
+              print('playAnim', err)
+          end)
+          :always(function()
+              print('always called, regardless of success or failure')
+          end)
+  end
+  start(1)
+  {{/isComic}}
 end
+
+{{^isComic}}
+local preX = 0
+local preY = 0
+--
+function _M:buildAnim(index, frames, success, fail)
+  print("buildAnim", index)
+  if self.sceneGroup == nil then
+    fail("sceneGroup is empty")
+    return
+  end
+  if index > #frames then
+    fail("finished")
+    return
+  end
+
+  local x, y, width, height = frames[index].x, frames[index].y, frames[index].width, frames[index].height
+  local time, delay = frames[index].time, frames[index].delay
+  local _ease = frames[index].ease
+  local layer = self.layer
+  local sceneGroup =self.sceneGroup
+
+  local endX, endY = _K.ultimatePosition(x, y)
+  local _xScale =  sceneGroup.oriWidth/width*4
+  local _yScale = sceneGroup.oriWidth/width*4
+  local mX = sceneGroup.x + (display.contentWidth/2-endX*_xScale) - preX
+  local mY = sceneGroup.y +(display.contentHeight/2-endY*_yScale) - preY
+
+  preX = mX
+  preY = mY
+
+  local anim =  _K.gtween.new(
+    sceneGroup,
+    time,
+    {
+      x = mX,
+      y = mY,
+      alpha = 1,
+      rotation = 0,
+      xScale = _xScale,
+      yScale = _yScale
+    },
+    {
+      ease = _ease,
+      repeatCount = 1,
+      reflect = false,
+      delay = delay,
+      onComplete = function() success(index) end
+    }
+  )
+  --anim:toBeginning()
+  anim:play()
+  return anim
+end
+{{/isComic}}
+
 -------------------------------------------
 -- end of didShow
 -------------------------------------------
@@ -373,6 +462,8 @@ function _M:toDispose(UI)
     UI.scrollView:removeSelf()
     self:cancel()
   end
+  _K.cancelAllTweens()
+  _K.cancelAllTransitions()
 end
 --
 function _M:localVars()

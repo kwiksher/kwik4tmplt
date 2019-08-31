@@ -76,7 +76,7 @@ local function reset(UI, panels, ballons)
     ballons:toFront()
     ballons.alpha = 1
     index = 1
-    UI.layer.background.alpha = 1
+    UI.layer.{{backLayer}}.alpha = 1
 end
 --
 function showNextBallon(ballon, fX, fY, oriX, oriY, delay)
@@ -311,7 +311,7 @@ function _M:didShow(UI)
   for i=1, #panels do
     panels[i].panel.alpha = 0
   end
-  UI.layer.background.alpha = 0
+  UI.layer.{{backLayer}}.alpha = 0
   UI.layer.ballons.alpha    = 0
   --
   self._start = function()
@@ -320,7 +320,7 @@ function _M:didShow(UI)
       index = 1
     end
     -- UI.layer.pageCurl.alpha   = 0
-    UI.layer.background.alpha = 0
+    UI.layer.{{backLayer}}.alpha = 0
     UI.scrollView.alpha       = 1
     UI.layer.ballons.alpha = 1
     --
@@ -340,8 +340,8 @@ function _M:didShow(UI)
   {{^isComic}}
   self.layer = UI.layer
   self.sceneGroup = UI.scene.view
-  self.sceneGroup.oriWidth = UI.layer.background.width
-  self.sceneGroup.oriHeight = UI.layer.background.height
+  self.sceneGroup.oriWidth = UI.layer.{{backLayer}}.width
+  self.sceneGroup.oriHeight = UI.layer.{{backLayer}}.height
 
    function playAnim(index, frames)
         local deferred = Deferred()

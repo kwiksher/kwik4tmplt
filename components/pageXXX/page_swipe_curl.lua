@@ -22,7 +22,7 @@ local debug = false
 ------------------------------------------------
 {{#landscape}}
 {{#ultimate}}
-local bgW, bgH = 1920/4, 1280/4                --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
+local bgW, bgH = display.contentWidth, display.contentHeight               --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
 local pgX, pgY = _K.ultimatePosition(960, 640) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
 local curlWidth = 400/4
 {{/ultimate}}
@@ -35,7 +35,7 @@ local curlWidth = 400
 --
 {{#portrait}}
 {{#ultimate}}
-local bgW, bgH = 1280/4, 1920/4                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
+local bgW, bgH = display.contentWidth, display.contentHeight                 --  layer.{{backLayer}}.width, layer.{{backLayer}}.height
 local pgX, pgY = _K.ultimatePosition(640, 960) --  layer.{{backLayer}}.x, layer.{{backLayer}}.y
 local curlWidth = 400/4
 {{/ultimate}}

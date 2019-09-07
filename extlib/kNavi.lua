@@ -32,6 +32,7 @@ local composer = require( "composer" )
 local Navigation = {}
 local navShow = 0
 local navItems = nil
+local bResponsive = true
 
 Navigation.getItems = function()
     return navItems
@@ -47,6 +48,10 @@ Navigation.new = function( obj, params, naviListener)
 
 	local _W = display.contentWidth
 	local _H = display.contentHeight
+    if bResponsive then
+        _W = display.safeActualContentWidth
+        _H = display.safeActualContentHeight
+    end
 
 	local numAnim = params.anim
 	local numTimers = params.timer
@@ -280,6 +285,15 @@ Navigation.new = function( obj, params, naviListener)
        _K.kNavigation:insert(navItems)
        _K.kNavig:insert(_K.kNavigation)
 
+    if (params.dire == "top") then
+        _K.kNavig:translate(0, (display.contentHeight - display.safeActualContentHeight)/2)
+    elseif (params.dire == "bottom") then
+        _K.kNavig:translate(0, (display.contentHeight - display.safeActualContentHeight)/2)
+    elseif (params.dire == "left") then
+        _K.kNavig:translate((display.contentWidth - display.safeActualContentWidth)/2, 0)
+    elseif (params.dire == "right") then
+        _K.kNavig:translate((display.contentWidth - display.safeActualContentWidth)/2, 0)
+    end
 
      local function touchNavig(event)
           --do not allow swipe of the next/previous page

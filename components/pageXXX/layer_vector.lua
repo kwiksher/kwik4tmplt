@@ -10,7 +10,7 @@ end
 {{#ultimate}}
 local imageWidth = {{elW}}/4
 local imageHeight = {{elH}}/4
-local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
+local mX, mY = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{#randX}}
 local randXStart = _K.ultimatePosition({{randXStart}})
 local randXEnd = _K.ultimatePosition({{randXEnd}})

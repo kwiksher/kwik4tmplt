@@ -9,7 +9,7 @@ local _K = require "Application"
 {{#ultimate}}
 local imageWidth = {{elW}}/4
 local imageHeight = {{elH}}/4
-local mX, mY = _K.ultimatePosition({{mX}}, {{mY}})
+local mX, mY = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{#randX}}
 local randXStart = _K.ultimatePosition({{randXStart}})
 local randXEnd = _K.ultimatePosition({{randXEnd}})
@@ -65,14 +65,18 @@ function _M:localPos(UI)
     layer.{{myLName}}.originalW = imageWidth
     layer.{{myLName}}:setFillColor ({{elR}}, {{elG}}, {{elB}})
     {{#ultimate}}
-    layer.{{myLName}}.x = layer.{{myLName}}.x + imageWidth/2
-    layer.{{myLName}}.y = layer.{{myLName}}.y - imageHeight/2
+    -- layer.{{myLName}}.x = layer.{{myLName}}.x + imageWidth/2
+    -- layer.{{myLName}}.y = layer.{{myLName}}.y - imageHeight/2
+      layer.{{myLName}}.anchorX = 0.5
+      layer.{{myLName}}.anchorY = 0.5
+    {{/ultimate}}
+    {{^ultimate}}
+      layer.{{myLName}}.anchorX = 0.5
+      layer.{{myLName}}.anchorY = 0
     {{/ultimate}}
     {{#epadV}}
       layer.{{myLName}}.y = layer.{{myLName}}.y + epadV
     {{/epadV}}
-    layer.{{myLName}}.anchorX = 0.5
-    layer.{{myLName}}.anchorY = 0
     {{#scaleW}}
       layer.{{myLName}}.xScale = scaleW
     {{/scaleW}}

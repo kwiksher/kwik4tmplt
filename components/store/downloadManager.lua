@@ -44,6 +44,8 @@ local function networkListener(event, deferred, selectedPurchase, version)
     elseif ( event.phase == "began" ) then
         print( "Progress Phase: began" )
         spinner:show()
+    elseif ( event.phase ==  "progress" ) then
+        spinner:setBytesTransferred(event)
     elseif ( event.phase == "ended" ) then
         spinner:remove()
         if ( math.floor(event.status/100) > 3 ) then

@@ -36,6 +36,15 @@ function M.new (host)
             spinner=nil
         end
     end
+    --
+    function obj:setBytesTransferred(event)
+        if ( event.bytesEstimated <= 0 ) then
+            print( "Download progress: " .. event.bytesTransferred )
+        else
+            print( "Download progress: " .. event.bytesTransferred .. " of estimated: " .. event.bytesEstimated )
+        end
+        spinner.spinnerText.text = "bytes:" .. event.bytes.." estimated:"..event.bytesEstimated 
+    end
 
     return obj
 end

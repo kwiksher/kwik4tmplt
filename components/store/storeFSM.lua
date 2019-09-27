@@ -33,9 +33,10 @@ end
 function _Class:startDownload(id, version)
     if id then
         print("storeFSM startDownload", id.name, version)
+        self.fromDialog = true  -- downlaoding a version must be from dialog
         cmd:startDownload(id.name, version)
     else
-    cmd:startDownload()
+        cmd:startDownload()
     end
 end
 

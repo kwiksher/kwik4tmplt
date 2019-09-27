@@ -43,7 +43,7 @@ function M.new (host)
         else
             print( "Download progress: " .. event.bytesTransferred .. " of estimated: " .. event.bytesEstimated )
         end
-        spinner.spinnerText.text = "bytes:" .. event.bytes.." estimated:"..event.bytesEstimated 
+        spinner.spinnerText.text = "bytes:" .. event.bytesTransferred.." estimated:"..event.bytesEstimated
     end
 
     return obj

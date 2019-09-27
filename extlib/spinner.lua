@@ -25,6 +25,7 @@ function M.new (host)
             spinner:insert(spinnerText)
             spinner:insert(spinnerRect)
             spinner.x, spinner.y = _W/2, _H/2
+            spinner.spinnerText = spinnerText
         end
     end
     --

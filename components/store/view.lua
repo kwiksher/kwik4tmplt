@@ -350,7 +350,10 @@ function M.new()
     --
     function VIEW.onDownloadError (selectedPurchase, message)
         -- CMD.downloadGroup[selectedPurchase].text.text="download error"
-        native.showAlert("Failed", model.downloadErrorMessage, {"Okay"})
+        native.showAlert("Failed", model.downloadErrorMessage, {"Okay"},
+            function()
+                VIEW.fsm:back()
+            end)
     end
     --
     function VIEW:destroyThumbnail()

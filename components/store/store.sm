@@ -37,7 +37,7 @@ ThumbnailDisplayed
             purchase(id, fromDialog);
         }
     showThumbnail() nil {
-            createThumbnail();        
+            createThumbnail();
     }
     backThumbnail() nil {}
 
@@ -188,5 +188,7 @@ DownloadedError
         pop(backThumbnail){}
     fromDialog(id)
         pop(showDialogNotPurchased){}
+    back()
+        pop(){}
 }
 %%

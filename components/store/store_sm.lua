@@ -21,6 +21,7 @@ StoreManagerState.Exit = _empty
 local function _default (self, fsm)
     self:Default(fsm)
 end
+StoreManagerState.back = _default
 StoreManagerState.backThumbnail = _default
 StoreManagerState.clickCloseDialog = _default
 StoreManagerState.clickImage = _default
@@ -452,6 +453,11 @@ end
 
 NetworkMap.DownloadedError = NetworkMap.Default:new('NetworkMap.DownloadedError', 10)
 
+function NetworkMap.DownloadedError:back (fsm)
+    fsm:getState():Exit(fsm)
+    fsm:popState()
+end
+
 function NetworkMap.DownloadedError:backThumbnail (fsm)
     fsm:getState():Exit(fsm)
     fsm:popState()
@@ -468,6 +474,12 @@ local storeContext = statemap.FSMContext.class()
 
 function storeContext:_init ()
     self:setState(MainMap.INIT)
+end
+
+function storeContext:back ()
+    self.transition = 'back'
+    self:getState():back(self)
+    self.transition = nil
 end
 
 function storeContext:backThumbnail ()
@@ -606,7 +618,7 @@ function storeContext:enterStartState ()
     self:getState():Entry(self)
 end
 
-return 
+return
 storeContext
 -- Local variables:
 --  buffer-read-only: t

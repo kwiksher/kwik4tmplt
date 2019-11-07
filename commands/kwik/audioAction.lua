@@ -31,11 +31,20 @@ function _M:recordAudio(duration, mmFile, malfa, sceneGroup, allAudios)
    -- allAudios.playback = nil
 end
 --
-function _M:muteUnmute()
+function _M:muteUnmute(videos)
   if (audio.getVolume() == 0.0) then
      audio.setVolume(1.0)
   else
      audio.setVolume(0.0)
+  end
+  if videos then
+      for i=0, #videos do
+        if videos[i].isMuted then
+          videos[i].isMuted = false
+        else
+          videos[i].isMuted = true
+        end
+      end
   end
 end
 --

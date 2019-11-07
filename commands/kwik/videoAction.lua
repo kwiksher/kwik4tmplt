@@ -38,4 +38,12 @@ function _M:rewindVideo(obj)
     end
 end
 --
+function _M:muteVideo(obj)
+    obj.isMuted = true
+end
+--
+function _M:unmuteVideo(obj)
+    obj.isMuted = false
+end
+--
 return _M

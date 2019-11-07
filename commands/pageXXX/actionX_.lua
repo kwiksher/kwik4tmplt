@@ -82,7 +82,12 @@ function ActionCommand:new()
 		{{/audio.recordAudio}}
 
 		{{#audio.muteUnmute}}
-			_AC.Audio:muteUnmute()
+		 local videos = {
+			{{#videos}}
+				 layer.{{name}},
+			{{/videos}}
+			}
+			_AC.Audio:muteUnmute(videos)
 		{{/audio.muteUnmute}}
 
 		{{#audio.playAudio}}
@@ -313,6 +318,14 @@ function ActionCommand:new()
 		{{#video.pauseVideo}}
 			_AC.Video:pauseVideo(layer.{{layer}})
 		{{/video.pauseVideo}}
+
+		{{#video.muteVideo}}
+			_AC.Video:muteVideo(layer.{{layer}})
+		{{/video.muteVideo}}
+
+		{{#video.unmuteVideo}}
+			_AC.Video:unmuteVideo(layer.{{layer}})
+		{{/video.unmuteVideo}}
 
 		{{#web.gotoURL}}
 			_AC.Web:gotoURL("{{pLink}}")

@@ -38,7 +38,7 @@ function _M:muteUnmute(videos)
      audio.setVolume(0.0)
   end
   if videos then
-      for i=0, #videos do
+      for i=1, #videos do
         if videos[i].isMuted then
           videos[i].isMuted = false
         else

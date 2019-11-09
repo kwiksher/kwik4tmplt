@@ -1,4 +1,4 @@
--- Template Version 2019.0015
+-- Template Version 2019.0016
 -- Code created by Kwik - Copyright: kwiksher.com {{year}}
 -- Version: {{vers}}
 -- Project: {{ProjName}}
@@ -57,6 +57,7 @@ local function startThisMug()
 		  APNG        = {},
 		  AGIF        = {}
 		}
+		_K.muteVideos = {}
 	end
 	--
 	bootstrap()

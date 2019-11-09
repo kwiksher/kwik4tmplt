@@ -3,6 +3,8 @@
 -- Project: {{ProjName}}
 --
 local _M = {}
+local _K            = require "Application"
+
 --
 function _M:playVideo(obj)
     if obj.player then
@@ -38,12 +40,28 @@ function _M:rewindVideo(obj)
     end
 end
 --
-function _M:muteVideo(obj)
-    obj.isMuted = true
+function _M:muteVideo(obj, videos)
+    if #videos > 0 then
+        for i=1, #videos do
+            videos[i].isMuted = true
+            _K.muteVideos[videos[i].name] = true
+        end
+    else
+        obj.isMuted = true
+        _K.muteVideos[obj.name] = true
+    end
 end
 --
-function _M:unmuteVideo(obj)
-    obj.isMuted = false
+function _M:unmuteVideo(obj, videos)
+    if #videos > 0 then
+        for i=1, #videos do
+            videos[i].isMuted = false
+            _K.muteVideos[videos[i].name] = false
+        end
+    else
+        obj.isMuted = false
+        _K.muteVideos[obj.name] = false
+    end
 end
 --
 return _M

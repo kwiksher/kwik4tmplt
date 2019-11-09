@@ -138,6 +138,9 @@ function _M:didShow(UI)
     layer.{{myLName}}.name = "{{myLName}}"
     sceneGroup:insert( layer.{{myLName}})
     sceneGroup.{{myLName}} = layer.{{myLName}}
+    if _K.muteVideos["{{myLName}}"] == true then
+      layer.{{myLName}}.isMuted = true
+    end
   {{/multLayers}}
 end
 --

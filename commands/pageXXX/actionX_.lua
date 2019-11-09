@@ -320,11 +320,21 @@ function ActionCommand:new()
 		{{/video.pauseVideo}}
 
 		{{#video.muteVideo}}
-			_AC.Video:muteVideo(layer.{{layer}})
+			local videos = {
+			{{#videos}}
+				 layer.{{name}},
+			{{/videos}}
+			}
+			_AC.Video:muteVideo(layer.{{layer}}, videos)
 		{{/video.muteVideo}}
 
 		{{#video.unmuteVideo}}
-			_AC.Video:unmuteVideo(layer.{{layer}})
+			local videos = {
+			{{#videos}}
+				 layer.{{name}},
+			{{/videos}}
+			}
+			_AC.Video:unmuteVideo(layer.{{layer}}, videos)
 		{{/video.unmuteVideo}}
 
 		{{#web.gotoURL}}

@@ -15,7 +15,6 @@ function _M:showHide(obj, hides, toggles, time, delay)
           end
       else
           if hides then
-            obj.oldAlpha = 1
                 timer = transition.to( obj, {alpha=obj.oldAlpha, time=time, delay=delay})
                 print("obj.oldAlpha", obj.oldAlpha)
                 print("hides", obj.alpha)
@@ -33,8 +32,7 @@ function _M:showHide(obj, hides, toggles, time, delay)
           end
       else
           if hides then
-            obj.oldAlpha = 1
-            obj.alpha = 1
+            obj.alpha = obj.oldAlpha
          else
               obj.alpha = 0
          end

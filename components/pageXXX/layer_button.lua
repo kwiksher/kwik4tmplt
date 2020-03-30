@@ -7,7 +7,9 @@ local _M = require("components.kwik.tabButFunction").new(scene)
 local widget = require("widget")
 local _K = require "Application"
 {{#buyProductHide}}
+local model       = require("components.store.model")
 local IAP    = require ( "components.store.IAP" )
+local view        = require("components.store.view").new()
 {{/buyProductHide}}
 --
 -- scene, layer and sceneGroup should be INPUT
@@ -68,6 +70,14 @@ function _M:localVars (UI)
 end
 --
 function _M:localPos(UI)
+  {{#buyProductHide}}
+  local sceneGroup  = UI.scene.view
+  local layer       = UI.layer
+  -- Page properties
+  view:init(sceneGroup, layer)
+  IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, function(e) print("IAP cancelled") end, model.debug)
+  {{/buyProductHide}}
+
   self:buttonLocal(UI)
 end
 --

@@ -149,6 +149,11 @@ IAPBadger
     showDialogNotPurchased()
         BookNotPurchased{}
     showThumbnail() nil {}
+    clickPurchase() nil {}
+    clickCloseDialog()
+        pop(){
+            refreshThumbnail();
+        }
 }
 %%
 

@@ -261,7 +261,7 @@ function ActionCommand:new()
 		{{#screenshot.takeScreenShot}}
 			_AC.Screenshot:takeScreenShot("{{ptit}}", "{{pmsg}}",  {{shutter}},
 				{ {{#buttonArr}}
-					{{name}},
+					"{{name}}",
 				{{/buttonArr}} }
 
 				)

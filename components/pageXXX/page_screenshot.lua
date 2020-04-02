@@ -49,7 +49,7 @@ function checkPermissions()
             end
         end
     else
-        if  media.hasSource( media.photoLibrary ) then
+        if  media.hasSource( media.PhotoLibrary ) then
             deferred:resolve()
         else
             deferred:reject()

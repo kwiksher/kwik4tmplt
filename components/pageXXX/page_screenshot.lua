@@ -77,7 +77,9 @@ function _M:takeScreenShot(ptit, pmsg, shutter, buttonArr)
         end
         if buttonArr then
             for i=1, #buttonArr do
-            _M.layer[buttonArr[i]].alpha = 0
+              local myLayer = _M.layer[buttonArr[i]]
+              myLayer.alphaBeforeScreenshot = myLayer.alpha
+              myLayer.alpha = 0
             end
         end
             --
@@ -86,7 +88,8 @@ function _M:takeScreenShot(ptit, pmsg, shutter, buttonArr)
         screenCap:removeSelf()
         if buttonArr then
             for i=1, #buttonArr do
-            _M.layer[buttonArr[i]].alpha = 1
+              local myLayer = _M.layer[buttonArr[i]]
+              myLayer.alpha = myLayer.alphaBeforeScreenshot
             end
         end
     end)

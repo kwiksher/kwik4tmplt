@@ -21,10 +21,14 @@ function _M:eraseCanvas(canvas)
   for i=1, #lineTable do
      lineTable[i]:removeSelf(); lineTable[i] = nil
   end
+  canvas.undone   = {}
+  canvas.lineTable = {}
 end
 --
 function _M:undo(canvas)
   local lineTable = canvas.lineTable
+  local undone    = canvas.undone
+
   if #lineTable>0 then
       local n = #lineTable
       local stroke = lineTable[n]
@@ -37,6 +41,8 @@ end
 --
 function _M:redo(canvas)
   local lineTable = canvas.lineTable
+  local undone    = canvas.undone
+
  if #undone>0 then
      local n = #undone
      local stroke = undone[n]

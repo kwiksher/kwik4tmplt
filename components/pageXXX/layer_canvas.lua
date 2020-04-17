@@ -28,6 +28,8 @@ function _M:localPos(UI)
   UI.canvas.brushSize                      = {{bs}}
   UI.canvas.brushAlpha                     = 1
   UI.canvas.lineTable                      = {}
+  UI.canvas.undone                         = {}
+
   UI.canvas:setFillColor({{cc}})
   -- sceneGroup:insert( UI.canvas)
 end
@@ -35,11 +37,11 @@ end
 function _M:didShow(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
-  local lineTable  = UI.canvas.lineTable
   local linePoints = nil
+  local i = 1
   -- UI.Canvas code
   local function newLine( event )
-     local i = 1
+     local lineTable  = UI.canvas.lineTable
      local function drawLine()
         local line = display.newLine(linePoints[#linePoints-1].x,linePoints[#linePoints-1].y,linePoints[#linePoints].x,linePoints[#linePoints].y)
         local circle = display.newCircle(linePoints[#linePoints].x,linePoints[#linePoints].y,UI.canvas.brushSize/2)

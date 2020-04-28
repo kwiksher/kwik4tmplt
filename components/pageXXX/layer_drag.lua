@@ -99,16 +99,16 @@ function _M:didShow(UI)
         {{/gdrop}}
       {{#gdropr}}
           {{#gcomplete}}
-          UI.dragLayer = dragLayer
-           scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
+          if ({{glayer}}_lock == 0) then
+              UI.dragLayer = dragLayer
+               scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
+          end
           {{/gcomplete}}
       {{/gdropr}}
       {{^gdropr}}
           {{#gcomplete}}
-              if ({{glayer}}_lock == 0) then
-              UI.dragLayer = dragLayer
-               scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
-              end
+           UI.dragLayer = dragLayer
+           scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
           {{/gcomplete}}
       {{/gdropr}}
       {{#gfocus}}

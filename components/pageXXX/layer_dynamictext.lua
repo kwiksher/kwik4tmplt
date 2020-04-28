@@ -9,7 +9,7 @@ local _K = require "Application"
 {{#ultimate}}
 local imageWidth             = {{elW}}/4
 local imageHeight            = {{elH}}
-local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}} + {{eloffset}, "{{align}}" )
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}} + {{eloffset}}, "{{align}}" )
 {{#randX}}
 local randXStart = _K.ultimatePosition({{randXStart}})
 local randXEnd = _K.ultimatePosition({{randXEnd}})

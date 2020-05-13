@@ -87,9 +87,9 @@ function _M:didShow(UI)
     local _scrollHeight = gwsh
   {{/manual}}
 
-  _width        = (_width        ==0) and layer.{{glayer}}.height or _width
+  _width        = (_width        ==0) and layer.{{glayer}}.width or _width
   _height       = (_height       ==0) and layer.{{glayer}}.height or _height
-  _scrollWidth  = (_scrollWidth  ==0) and layer.{{glayer}}.height or _scrollWidth
+  _scrollWidth  = (_scrollWidth  ==0) and layer.{{glayer}}.width or _scrollWidth
   _scrollHeight = (_scrollHeight ==0) and layer.{{glayer}}.height or _scrollHeight
 
   layer.{{gname}} = widget.newScrollView( {

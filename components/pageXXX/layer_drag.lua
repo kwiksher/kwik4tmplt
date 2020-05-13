@@ -17,7 +17,17 @@ function _M:didShow(UI)
   local dragLayer = layer.{{glayer}}
   if dragLayer == nil then return end
   {{/gPage}}
-    _K.MultiTouch.activate( dragLayer, "move", "single", {{dbounds}} )
+    _K.MultiTouch.activate( dragLayer, "move", "single", {
+        {{#gangle}}
+          constrainAngle={{gangle}} ,
+        {{/gangle}}
+        {{#gboundsX}}
+          xBounds ={ {{gboundsXS}}, {{gboundsXE}} }, 
+        {{/gboundsX}}
+        {{#gboundsY}}
+          yBounds ={ {{gboundsYS}}, {{gboundsYE}} }, 
+        {{/gboundsY}}
+    })
     {{#gdrop}}
         local {{glayer}}_lock = 0
         local {{glayer}}_posX = 0

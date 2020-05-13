@@ -4,8 +4,8 @@
 --
 local _M = {}
 --
-local W = display.contentWidth
-local H = display.contentHeight
+local W = display.viewableContentWidth
+local H = display.viewableContentHeight
 --
 function _M:localVars()
 end

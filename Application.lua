@@ -162,35 +162,37 @@ end
 function Application.ultimatePosition(x,y, align)
 {{#ultimate}}
 	{{#use.landscape}}
-	local mX = x and display.contentWidth/2 + (x*0.25 - 480*0.5) or 0
-	local mY = y and display.contentHeight/2 + (y*0.25 - 320*0.5) or 0
-    if align == "left" then
-        mX = mX - (display.safeActualContentWidth - 480)/2 --* math.abs((mX - display.contentCenterX)/(display.contentWidth*0.5))
-    elseif align == "right" then
-        mX = mX + (display.safeActualContentWidth - 480)/2 --*  math.abs((mX - display.contentCenterX)/(display.contentWidth*0.5))
-    elseif align == "top" then
-        mY = mY - (display.safeActualContentHeight - 320)/2 --*  math.abs((mX - display.contentCenterY)/(display.contentHeight*0.5))
-    elseif align == "bottom" then
-        mY = mY + (display.safeActualContentHeight - 320)/2  --*  math.abs((mX - display.contentCenterY)/(display.contentHeight*0.5))
-    elseif align == "topLeft" then
-        mX = mX - (display.safeActualContentWidth - 480)/2 --* math.abs((mX - display.contentCenterX)/(display.contentWidth*0.5))
-        mY = mY - (display.safeActualContentHeight - 320)/2 --*  math.abs((mX - display.contentCenterY)/(display.contentHeight*0.5))
-    elseif align == "topRight" then
-        mX = mX + (display.safeActualContentWidth - 480)/2 --*  math.abs((mX - display.contentCenterX)/(display.contentWidth*0.5))
-        mY = mY - (display.safeActualContentHeight - 320)/2 --*  math.abs((mX - display.contentCenterY)/(display.contentHeight*0.5))
-    elseif align == "bottomLeft" then
-        mX = mX - (display.safeActualContentWidth - 480)/2 --* math.abs((mX - display.contentCenterX)/(display.contentWidth*0.5))
-        mY = mY + (display.safeActualContentHeight - 320)/2  --*  math.abs((mX - display.contentCenterY)/(display.contentHeight*0.5))
-    elseif align == "bottomRight" then
-        mX = mX + (display.safeActualContentWidth - 480)/2 --*  math.abs((mX - display.contentCenterX)/(display.contentWidth*0.5))
-        mY = mY + (display.safeActualContentHeight - 320)/2  --*  math.abs((mX - display.contentCenterY)/(display.contentHeight*0.5))
-    end
-	{{/use.landscape}}
+	local w, h = 480, 320
+	local mX = x and display.contentWidth/2 + (x*0.25 - w*0.5) or 0
+	local mY = y and display.contentHeight/2 + (y*0.25 - h*0.5) or 0
+    {{/use.landscape}}
 	{{#use.portrait}}
-	local mX = x and display.contentWidth/2 + (x*0.25 - 320*0.5) or 0
-	local mY = y and display.contentHeight/2 + (y*0.25 - 480*0.5) or 0
+	local w, h = 320, 480
+	local mX = x and display.contentWidth/2 + (x*0.25 - w*0.5) or 0
+	local mY = y and display.contentHeight/2 + (y*0.25 - h*0.5) or 0
 	{{/use.portrait}}
-		return mX, mY
+	if align == "left" then
+        mX = mX - (display.safeActualContentWidth - w)/2 
+    elseif align == "right" then
+        mX = mX + (display.safeActualContentWidth - w)/2 
+    elseif align == "top" then
+        mY = mY - (display.safeActualContentHeight - h)/2
+    elseif align == "bottom" then
+        mY = mY + (display.safeActualContentHeight - h)/2 
+    elseif align == "topLeft" then
+        mX = mX - (display.safeActualContentWidth - w)/2 
+        mY = mY - (display.safeActualContentHeight - h)/2 
+    elseif align == "topRight" then
+        mX = mX + (display.safeActualContentWidth - w)/2 
+        mY = mY - (display.safeActualContentHeight - h)/2 
+    elseif align == "bottomLeft" then
+        mX = mX - (display.safeActualContentWidth - w)/2 
+        mY = mY + (display.safeActualContentHeight - h)/2 
+    elseif align == "bottomRight" then
+        mX = mX + (display.safeActualContentWidth - w)/2 
+        mY = mY + (display.safeActualContentHeight - h)/2 
+    end
+	return mX, mY
 {{/ultimate}}
 {{^ultimate}}
 		return x, y

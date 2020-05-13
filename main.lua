@@ -1,8 +1,10 @@
--- Template Version 2020.0001
+-- Template Version 2020.0006
 -- Code created by Kwik - Copyright: kwiksher.com {{year}}
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
+display.setDefault("background", 1,1,1)
+
 local function startThisMug()
 	local _K = require "Application"
 	local function bootstrap()

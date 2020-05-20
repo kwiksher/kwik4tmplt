@@ -112,7 +112,10 @@ end
 
 function M.hasDownloaded(episode, version)
     print(episode, version)
-    if not model.URL then return true end
+    if not model.URL then 
+        print ("no model.URL means it is embedded")
+       return  true  
+    end
     local _ver = version or ""
     local path = system.pathForFile( model.episodes[episode].dir.._ver, system.ApplicationSupportDirectory )
     -- io.open opens a file at path. returns nil if no file found
@@ -171,10 +174,12 @@ function M:startDownload(episode, version)
     end
 end
 --
-M.setButtonImage = function (_button, episode)
+M.setButtonImage = function (_button, episode, lang)
     local params = {}
+    local version = lang or ""
     local button = _button
     params.progress = true
+    
     --
     local function buttonImageListener( event )
         if ( event.isError ) then
@@ -203,10 +208,10 @@ M.setButtonImage = function (_button, episode)
             }
         end
     end
-    print(URL..episode.."/"..backgroundImg)
+    print(button.name, URL..episode..version.."/"..backgroundImg)
     --
     network.download(
-        URL..episode.."/"..backgroundImg,
+        URL..episode..version.."/"..backgroundImg.."?time="..os.time(),
         "GET",
         buttonImageListener,
         params,

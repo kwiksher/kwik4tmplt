@@ -19,6 +19,7 @@ function scene:show( event )
       print("reload "..composer.getSceneName( "previous" ))
         composer.removeScene(composer.getSceneName( "previous" ))
         composer.gotoScene( composer.getSceneName( "previous" ))
+        composer.reloading = false
         end)
    end --ends phase did
 end -- ends scene:show

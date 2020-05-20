@@ -31,6 +31,7 @@ end
 -- Downloading State
 --
 function _Class:startDownload(id, version)
+    print("storeFSM:startDownload", id, version)
     if id then
         print("storeFSM startDownload", id.name, version)
         self.fromDialog = true  -- downlaoding a version must be from dialog
@@ -80,6 +81,20 @@ function _Class:isBookPurchased(episode)
     self.episode = episode
     local isPurchased  = false
     local isDownloaded = false
+    if episode.isFree then
+        isPurchased = true
+        if downloadManager.hasDownloaded(episode.name) then
+            self.fsm:gotoBook(episode)
+        else
+            isDownloaded = false
+            local event = {target={episode = episode, selectedPurchase = episode.name, isPurchased = isPurchased, isDownloaded=isDownloaded}}
+            if cmd.showOverlay(event) then
+                timer.performWithDelay(100, function ()
+                    self.fsm:createDialog(episode, isPurchased, isDownloaded)
+                end)
+            end
+        end
+    else
     if (IAP.getInventoryValue("unlock_"..episode.name)==true) then
         isPurchased = true
         if downloadManager.hasDownloaded(episode.name) then
@@ -109,6 +124,7 @@ function _Class:isBookPurchased(episode)
         end
     end
     -- Runtime:addEventListener("hideOverlay", self.fsm.onClose)
+    end
 end
 
 ------------------------------

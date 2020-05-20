@@ -87,8 +87,8 @@ function M.new ()
         IAP.restorePurchases(event)
     end
 
-    function CMD:setButtonImage(button, id)
-        downloadManager.setButtonImage(button, id)
+    function CMD:setButtonImage(button, id, version)
+        downloadManager.setButtonImage(button, id, version)
     end
 
     function CMD.hasDownloaded(name, version)
@@ -130,6 +130,8 @@ function M.onPurchaseComplete(event)
                 if #model.episodes[selectedPurchase].versions == 0 then
                 print("startDownload")
                 downloadManager:startDownload(event.product)
+                elseif (button.versions==nil or #button.versions == 0) then
+                   downloadManager:startDownload(event.product, button.lang )
                 else
                     print("user can download a version now")
                 end

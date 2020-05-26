@@ -119,9 +119,6 @@ function _M:didShow(UI)
   {{#gHideBack}}
      hideBackground = true,
   {{/gHideBack}}
-  {{#gmask}}
-     maskFile = _K.imgDir.."{{fileName}}",
-  {{/gmask}}
   {{#gdH}}
      horizontalScrollDisabled = true,
   {{/gdH}}
@@ -129,6 +126,12 @@ function _M:didShow(UI)
      verticalScrollDisabled = true
   {{/gdV}}
   })
+
+  {{#gmask}}
+  local mask = graphics.newMask(_K.imgDir.."{{fileName}}" )
+  layer.{{gname}}:setMask( mask )
+  {{/gmask}}
+
   sceneGroup:insert( layer.{{gname}})
   layer.{{gname}}:insert(layer.{{glayer}})
 
@@ -201,9 +204,6 @@ function _M:didShow(UI)
   {{#gHideBack}}
      hideBackground = true,
   {{/gHideBack}}
-  {{#gmask}}
-     maskFile = _K.imgDir.."{{fileName}}",
-  {{/gmask}}
   {{#gdH}}
      horizontalScrollDisabled = true,
   {{/gdH}}
@@ -211,6 +211,12 @@ function _M:didShow(UI)
      verticalScrollDisabled = true
   {{/gdV}}
   })
+
+  {{#gmask}}
+  local mask = graphics.newMask(_K.imgDir.."{{fileName}}" )
+  layer.{{gname}}:setMask( mask )
+  {{/gmask}}
+
   --
   sceneGroup:insert( layer.{{gname}})
   layer.{{gname}}:insert(layer.{{glayer}})

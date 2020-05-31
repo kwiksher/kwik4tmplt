@@ -55,7 +55,7 @@ function _M:didShow(UI)
     {{^ultimate}}
     local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
     {{/ultimate}}
-    local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName)
+    local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName, _K.systemDir)
     if mask then
       layer.{{targetLayer}}.group:setMask(mask)
       layer.{{targetLayer}}.group.maskScaleX = {{scaleX}}

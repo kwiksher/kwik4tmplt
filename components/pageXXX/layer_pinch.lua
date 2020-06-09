@@ -10,6 +10,9 @@ function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
   if layer.{{glayer}} == nil then return end
+    {{#move}}
+    _K.MultiTouch.activate( layer.{{glayer}}, "move", {"single"} )
+    {{/move}}
     _K.MultiTouch.activate( layer.{{glayer}}, "scale", "multi", {minScale = {{gmin}}, maxScale = {{gmax}} })
     _K.{{glayer}}Pinc = function (event )
         if event.phase == "moved" then

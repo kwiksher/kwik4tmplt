@@ -8,7 +8,7 @@ local scene     = composer.newScene(sceneName)
 local _K = require("Application")
 scene._composerFileName = nil
 scene.classType = "{{classType}}"
-scene.pageUI    = require("{{custom}}{{pageUI}}").new(scene)
+scene.pageUI    = require("{{custom}}{{pageUI}}").new(scene, {{imagePage}} )
 ------------------------------------------------------------
 ------------------------------------------------------------
 function scene:create( event )

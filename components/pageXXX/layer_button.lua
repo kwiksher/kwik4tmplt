@@ -58,12 +58,15 @@ local oriAlpha = {{oriAlpha}}
 local imagePath = "{{bn}}.{{fExt}}"
 {{/kwk}}
 {{^kwk}}
-local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
+local imageName = "/{{bn}}.{{fExt}}"
 {{/kwk}}
 {{/bn}}
 
 function _M:localVars (UI)
    {{#isTmplt}}
+   {{^kwk}}
+   local imagePath = "p"..UI.imagePage..imageName
+   {{/kwk}}
    mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath, UI.dummy)
    {{/isTmplt}}
   self:buttonVars(UI)
@@ -131,7 +134,10 @@ function _M:buttonVars(UI)
   local sceneGroup = UI.scene.view
   local layer      = UI.layer
   {{#multLayers}}
-      UI.tab{{um}}["{{dois}}"] = {imagePath,imageWidth, imageHeight, mX, mY, imagePath, "{{myLName}}_{{layerType}}_{{triggerName}}", oriAlpha }
+  {{^kwk}}
+  local imagePath = "p"..UI.imagePage..imageName
+  {{/kwk}}
+     UI.tab{{um}}["{{dois}}"] = {imagePath,imageWidth, imageHeight, mX, mY, imagePath, "{{myLName}}_{{layerType}}_{{triggerName}}", oriAlpha }
   {{/multLayers}}
 end
 --
@@ -140,8 +146,11 @@ function _M:buttonLocal(UI)
   local layer      = UI.layer
 {{#bn}}
   {{^multLayers}}
+  {{^kwk}}
+  local imagePath = "p"..UI.imagePage..imageName
+  {{/kwk}}
     {{^Press}}
-      layer.{{myLName}} = display.newImageRect( _K.imgDir.. imagePath, _K.systemDir, imageWidth, imageHeight )
+       layer.{{myLName}} = display.newImageRect( _K.imgDir.. imagePath, _K.systemDir, imageWidth, imageHeight )
     if layer.{{myLName}} == nil then return end
       layer.{{myLName}}.x        = mX
       layer.{{myLName}}.y        = mY

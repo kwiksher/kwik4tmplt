@@ -117,10 +117,13 @@ local oriAlpha = {{oriAlpha}}
 local imagePath = "{{bn}}.{{fExt}}"
 {{/kwk}}
 {{^kwk}}
-local imagePath = "p{{docNum}}/{{bn}}.{{fExt}}"
+local imageName = "/{{bn}}.{{fExt}}"
 {{/kwk}}
 --
 function _M:localVars(UI)
+	{{^kwk}}
+	local imagePath = UI.imagePage ..imageName
+ {{/kwk}}
   {{#isTmplt}}
    mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)
   {{/isTmplt}}
@@ -152,7 +155,10 @@ end
 function _M:localPos(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  {{^multLayers}}
+	{{^kwk}}
+	local imagePath = "p"..UI.imagePage ..imageName
+  {{/kwk}}
+   {{^multLayers}}
   local function myNewImage()
     layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
     -- layer.{{myLName}} = newImageRect({{bn}}, imageWidth, imageHeight )

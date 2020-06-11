@@ -21,11 +21,14 @@ local imagePath = "{{bn}}"
 local ext       = "{{fExt}}"
 {{/kwk}}
 {{^kwk}}
-local imagePath = "p{{docNum}}/{{bn}}"
+local imageName = "/{{bn}}"
 local ext       = ".{{fExt}}"
 {{/kwk}}
 --
 function _M:localVars(UI)
+{{^kwk}}
+local imagePath = "p"..UI.imagePage ..imageName
+{{/kwk}}
   {{#isTmplt}}
    mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)
   {{/isTmplt}}

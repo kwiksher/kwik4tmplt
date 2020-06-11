@@ -10,10 +10,11 @@ local composer = require( "composer" )
 local _K       = require("Application")
 ---------------------
 ---------------------
-_Class.new = function(scene)
+_Class.new = function(scene, imagePage)
   local UI = layerUI.new()
     UI.scene     = scene
     UI.page      = "page{{page}}"
+    UI.imagePage = imagePage or {{page}}
     UI.curPage   = {{page}}
     -- All components on a table
     UI.layer     = {}

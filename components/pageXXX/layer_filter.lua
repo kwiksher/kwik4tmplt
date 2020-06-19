@@ -17,6 +17,14 @@ local function filters(name, effect, UI)
         param.time   = {{duration}} * 1000
         param.delay  = {{delay}}
         param.filterTable = filterTable[name]
+        local iteration = {{iteration}}
+        if iteration then
+          param.loop = {{iterationNum}}
+        end
+        local loop = {{loop}}
+        if loop then
+          param.loop = 0
+        end
         -- param.effectTo = filterTable[name].get()
         -- param.effectFrom = {}
         -- filterTable[name].set(param.effectFrom)

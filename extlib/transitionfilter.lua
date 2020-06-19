@@ -50,6 +50,7 @@ function transition.kwikFilter(obj, params)
   local time = params.time
   local delay = params.delay
   local complete = params.onComplete
+  local loop = params.loop
 
   local from =   params.filterTable.get()
   params.filterTable.set(from)
@@ -82,6 +83,7 @@ function transition.kwikFilter(obj, params)
       end
     }
   end
+  p.iterations       = loop or 1
   p.time       = time or 1000 ; --defaults to 1 second
   p.delay      = delay or 0 ;
   p.transition = ease ;

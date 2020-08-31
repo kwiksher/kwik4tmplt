@@ -127,7 +127,6 @@ function _M:localPos(UI)
         padding      = elpad,
         sentence     = allAudios.{{elaudio}},
         volume       = {{avol}},
-        sentenceDir  = "audio",
         line         = layer.{{myLName}}_txt,
         button       = {{sbut}},
         font         = {{elFont}},
@@ -137,6 +136,7 @@ function _M:localPos(UI)
         fadeDuration = {{afade}},
         wordTouch    = {{elTouch}},
         readDir      = "{{rightLeft}}",
+        sentenceDir  = {{elTouchFolder}},
         channel      = {{vchan}},
         lang         = ""
     }

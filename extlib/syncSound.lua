@@ -32,7 +32,8 @@ local function displayText(params)
 	local lineHeight = fontSize*1.33
 	local space = fontSize/5
 	local name = ""
-	local dir = params.sentenceDir .. "_words/"
+	local sentenceDir = params.sentenceDir and params.sentenceDir .."/" or ""
+	local dir = _K.audioDir .. sentenceDir
 	local readDir    = params.readDir or "leftToRight"
 	local newX
 
@@ -74,9 +75,9 @@ local function displayText(params)
 		if (name=="" or name==nil) then
 		else
 		  if (lang=="") then
-		  	words[i].snd = audio.loadSound(_K.audioDir..name ..".mp3", _K.systemDir)
+		  	words[i].snd = audio.loadSound(dir..name ..".mp3", _K.systemDir)
 		  else
-			  	words[i].snd = audio.loadSound(_K.audioDir..lang.."_"..name ..".mp3", _K.systemDir)
+			  	words[i].snd = audio.loadSound(dir..lang.."_"..name ..".mp3", _K.systemDir)
 		  end
 		  words[i].id = i
 		  --  calculate the duration of each word
@@ -245,7 +246,7 @@ function speakWord( event )
  	dur = dur + 2*trans
  	local isChannelPlaying = audio.isChannelPlaying(channel)
     if isChannelPlaying or snd==nil then
-    	print("Warning: channel is already playing for speakWord", channel)
+    	print("Warning: channel is already playing for speakWord or audio is empty", channel)
     else
        	audio.play(snd, {  channel=channel } )
        	--Moves main and colored words

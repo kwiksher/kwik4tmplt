@@ -122,7 +122,7 @@ local imageName = "/{{bn}}.{{fExt}}"
 --
 function _M:localVars(UI)
 	{{^kwk}}
-	local imagePath = UI.imagePage ..imageName
+	local imagePath = "p"..UI.imagePage ..imageName
  {{/kwk}}
   {{#isTmplt}}
    mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)

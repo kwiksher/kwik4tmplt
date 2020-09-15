@@ -18,7 +18,9 @@ function M.new (host)
             spinnerText:setFillColor(0,0,0)
             --Add a little spinning rectangle
             local spinnerRect = display.newRect(0, 0,35,35)
-            spinnerRect:setFillColor(0.25,0.25,0.25)
+            spinnerRect:setFillColor(0, 0)
+            spinnerRect:setStrokeColor(1,1,1)
+            spinnerRect.strokeWidth = 2
             transition.to(spinnerRect, { time=4000, rotation=360, iterations=999999, transition=easing.inOutQuad})
             --Create a group and add all these objects to it
             spinner:insert(spinnerBackground)
@@ -45,6 +47,14 @@ function M.new (host)
             print( "Download progress: " .. event.bytesTransferred .. " of estimated: " .. event.bytesEstimated )
         end
         spinner.spinnerText.text = "bytes:" .. event.bytesTransferred.." estimated:"..event.bytesEstimated
+    end
+
+    function obj:updateText()
+            local percent = self.size/self.bookSize
+            local sec     = os.difftime( os.time(), self.startTime) 
+            local remain  = math.floor(sec * (1.0/percent))
+            local time    = os.date("*t", remain)
+            spinner.spinnerText.text = math.floor(percent*100).." % (" ..self.size .."/" ..self.bookSize .." Mb) \nEstimated time of completion\n" ..time.min.." min "..time.sec .." sec"
     end
 
     return obj

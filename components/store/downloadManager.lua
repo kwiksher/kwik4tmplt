@@ -145,7 +145,7 @@ function M:init(onSuccess, onError)
 end
 
 function M.isDownloadQueue()
-    return downloadQueue:poll()
+    return downloadQueue:length()
 end
 
 function M:startDownload(episode, version)

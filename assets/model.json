@@ -13,7 +13,7 @@
     "thumbnails":[{{#thumbnails}}{{#filenames}}"{{.}}",{{/filenames}} {{/thumbnails}}null],
     "images":[
         {{#images}}
-         "{{foldername}}/{{filename}}@4x.{{filetype}}", "{{foldername}}/{{filename}}@2x.{{filetype}}", "{{foldername}}/{{filename}}.{{filetype}}",
+         "{{filename}}@4x.{{filetype}}", "{{filename}}@2x.{{filetype}}", "{{filename}}.{{filetype}}",
         {{/images}}
         null
     ],

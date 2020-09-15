@@ -311,7 +311,13 @@ function M.new()
                     else
                         print(episode.name.."(saving)")
                         if episode.isFree then
+                            function bookXXIcon.downloadBtn:tap(e)
+                                print("free book to be downloaded")
+                                VIEW.fsm:startDownload(self.episode)
+                                return true
+                            end
                             bookXXIcon.downloadBtn.alpha = 1
+                            bookXXIcon.downloadBtn.episode = bookXXIcon.episode
                         else
                         bookXXIcon.savingTxt.alpha = 1
                         end

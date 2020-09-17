@@ -167,9 +167,11 @@ function M:startDownload(episode, version)
     if selectedPurchase == nil then
         local item = downloadQueue:poll()
         if item then
+            print("downloadManager:startDownload Queue", item)
             selectedPurchase = item.product
             _version = item.version  or ""
         end
+        print("nothing to be donwloaded")
     end
 
     if selectedPurchase then

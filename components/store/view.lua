@@ -1,6 +1,5 @@
 local M = {}
 --
-
 local composer = require("composer")
 local model = require("components.store.model")
 local cmd = require("components.store.command").new()
@@ -162,7 +161,7 @@ function M.new()
                     if button.updateMark then
                         button.updateMark.alpha = 1
                     else
-                        setUpdateMark(button, self.sceneGroup)
+                     setUpdateMark(button, self.sceneGroup)
                     end
                 else
                     if button.updateMark then
@@ -289,7 +288,7 @@ function M.new()
                 bookXXIcon.downloadBtn.alpha = 1
                 bookXXIcon.downloadBtn:addEventListener("tap", bookXXIcon.downloadBtn)
                 print(self.sceneGroup)
-                print("", "setUpdateMark", bookXXIcon.downloadBtn, self.sceneGroup)
+                print ("", "setUpdateMark", bookXXIcon.downloadBtn, self.sceneGroup)
                 setUpdateMark(bookXXIcon.downloadBtn, self.sceneGroup)
                 print("", "setUpdateMark ended")
             end
@@ -326,6 +325,7 @@ function M.new()
                         versionBtn:addEventListener("tap", versionBtn)
                         setUpdateMark(versionBtn, self.sceneGroup)
                     end
+
                 else
                     print("Error to find versionBtn")
                 end
@@ -351,30 +351,28 @@ function M.new()
                         end
                         bookXXIcon:addEventListener("tap", bookXXIcon)
                         if model.URL then
-                        -- bookXXIcon.savingTxt.alpha = 0
+                            -- bookXXIcon.savingTxt.alpha = 0
                         end
-
+                        
                         if cmd.isUpdateAvailable(episode.name) then
                             print("~~~~~~~~~~~~~~~~")
                             bookXXIcon.savedBtn.alpha = 1
-                            bookXXIcon.savedBtn:addEventListener(
-                                "tap",
-                                function(e)
-                                    VIEW.fsm:clickImage(_episode)
-                                end
-                            )
+                            bookXXIcon.savedBtn:addEventListener("tap", function(e)
+                                 VIEW.fsm:clickImage(_episode)
+                            end)
                             --if episode.isFree then
-                            function bookXXIcon.downloadBtn:tap(e)
-                                print("free book to be downloaded", self.episode)
-                                VIEW.fsm:startDownload(self.episode)
-                                return true
-                            end
-                            bookXXIcon.downloadBtn.alpha = 1
-                            bookXXIcon.downloadBtn.episode = bookXXIcon.episode
-                            bookXXIcon.downloadBtn:addEventListener("tap", bookXXIcon.downloadBtn)
-                            setUpdateMark(bookXXIcon.downloadBtn, self.sceneGroup)
-                        --cend
+                                function bookXXIcon.downloadBtn:tap(e)
+                                    print("free book to be downloaded", self.episode)
+                                    VIEW.fsm:startDownload(self.episode)
+                                    return true
+                                end
+                                bookXXIcon.downloadBtn.alpha = 1
+                                bookXXIcon.downloadBtn.episode = bookXXIcon.episode
+                                bookXXIcon.downloadBtn:addEventListener("tap", bookXXIcon.downloadBtn)                        
+                                setUpdateMark(bookXXIcon.downloadBtn, self.sceneGroup)
+                            --cend
                         end
+                         
                     else
                         print(episode.name .. "(saving)")
                         if episode.isFree then
@@ -385,17 +383,17 @@ function M.new()
                             end
                             bookXXIcon.downloadBtn.alpha = 1
                             bookXXIcon.downloadBtn.episode = bookXXIcon.episode
-                            bookXXIcon.downloadBtn:addEventListener("tap", bookXXIcon.downloadBtn)
+                            bookXXIcon.downloadBtn:addEventListener("tap", bookXXIcon.downloadBtn)                        
                         else
                             bookXXIcon.savingTxt.alpha = 1
                         end
                         Runtime:dispatchEvent({name = "cmd:purchaseCompleted", target = episode})
                     end
                 else
-                    --print("### setVersionButtons end")
                     -----------------
                     -- version
                     self:setVersionButtons(bookXXIcon, episode.isFree)
+                    --print("### setVersionButtons end")
                 end
             else
                 print(episode.name .. "(not purchased)")

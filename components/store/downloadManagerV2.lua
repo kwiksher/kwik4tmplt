@@ -80,6 +80,7 @@ local function fetchAssetJson(aQueue)
                             jsonBaseDir = event.response.baseDirectory,
                         }
                         local downloadables, assets = M.saveDownloadablesAsJson(options, selectedPurchase,version)
+                        deferred:resolve()
                     end
                 end
             end,
@@ -125,6 +126,7 @@ M.fetchAssets = function ()
             fetchAssetJson(aQueue)
         end)
         promise:fail(function(error)
+            print("error in fetchAssets")
         end)
         promise:always(function()
         end)
@@ -134,7 +136,7 @@ end
 function M.startDownload(selectedPurchase, version)
     local deferred = Deferred()
     local downloadables = M.getDownloadables(selectedPurchase, version)
-    print("-------------")
+    print("------ V2 -------")
     local _version = version or ""
     --local assetsRemote = json.decode(jsonFile("downloadable_"..selectedPurchase.._version..".json", system.TemporaryDirectory))
     print("downloadable_"..selectedPurchase.._version..".json")
@@ -143,6 +145,7 @@ function M.startDownload(selectedPurchase, version)
         print("startDownload #downlodables", #downloadables)
         local size = 0
         for i=1, #downloadables do
+            print(downloadables[i].size)
             aQueue:offer(downloadables[i])
             size = size + downloadables[i].size
         end
@@ -194,6 +197,7 @@ function isUpdated(book,page, type, date)
 end
 
 M.saveDownloadablesAsJson = function(options, name, version)
+    print("saveDownloadablesAsJson")
     local _version = version or ""
     local downloadables = {}
     local assets = json.decode(jsonFile(options.jsonFile, options.jsonBaseDir))
@@ -214,7 +218,6 @@ M.saveDownloadablesAsJson = function(options, name, version)
     else
         print("error",reason)
     end
-
     return downloadables, assets
 end
 
@@ -225,6 +228,7 @@ M.getDownloadables = function(name, version)
     if isFile(path) then
         return json.decode(jsonFile("downloadable_"..name.._version..".json", system.TemporaryDirectory))
     else
+        print("getDownloadables None")
         return {}
     end
 end
@@ -296,12 +300,12 @@ local function moveAsset(bookProject, version, item)
         print(item.type, const[item.type])
         if item.type ~= "images" then
             if not isFileOrDir(const[item.type]) then
-                print("############ ", item.type)
+                -- print("############ ", item.type)
                 lfs.mkdir(const[item.type])
             end
         else
             if not isFileOrDir("images") then
-                print("############ images ")
+                -- print("############ images ")
                 lfs.mkdir("images")
             end
             path = system.pathForFile(bookProject..version.."/images", system.ApplicationSupportDirectory)

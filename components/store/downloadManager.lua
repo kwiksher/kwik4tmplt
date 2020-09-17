@@ -4,6 +4,7 @@ local zip = require( "plugin.zip" )
 local spinner = require("extlib.spinner").new("download server")
 local queue = require("extlib.queue")
 local model = require("components.store.model")
+local V2 = require("components.store.downloadManagerV2")
 --
 local onDownloadComplete
 local onDownloadError
@@ -111,7 +112,7 @@ local function _startDownload(selectedPurchase, version)
 end
 
 function M.hasDownloaded(episode, version)
-    print(episode, version)
+    print("hasDownloaded", episode, version)
     if not model.URL then 
         print ("no model.URL means it is embedded")
        return  true  
@@ -129,6 +130,14 @@ function M.hasDownloaded(episode, version)
     end
 end
 
+function M.isUpdateAvailable(name, version)
+   return V2.isUpdateAvailable(name,version)
+end
+
+function M.isUpdateAvailableInVersions(name)
+    return V2.isUpdateAvailableInVersions(name)
+end
+
 function M:init(onSuccess, onError)
     onDownloadComplete = onSuccess
     onDownloadError    = onError
@@ -142,10 +151,13 @@ function M:init(onSuccess, onError)
             downloadQueue:offer({product=selectedPurchase, version=version})
         end
     end)
+    -- fetch assets.json for all books
+    V2.fetchAssets()
 end
 
 function M.isDownloadQueue()
-    return downloadQueue:length()
+   -- print(downloadQueue:length())
+    return downloadQueue:length() > 0
 end
 
 function M:startDownload(episode, version)
@@ -161,16 +173,29 @@ function M:startDownload(episode, version)
     end
 
     if selectedPurchase then
-        print("startDownload:"..selectedPurchase, _version)
-        promise = _startDownload(selectedPurchase, _version)
-            :done(function()
-                    self:startDownload()
-                end)
-            :fail(function(error)
-                print("Download Error ", error)
-                end)
-            :always(function()
-                end)
+        print("downloardManager:startDownload:"..selectedPurchase, _version)
+        if model.downloadManager == "V2" then
+            V2.init(onDownloadComplete, onDownloadError)
+            promise = V2.startDownload(selectedPurchase, _version)
+                :done(function()
+                        self:startDownload()
+                    end)
+                :fail(function(error)
+                    print("Download Error ", error)
+                    end)
+                :always(function()
+                    end)
+        else
+            promise = _startDownload(selectedPurchase, _version)
+                :done(function()
+                        self:startDownload()
+                    end)
+                :fail(function(error)
+                    print("Download Error ", error)
+                    end)
+                :always(function()
+                    end)
+        end
     end
 end
 --

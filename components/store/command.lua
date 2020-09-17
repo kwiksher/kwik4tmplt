@@ -95,6 +95,14 @@ function M.new ()
         return downloadManager.hasDownloaded(name, version)
     end
 
+    function CMD.isUpdateAvailableInVersions(name)
+        return downloadManager.isUpdateAvailableInVersions(name)
+    end
+
+    function CMD.isUpdateAvailable(name, version)
+        return downloadManager.isUpdateAvailable(name, version)
+    end
+
     function CMD.buyBook(e)
         IAP.buyEpisode(e)
     end

@@ -4,6 +4,9 @@ local IAP             = require("components.store.IAP")
 --
 {{#bookShelfType}}
 M.bookShelfType  = {{bookShelfType}} --{none = -1, pages = 0, embedded = 1, tmplt=2}
+if M.bookShelfType  == 1 then
+    M.downloadManager = "V2"
+end
 {{/bookShelfType}}
 --
 M.debug     = {{iapDebug}}

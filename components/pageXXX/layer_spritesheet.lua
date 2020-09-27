@@ -23,8 +23,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 {{^ultimate}}
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
-local mX = {{mX}}
-local mY = {{mY}}
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{#randX}}
 local randXStart = {{randXStart}}
 local randXEnd = {{randXEnd}}
@@ -47,15 +46,26 @@ local oriAlpha = {{oriAlpha}}
         {{#Animate}}
         {{/Animate}}
     {{/arq}}
-    {{^arq}}
-        local {{myLName}}_options = {
-            width              = {{frameWidth}},
-            height             = {{frameHeight}},
-            numFrames          = {{autoFrames}},
-            sheetContentWidth  = {{sheetWidth}},
-            sheetContentHeight = {{sheetHeight}}
-        }
-    {{/arq}}
+{{#ultimate}}
+local {{myLName}}_options = {
+    width              = {{frameWidth}}/4,
+    height             = {{frameHeight}}/4,
+    numFrames          = {{autoFrames}},
+    sheetContentWidth  = {{sheetWidth}}/4,
+    sheetContentHeight = {{sheetHeight}/4}
+}
+{{/ultimate}}
+{{^ultimate}}
+{{^arq}}
+    local {{myLName}}_options = {
+        width              = {{frameWidth}},
+        height             = {{frameHeight}},
+        numFrames          = {{autoFrames}},
+        sheetContentWidth  = {{sheetWidth}},
+        sheetContentHeight = {{sheetHeight}}
+    }
+{{/arq}}
+{{/ultimate}}
     _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", _K.systemDir, {{myLName}}_options )
 {{/newImageSheet}}
 {{/kwik3Tp}}
@@ -100,6 +110,18 @@ local oriAlpha = {{oriAlpha}}
         {{myLName}}_options = newSheetInfo()
         {{/Animate}}
     {{/arq}}
+    {{#ultimate}}
+    {{^arq}}
+        local {{myLName}}_options = {
+            width              = {{frameWidth}}/4,
+            height             = {{frameHeight}}/4,
+            numFrames          = {{autoFrames}},
+            sheetContentWidth  = {{sheetWidth}}/4,
+            sheetContentHeight = {{sheetHeight}}/4
+        }
+    {{/arq}}
+    {{/ultimate}}
+    {{^ultimate}}
     {{^arq}}
         local {{myLName}}_options = {
             width              = {{frameWidth}},
@@ -109,6 +131,7 @@ local oriAlpha = {{oriAlpha}}
             sheetContentHeight = {{sheetHeight}}
         }
     {{/arq}}
+    {{/ultimate}}
     _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", _K.systemDir, {{myLName}}_options )
 {{/newImageSheet}}
 {{/kwik3Tp}}

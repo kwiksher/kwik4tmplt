@@ -63,10 +63,16 @@ function _M:didShow(UI)
           end
        end
         {{#hasShake}}
+        if _K.shakeMe ~= nil then
         Runtime:removeEventListener("accelerometer", _K.shakeMe);
+        _K.shakeMe = nil
+        end
         {{/hasShake}}
         {{#invert}}
+        if _K.kOrientation_act ~= nil then
         Runtime:removeEventListener("orientation", _K.kOrientation_act);
+        _K.kOrientation_act = nil
+        end
         {{/invert}}
         {{#navigation}}
           Navigation.hide()
@@ -109,10 +115,16 @@ function _M:didShow(UI)
     {{^bookshelf}}
        if tonumber(wPage) ~= tonumber(curPage) then
           {{#hasShake}}
-          Runtime:removeEventListener("accelerometer", _K.shakeMe);
+          if _K.shakeMe ~=nil then
+            Runtime:removeEventListener("accelerometer", _K.shakeMe);
+            _K.shakeMe = nil
+          end
           {{/hasShake}}
           {{#invert}}
+          if _K.kOrientation_act ~= nil then
           Runtime:removeEventListener("orientation", _K.kOrientation_act);
+          _K.kOrientation_act = nil
+          end
           {{/invert}}
           {{#navigation}}
             Navigation.hide()
@@ -136,6 +148,7 @@ function _M:toDispose(UI)
       {{#infinity}}
         layer.{{backLayer}}_2:removeEventListener( _K.Gesture.SWIPE_EVENT, _K.pageSwap )
       {{/infinity}}
+      _K.pageSwap = nil
    end
   --_K.Gesture.deactivate(layer.{{myLName+') ;
 end

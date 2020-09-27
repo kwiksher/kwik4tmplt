@@ -274,8 +274,10 @@ function _M:toDispose(UI)
   local layer       = UI.layer
   {{^multLayers}}
     {{#infinity}}
+      if layer.{{myLName}} and layer.{{myLName}}_2 then
       Runtime:removeEventListener("enterFrame", layer.{{myLName}})
       Runtime:removeEventListener("enterFrame", layer.{{myLName}}_2)
+      end
     {{/infinity}}
   {{/multLayers}}
 end

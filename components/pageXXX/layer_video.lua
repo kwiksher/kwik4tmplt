@@ -25,8 +25,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 {{^ultimate}}
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
-local mX = {{mX}}
-local mY = {{mY}}
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{#randX}}
 local randXStart = {{randXStart}}
 local randXEnd = {{randXEnd}}
@@ -165,8 +164,9 @@ function _M:toDispose(UI)
     end
   end
   {{#elTriggerElLoop}}
-  if layer.{{myLName}} then
+  if layer.{{myLName}} ~=nil and UI.videoListener_{{myLName}} ~= nil then
       layer.{{myLName}}:removeEventListener( "video", UI.videoListener_{{myLName}} )
+      UI.videoListener_{{myLName}} = nil
   end
   {{/elTriggerElLoop}}
   {{/multLayers}}

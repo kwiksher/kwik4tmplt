@@ -129,16 +129,7 @@ function _M:didShow(UI)
   {{#hasMutliplier}}
     -- Clean up memory for Multiplier set to forever
     -- control variable to dispose kClean via kNavi
-    _K.disposeMultiplier = nil
     _K.kClean = function()
-       if _K.disposeMultiplier == 1 then
-          -- remove all past listeners
-        {{#Multiplier}}
-          _K.mt_{{layer}} = nil
-          Runtime:removeEventListener("enterFrame", _K.kClean)
-        {{/Multiplier}}
-        _K.disposeMultiplier = nil
-       else
           -- runs normal code
           {{codeMultiplier}}
        end
@@ -167,7 +158,10 @@ end
 function _M:toDispose(UI)
   {{^multLayers}}
   {{#hasMutliplier}}
-    Runtime:removeEventListener("enterFrame", _K.kClean)
+    if _K.kClean ~=nil then
+      Runtime:removeEventListener("enterFrame", _K.kClean)
+      _K.kClean = nil
+    end
   {{/hasMutliplier}}
     if _K.timerStash.mt0 then
       timer.cancel(_K.timerStash.mt0)

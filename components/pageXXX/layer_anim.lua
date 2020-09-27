@@ -49,8 +49,8 @@ local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
 	      mX = endX + layer.x
 	      mY = endY + layer.y
 	  else
-	      mX = layer.x + ((endX +layer.width/2) - layer.x)
-	      mY = layer.y + ((endY +layer.height/2) -layer.y)
+	      mX = endX +layer.width/2) 
+	      mY = endY +layer.height/2)
 	  end
 	{{/CenterReferencePoint}}
 	{{#TopLeftReferencePoint}}
@@ -106,53 +106,54 @@ end
 --
 local function getPos(layer, _endX, _endY)
 	local endX, endY =  _K.ultimatePosition(_endX, _endY)
+	local width, height = layer.width*layer.xScale, layer.height*layer.yScale
 	{{#DefaultReference}}
-    mX = layer.x + endX + layer.width/2  - layer.x
-    mY = layer.y + endY + layer.height/2 - layer.y
+    mX = endX + width/2
+    mY = endY + height/2
 	{{/DefaultReference}}
 	{{#TextReference}}
-    mX = layer.x + endX + {{nX}} - {{elX}} - layer.x
-    mY = layer.y + endY + {{nY}} - {{elY}} - layer.y -layer.height*0.5
+    mX = endX + {{nX}} - {{elX}} 
+    mY = endY + {{nY}} - {{elY}} -height*0.5
 	{{/TextReference}}
 	{{#TopLeftReferencePoint}}
 		--TopLeftReferencePoint
-      mX = layer.x + endX - layer.x
-      mY = layer.y + endY - layer.y
+      mX = endX 
+      mY = endY 
 	{{/TopLeftReferencePoint}}
 	{{#TopCenterReferencePoint}}
 	--TopCenterReferencePoint
-      mX = layer.x + endX + layer.width/2 - layer.x
-      mY = layer.y + endY - layer.y
+      mX = endX + width/2 
+      mY = endY 
 	{{/TopCenterReferencePoint}}
 	{{#TopRightReferencePoint}}
 	--TopRightReferencePoint
-      mX = layer.x + endX + layer.width - layer.x
-      mY = layer.y + endY - layer.y
+      mX = endX + width 
+      mY = endY 
 	{{/TopRightReferencePoint}}
 	{{#CenterLeftReferencePoint}}
 	--CenterLeftReferencePoint
-      mX = layer.x + endX - layer.x
-      mY = layer.y + endY + layer.height/2 - layer.y
+      mX = endX 
+      mY = endY + height/2
 	{{/CenterLeftReferencePoint}}
 	{{#CenterRightReferencePoint}}
 	--CenterRightReferencePoint
-      mX = layer.x + endX + layer.width - layer.x
-      mY = layer.y + endY + layer.height/2 - layer.y
+      mX = endX + width 
+      mY = endY + height/2 
 	{{/CenterRightReferencePoint}}
 	{{#BottomLeftReferencePoint}}
 	--BottomLeftReferencePoint
-      mX = layer.x + endX - layer.x
-      mY = layer.y + endY + layer.height - layer.y
+      mX = endX 
+      mY = endY + height 
 	{{/BottomLeftReferencePoint}}
 	{{#BottomRightReferencePoint}}
 	--BottomRightReferencePoint
-      mX = layer.x + endX + layer.width - layer.x
-      mY = layer.y + endY + layer.height - layer.y
+      mX = endX + width 
+      mY = endY + height 
 	{{/BottomRightReferencePoint}}
 	{{#BottomCenterReferencePoint}}
 	--BottomCenterReferencePoint
-      mX = layer.x + endX + layer.width/2 - layer.x
-      mY = layer.y + endY + layer.height - layer.y
+      mX = endX + width/2 
+      mY = endY + height 
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
 		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
@@ -347,10 +348,10 @@ function _M:buildAnim(UI)
 						rotation={{rotation}},
 						{{/rotation}}
 						{{#scalW}}
-						xScale={{scalW}},
+						xScale={{scalW}} * {{gtLayer}}.xScale,
 						{{/scalW}}
 						{{#scalH}}
-						yScale={{scalH}},
+						yScale={{scalH}} * {{gtLayer}}.yScale,
 						{{/scalH}}
 					},
 					{{/Linear}}

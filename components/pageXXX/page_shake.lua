@@ -3,11 +3,13 @@
 -- Project: {{ProjName}}
 --
 local _M = {}
+local _K = require "Application"
+
 --
 function _M:didShow(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-    local function shakeMe(e)
+    _K.shakeMe = function(e)
      if(e.isShake == true) then
            UI.scene:dispatchEvent({name="action_{{gcomplete}}", shake=e })
      end

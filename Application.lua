@@ -195,7 +195,30 @@ function Application.ultimatePosition(x,y, align)
 	return mX, mY
 {{/ultimate}}
 {{^ultimate}}
-		return x, y
+	local w, h = display.contentWidth, display.contentHeight
+	local mX, mY = x, y
+	if align == "left" then
+		mX = mX - (display.safeActualContentWidth - w)/2 
+	elseif align == "right" then
+		mX = mX + (display.safeActualContentWidth - w)/2 
+	elseif align == "top" then
+		mY = mY - (display.safeActualContentHeight - h)/2
+	elseif align == "bottom" then
+		mY = mY + (display.safeActualContentHeight - h)/2 
+	elseif align == "topLeft" then
+		mX = mX - (display.safeActualContentWidth - w)/2 
+		mY = mY - (display.safeActualContentHeight - h)/2 
+	elseif align == "topRight" then
+		mX = mX + (display.safeActualContentWidth - w)/2 
+		mY = mY - (display.safeActualContentHeight - h)/2 
+	elseif align == "bottomLeft" then
+		mX = mX - (display.safeActualContentWidth - w)/2 
+		mY = mY + (display.safeActualContentHeight - h)/2 
+	elseif align == "bottomRight" then
+		mX = mX + (display.safeActualContentWidth - w)/2 
+		mY = mY + (display.safeActualContentHeight - h)/2 
+	end
+	return mX, mY
 {{/ultimate}}
 end
 --

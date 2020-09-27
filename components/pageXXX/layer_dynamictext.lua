@@ -23,8 +23,7 @@ local elFontSize = {{elFontSize}}/4
 {{^ultimate}}
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
-local mX = {{mX}}
-local mY = {{mY}} + {{eloffset}}
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}} + {{eloffset}}, "{{align}}")
 {{#randX}}
 local randXStart = {{randXStart}}
 local randXEnd = {{randXEnd}}

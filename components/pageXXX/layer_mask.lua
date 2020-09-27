@@ -12,8 +12,7 @@ local mX, mY = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{^ultimate}}
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
-local mX = {{mX}}
-local mY = {{mY}}
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{/ultimate}}
 local oriAlpha = {{oriAlpha}}
 {{#kwk}}

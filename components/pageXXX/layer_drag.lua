@@ -140,8 +140,9 @@ function _M:toDispose(UI)
   {{^gPage}}
   local dragLayer = layer.{{glayer}}
   {{/gPage}}
-    if (nil ~= dragLayer ) then
+    if (nil ~= dragLayer and _K.{{glayer}}Drag ~=nil ) then
        dragLayer:removeEventListener ( _K.MultiTouch.MULTITOUCH_EVENT,  _K.{{glayer}}Drag );
+       _K.{{glayer}}Drag = nil
     end
 end
 --

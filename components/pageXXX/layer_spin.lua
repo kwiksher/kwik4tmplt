@@ -36,10 +36,11 @@ end
 function _M:toDispose(UI)
   local sceneGroup  = UI.scene.view
   local layer       = UI.layer
-  if layer.{{glayer}} == nil then return end
+  if layer.{{glayer}} == nil or _K.{{glayer}}Spin == nil then return end
 
   layer.{{glayer}}:removeEventListener ( _K.MultiTouch.MULTITOUCH_EVENT,  _K.{{glayer}}Spin )
-  --_K.Gesture.deactivate(layer.{{glayer}})
+  _K.{{glayer}}Spin = nil
+    --_K.Gesture.deactivate(layer.{{glayer}})
 end
 --
 function _M:toDestroy(UI)

@@ -24,7 +24,10 @@ function _M:pPinchPag(pag)
 end
 --
 function _M:dsipose()
+  if _M.pinchHandler ~=nil then
   sceneGroup:removeEventListener( _K.MultiTouch.MULTITOUCH_EVENT, _M.pinchHandler );
+  _M.pinchHandler = nil
+  end
     --Gesture.deactivate(sceneGroup)
 end
 --

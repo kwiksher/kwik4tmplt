@@ -52,9 +52,10 @@ function _M:toDispose(UI)
   {{#sceneGroup}}
   local target = sceneGroup
   {{/sceneGroup}}
-  if target == nil then return end
+  if target == nil or  _K.{{myLName}}Swipe == nil then return end
   target:removeEventListener ( _K.Gesture.SWIPE_EVENT, _K.{{myLName}}Swipe )
-  --_K.Gesture.deactivate(layer.{{myLName+') ;
+  _K.{{myLName}}Swipe = nil
+    --_K.Gesture.deactivate(layer.{{myLName+') ;
 end
 --
 function _M:toDestroy(UI)

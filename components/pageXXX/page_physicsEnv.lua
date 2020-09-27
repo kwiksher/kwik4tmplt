@@ -6,6 +6,9 @@ local _M = {}
 --
 local W = display.viewableContentWidth
 local H = display.viewableContentHeight
+
+local _K = require "Application"
+
 --
 function _M:localVars()
 end
@@ -23,7 +26,7 @@ function _M:didShow(UI)
   {{#invert}}
    -- Invert gravity on orientation change
    local kOrientation, gx, gy = system.orientation, physics.getGravity()
-   kOrientation_act = function(event)
+   _K.kOrientation_act = function(event)
    {{#landscape}}
        vori = "landscapeLeft"
    {{/landscape}}

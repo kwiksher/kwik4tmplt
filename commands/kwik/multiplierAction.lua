@@ -15,7 +15,10 @@ function _M:stopMultiplier(tname)
        _K.disposeMultiplier = 1
    else
        _K["multi_"..tname] = nil
-       Runtime:removeEventListener("enterFrame", _K.kClean)
+       if _K.kClean ~= nil then
+        Runtime:removeEventListener("enterFrame", _K.kClean)
+        _K.kClean = nil
+       end
    end
 end
 --

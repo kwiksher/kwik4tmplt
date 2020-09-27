@@ -20,8 +20,7 @@ local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
 {{^ultimate}}
 local imageWidth = {{elW}}
 local imageHeight = {{elH}}
-local mX = {{mX}}
-local mY = {{mY}}
+local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
 {{#randX}}
 local randXStart = {{randXStart}}
 local randXEnd = {{randXEnd}}

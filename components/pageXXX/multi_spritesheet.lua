@@ -45,10 +45,13 @@ function _M:localPos(UI)
     --
     layer.{{myLName}} = display.newSprite(_M.{{myLName}}_sheet, {{myLName}}_seq ) -- ff_seq is to be used in future
     {{#multLayers}}
+        imageWidth                 = UI.tSearch["{{dois}}"][2]
+        imageHeight                = UI.tSearch["{{dois}}"][3]
         layer.{{myLName}}.x        = UI.tSearch["{{dois}}"][4]
         layer.{{myLName}}.y        = UI.tSearch["{{dois}}"][5]
         layer.{{myLName}}.alpha    = UI.tSearch["{{dois}}"][6]
         layer.{{myLName}}.oldAlpha = UI.tSearch["{{dois}}"][6]
+        
     {{/multLayers}}
     {{#randX}}
         layer.{{myLName}}.x = math.random(randXStart , randXEnd)

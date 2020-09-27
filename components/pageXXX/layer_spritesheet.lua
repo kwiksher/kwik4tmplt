@@ -54,6 +54,10 @@ local {{myLName}}_options = {
     sheetContentWidth  = {{sheetWidth}}/4,
     sheetContentHeight = {{sheetHeight}/4}
 }
+
+imageWidth = {{myLName}}_options.width
+imageHeight = {{myLName}}_options.height
+
 {{/ultimate}}
 {{^ultimate}}
 {{^arq}}
@@ -64,6 +68,9 @@ local {{myLName}}_options = {
         sheetContentWidth  = {{sheetWidth}},
         sheetContentHeight = {{sheetHeight}}
     }
+    imageWidth = {{myLName}}_options.width
+    imageHeight = {{myLName}}_options.height    
+
 {{/arq}}
 {{/ultimate}}
     _M.{{myLName}}_sheet = graphics.newImageSheet( _K.spriteDir.. "{{elFi}}", _K.systemDir, {{myLName}}_options )

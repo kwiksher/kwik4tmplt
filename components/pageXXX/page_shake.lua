@@ -15,7 +15,7 @@ function _M:didShow(UI)
      end
      return true
     end
-    Runtime:addEventListener("accelerometer", shakeMe)
+    Runtime:addEventListener("accelerometer", _K.shakeMe)
 end
 --
 return _M

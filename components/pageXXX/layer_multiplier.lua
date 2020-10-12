@@ -45,9 +45,11 @@ function _M:didShow(UI)
   -- Multipliers for {{myLName}}
   local {{myLName}}_m_loop = {{elfora}} --1 plays multiplier forever
   local {{myLName}}_m_counter = {{elCopies}}
+
 {{^kwk}}
-  local imagePath = UI.imagePage .. imageName
+  local imagePath = "p"..UI.imagePage ..imageName
 {{/kwk}}
+
   --
   layer.{{myLName}}        = {}
   layer.c_{{myLName}}      = 0

@@ -179,7 +179,12 @@ function ActionCommand:new()
 		{{/page.autoPlay}}
 
 		{{#page.showHideNavigation}}
-			_AC.Page:showHideNavigation(layer.{{layer}});
+		{{^TV}}
+		_AC.Page:showHideNavigation();
+		{{/TV}}
+		{{#TV}}
+		_AC.Page:showHideNavigation(layer.{{layer}});
+		{{/TV}}
 		{{/page.showHideNavigation}}
 
 		{{#page.reloadPage}}

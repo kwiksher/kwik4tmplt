@@ -8,11 +8,14 @@ local marker = require("extlib.marker")
 --
 ---------------------------------------------------
 --
+local LABEL_NAME = "saved_"
+--
 function M.new()
     local VIEW = {}
     --
     VIEW.downloadGroup = {}
     VIEW.versionGroup = {}
+    VIEW.labelsGroup  = {}
     VIEW.sceneGroup = nil
     VIEW.episode = nil
     --
@@ -180,8 +183,8 @@ function M.new()
         end
         if bookXXIcon then
             bookXXIcon.lang = _K.lang
-            self.downloadGroup[episode.name] = bookXXIcon
             bookXXIcon.versions = {}
+            bookXXIcon.labels   = {}
             bookXXIcon.selectedPurchase = episode.name
             print("createDialog with", episode.name)
             --If the user has purchased the episode before, change the bookXXIcon
@@ -212,37 +215,50 @@ function M.new()
                     end
                 end
             end
-
+            
             --
             if episode.versions then
                 for i = 1, #episode.versions do
                     if self.layer["version_" .. episode.versions[i]] and string.len(episode.versions[i]) > 1 then
                         local versionBtn =
-                            copyDisplayObject(
+                        copyDisplayObject(
                             self.layer["version_" .. episode.versions[i]],
                             nil,
                             episode.name .. self.episode.versions[i],
                             self.sceneGroup
                         )
-                        print(episode.versions[i])
                         versionBtn.alpha = 1
                         versionBtn.episode = episode
                         versionBtn.selectedPurchase = episode.name
                         versionBtn.selectedVersion = episode.versions[i]
                         table.insert(bookXXIcon.versions, versionBtn)
                         self.versionGroup[episode.name .. episode.versions[i]] = versionBtn
+                        --
+                        -- labels
+                        local labelBtn =
+                        copyDisplayObject(
+                            self.layer[LABEL_NAME .. episode.versions[i]],
+                            nil,
+                            episode.name .. self.episode.versions[i],
+                            self.sceneGroup
+                        )
+                        labelBtn.alpha = 1
+                        table.insert(bookXXIcon.labels, labelBtn)
+                        self.labelsGroup[episode.name .. episode.versions[i]] = labelBtn
                     end
                 end
                 if model.URL and #bookXXIcon.versions == 0 then
                     bookXXIcon.downloadBtn = copyDisplayObject(self.layer.downloadBtn, nil, episode, self.sceneGroup)
                 end
             end
+
+            self.downloadGroup[episode.name] = bookXXIcon
         end
     end
     --
     --
-    function VIEW:setVersionButtons(bookXXIcon, isFree)
-        print("setVersionButtons", #bookXXIcon.versions, isFree)
+    function VIEW:setVersionButtons(bookXXIcon, _isFree )
+        local isFree = _isFree or bookXXIcon.episode.isFree
         if #bookXXIcon.versions == 0 then
             if _K.lang == "" then
                 bookXXIcon.selectedVersion = "en"
@@ -295,9 +311,13 @@ function M.new()
         else
             for i = 1, #bookXXIcon.versions do
                 local versionBtn = bookXXIcon.versions[i]
+                local labelBtn   = bookXXIcon.labels[i]
+                print("-------------")
+                print(versionBtn.selectedPurchase, versionBtn.selectedVersion)
                 if versionBtn then
                     if cmd.hasDownloaded(versionBtn.selectedPurchase, versionBtn.selectedVersion) then
-                        print(versionBtn.selectedVersion .. "(saved)")
+                        print(versionBtn.selectedVersion .. "(saved)", i)
+                        labelBtn.alpha = 1 
                         function versionBtn:tap(e)
                             print("versionBtn tap for gotoScene")
                             --self.gotoScene
@@ -306,7 +326,8 @@ function M.new()
                         end
                         versionBtn:addEventListener("tap", versionBtn)
                     else
-                        print(versionBtn.selectedVersion .. "(not saved)")
+                        labelBtn.alpha = 0
+                        print(versionBtn.selectedVersion .. "(not saved)", i)
                         -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _episode.versions[i]})
                         function versionBtn:tap(e)
                             print("versionBtn tap for download")
@@ -318,6 +339,7 @@ function M.new()
 
                     if cmd.isUpdateAvailable(versionBtn.selectedPurchase, versionBtn.selectedVersion) then
                         -- show downloadBtn
+                        print("updateAvailable for version button")
                         function versionBtn:tap(e)
                             VIEW.fsm:startDownload(self.episode, self.selectedVersion)
                             return true
@@ -329,6 +351,7 @@ function M.new()
                 else
                     print("Error to find versionBtn")
                 end
+
             end
         end
     end
@@ -411,6 +434,9 @@ function M.new()
                 if episode.versions then
                     for i = 1, #bookXXIcon.versions do
                         local versionBtn = bookXXIcon.versions[i]
+                        local labelBtn   = bookXXIcon.labels[i]
+                        labelBtn.alpha   = 0
+                        print("createDialog labelBtn.alpha = 0")
                         if versionBtn then
                             function versionBtn:tap(e)
                                 --self.cmd.startDownloadVersion
@@ -420,6 +446,7 @@ function M.new()
                             versionBtn:addEventListener("tap", versionBtn)
                         end
                     end
+
                 end
             end
         end
@@ -452,15 +479,17 @@ function M.new()
         native.showAlert("Restore", model.restoreAlertMessage, {"Okay"})
     end
     --
-    function VIEW:updateDialog(selectedPurchase)
-        local button = VIEW.downloadGroup[selectedPurchase]
+    function VIEW:updateDialog(selectedPurchase, version)
+        local selected = selectedPurchase or self.episode.name
+        local button = VIEW.downloadGroup[selected]
         --self.episode  = selectedPurchase
-        print("VIEW.updateDialog", selectedPurchase)
+        print("VIEW.updateDialog", selected, version)
         -- button.text.text=selectedPurchase.."(saved)"
         if button.episode.versions == nil or #button.episode.versions == 0 then
             if model.URL then
                 button.savingTxt.alpha = 0
                 button.savedBtn.alpha = 1
+                print("------- savedBtn alpha = 1 wihout version")
                 button.downloadBtn.alpha = 0
                 button.purchaseBtn.alpha = 0
             end
@@ -511,7 +540,7 @@ function M.new()
                 button.updateMark.alpha = 0
             end
             -- not found. It means it is a version button
-            self:setVersionButtons(button)
+            self:setVersionButtons(button, nil)
         end
     end
     --

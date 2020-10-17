@@ -454,13 +454,13 @@ function NetworkMap.Downloaded:backThumbnail (fsm)
     fsm:backThumbnail()
 end
 
-function NetworkMap.Downloaded:fromDialog (fsm, id)
+function NetworkMap.Downloaded:fromDialog (fsm, id, version)
     local ctxt = fsm.owner
     fsm:getState():Exit(fsm)
     fsm:clearState()
     local r, msg = pcall(
         function ()
-            ctxt:updateDialog(id)
+            ctxt:updateDialog(id, version)
         end
     )
     fsm:popState()

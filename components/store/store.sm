@@ -181,9 +181,9 @@ Downloaded
 {
     backThumbnail()
         pop(backThumbnail){}
-    fromDialog(id)
+    fromDialog(id, version)
         pop(showDialogPurchased){
-            updateDialog(id);
+            updateDialog(id, version);
         }
 }
 

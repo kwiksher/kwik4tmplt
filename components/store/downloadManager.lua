@@ -119,23 +119,23 @@ function M.hasDownloaded(episode, version)
     end
     local _ver = version or ""
     local path = system.pathForFile( model.episodes[episode].dir.._ver, system.ApplicationSupportDirectory )
-    -- io.open opens a file at path. returns nil if no file found
-    local fh, reason = io.open( path.."/copyright.txt", "r" )
-    if fh then
-        io.close( fh )
-        return true
+    return os.rename(path,path) and true or false
+end
+
+function M.isUpdateAvailable(name, version)
+    if model.downloadManager == "V2" then 
+        return V2.isUpdateAvailable(name,version)
     else
-        print("error",reason)
         return false
     end
 end
 
-function M.isUpdateAvailable(name, version)
-   return V2.isUpdateAvailable(name,version)
-end
-
 function M.isUpdateAvailableInVersions(name)
-    return V2.isUpdateAvailableInVersions(name)
+    if model.downloadManager == "V2" then 
+        return V2.isUpdateAvailableInVersions(name)
+    else
+        return false
+    end
 end
 
 function M:init(onSuccess, onError)
@@ -152,7 +152,9 @@ function M:init(onSuccess, onError)
         end
     end)
     -- fetch assets.json for all books
-    V2.fetchAssets()
+    if model.downloadManager == "V2" then 
+        V2.fetchAssets()
+    end
 end
 
 function M.isDownloadQueue()

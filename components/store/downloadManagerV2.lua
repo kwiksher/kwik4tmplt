@@ -445,8 +445,9 @@ M.downloadAsset = function (aQueue, selectedPurchase, version)
 end
 
 M.isUpdateAvailable = function(name, version)
+    
     local downloadables = M.getDownloadables(name, version)
-    print("isUpdateAvailable", #downloadables)
+    --print("isUpdateAvailable", #downloadables)
     return #downloadables > 0  
 end
 
@@ -454,7 +455,7 @@ function M.isUpdateAvailableInVersions(name)
     print("M.isUpateAvailableInVersions", name)
     if #model.episodes[name].versions > 0 then
         for k, v in pairs(model.episodes[name].versions) do
-            print(k, v)
+            --print(k, v)
             local b = M.isUpdateAvailable(name, v )
             if b then
                 return true

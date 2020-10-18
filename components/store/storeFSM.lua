@@ -51,8 +51,8 @@ end
 ------------------------------
 -- Downloaded
 --
-function _Class:updateDialog(id)
-    self.view:updateDialog(id)
+function _Class:updateDialog(id, version)
+    self.view:updateDialog(id, version)
 end
 
 ------------------------------
@@ -232,6 +232,9 @@ end
 
 function _Class:refreshDialog(isDownloaded)
     print("refreshDialog", isDownloaded)
+    -- if isDownloaded then
+    --     self.view:updateDialog()
+    -- end
 end
 
 function _Class:refreshThumbnail()
@@ -256,11 +259,11 @@ end
 ------------------------------
 --
 --
-function _Class.onDownloadComplete(selectedPurchase)
+function _Class.onDownloadComplete(selectedPurchase, version)
     local self = _Class.getInstance()
     self.fsm:onSuccess()
     if self.fromDialog then
-        self.fsm:fromDialog(selectedPurchase)
+        self.fsm:fromDialog(selectedPurchase, version)
         self.fromDialog = false
         print("onDownloadComplete fromDialog false")
     else

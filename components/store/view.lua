@@ -44,9 +44,9 @@ function M.new()
     end
     --
 
-    local function setButton(self, button, episode)
+    local function setButton(self, button, episode, lang, label)
         button.selectedPurchase = episode.name
-        button.lang = _K.lang
+        button.lang = lang
         self.downloadGroup[episode.name] = button
         --If the user has purchased the episode before, change the button
         button.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, button, episode.name, self.sceneGroup)
@@ -71,11 +71,18 @@ function M.new()
         -- button image
         --
         if episode.isOnlineImg then
-            cmd:setButtonImage(button, episode.name, _K.lang)
+            cmd:setButtonImage(button, episode.name, lang)
         end
         if cmd.isUpdateAvailableInVersions(episode.name) then
             setUpdateMark(button, self.sceneGroup)
         end
+        --
+        -- label
+        --
+        if episode.isOnlineImg then
+            cmd:setButtonImage(label, episode.name, lang)
+        end
+
     end
     --
     function VIEW:createThumbnail()
@@ -83,15 +90,17 @@ function M.new()
         for k, episode in pairs(model.episodes) do
             -- print(episode.name)
             local button = self.layer[episode.name .. "Icon"] 
+            local label = self.layer[episode.name .. "Label"]
             if button then
-                setButton(self, button, episode)
+                setButton(self, button, episode, nil, label)
             else
                 if episode.versions then
                     for i = 1, #episode.versions do
                         button = self.layer[episode.name .. "_"..episode.versions[i]] 
+                        label = self.layer[episode.name .."_"..episode.versions[i].. "Label"]
                         print(episode.name .. "_"..episode.versions[i])
                         if button then
-                            setButton(self, button, episode)
+                            setButton(self, button, episode, episode.versions[i], label)
                         end
                     end
                 end
@@ -101,7 +110,7 @@ function M.new()
     end
     --
     local function setButtonListener(button, episode, version)
-        button.episode = {name = episode.name, versions = episode.versions} 
+        button.episode = {name = episode.name, versions = episode.versions, isOnlineImg = episode.isOnlineImg} 
         button.episode.selectedVersion = version
 
         -- Not work this transition because BookPurchased state is necessay to goto a book version
@@ -216,15 +225,15 @@ end
         end
     end
     --
-    local function setDialogButton(bookXXIcon, episode, self)
-        bookXXIcon.lang = _K.lang
+    local function setDialogButton(bookXXIcon, episode, self, lang)
+        bookXXIcon.lang = lang
         self.downloadGroup[episode.name] = bookXXIcon
         bookXXIcon.versions = {}
         bookXXIcon.labels   = {}
         bookXXIcon.selectedPurchase = episode.name
         bookXXIcon.selectedVersion = episode.selectedVersion
 
-        print("createDialog with", episode.name, episode.selectedVersion)
+        print("createDialog with", episode.name, episode.selectedVersion, episode.isOnlineImg)
         
         --If the user has purchased the episode before, change the bookXXIcon
         bookXXIcon.purchaseBtn = copyDisplayObject(self.layer.purchaseBtn, nil, episode, self.sceneGroup)
@@ -240,7 +249,7 @@ end
         -- bookXXIcon image then
         --
         if episode.isOnlineImg then
-            cmd:setButtonImage(bookXXIcon, episode.name, _K.lang)
+            cmd:setButtonImage(bookXXIcon, episode.name, lang)
         else
             local src = self.layer[episode.name]
             if src then
@@ -260,7 +269,8 @@ end
     ---
     function VIEW:createDialog(episode, isPurchased, isDownloaded)
         self.episode = episode
-        local bookXXIcon = self.layer["bookXXIcon"] or self.layer[episode.name.."_"..episode.selectedVersion]
+        print("VIEW:createDialog", episode.name)
+        local bookXXIcon = self.layer[episode.name.."Icon"] or self.layer[episode.name.."_"..episode.selectedVersion]
         if model.bookShelfType == 0 then
             bookXXIcon = self.layer[episode.name .. "Icon"]
         end
@@ -408,7 +418,7 @@ end
     --
     --
     function VIEW:controlDialog(episode, isPurchased, isDownloaded)
-        local bookXXIcon = self.layer["bookXXIcon"] or self.layer[episode.name.."_"..episode.selectedVersion]
+        local bookXXIcon = self.layer[episode.name.."Icon"] or self.layer[episode.name.."_"..episode.selectedVersion]
         if model.bookShelfType == 0 then
             bookXXIcon = self.layer[episode.name .. "Icon"]
         end
@@ -428,7 +438,6 @@ end
                         end
                         
                         if cmd.isUpdateAvailable(episode.name) then
-                            print("~~~~~~~~~~~~~~~~")
                             bookXXIcon.savedBtn.alpha = 1
                             bookXXIcon.savedBtn:addEventListener("tap", function(e)
                                  VIEW.fsm:clickImage(_episode)
@@ -508,7 +517,6 @@ end
         end
 
         if self.layer.infoTxt then
-            print("@@@@ info", model.episodes[episode.name].info)
             self.layer.infoTxt.text = model.episodes[episode.name].info
             self.layer.infoTxt.x = self.layer.infoTxt.oriX
             self.layer.infoTxt.y = self.layer.infoTxt.oriY

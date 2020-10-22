@@ -13,7 +13,6 @@ local downloadQueue
 --
 local URL       = model.URL
 local filename = "/assets.zip"
-local backgroundImg = model.backgroundImg
 --
 local function zipListener( event, deferred , selectedPurchase, version)
     if ( event.isError ) then
@@ -203,10 +202,12 @@ function M:startDownload(episode, version)
     end
 end
 --
-M.setButtonImage = function (_button, episode, lang)
+M.setButtonImage = function (_button, id, version)
     local params = {}
-    local version = lang or ""
+    local version = version or ""
     local button = _button
+    local imgName = model.backgroundImg or button.imagePath:sub(1, button.imagePath:len()-4).. display.imageSuffix ..".png"
+
     params.progress = true
     
     --
@@ -237,10 +238,10 @@ M.setButtonImage = function (_button, episode, lang)
             }
         end
     end
-    print(button.name, URL..episode..version.."/"..backgroundImg)
+    print("download image", button.name, URL..id..version.."/"..imgName)
     --
     network.download(
-        URL..episode..version.."/"..backgroundImg.."?time="..os.time(),
+        URL..id..version.."/"..imgName.."?time="..os.time(),
         "GET",
         buttonImageListener,
         params,

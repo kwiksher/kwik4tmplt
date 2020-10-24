@@ -79,7 +79,7 @@ function M.new()
         --
         -- label
         --
-        if episode.isOnlineImg then
+        if episode.isOnlineImg and label then
             cmd:setButtonImage(label, episode.name, lang)
         end
 

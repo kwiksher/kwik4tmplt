@@ -79,7 +79,7 @@ function M.new()
         --
         -- label
         --
-        if episode.isOnlineImg and label then
+        if episode.isOnlineImg then
             cmd:setButtonImage(label, episode.name, lang)
         end
 
@@ -98,8 +98,8 @@ function M.new()
                     for i = 1, #episode.versions do
                         button = self.layer[episode.name .. "_"..episode.versions[i]] 
                         label = self.layer[episode.name .."_"..episode.versions[i].. "Label"]
-                        print(episode.name .. "_"..episode.versions[i])
-                        if button then
+                        --print(episode.name .. "_"..episode.versions[i])
+                        if button and label then
                             setButton(self, button, episode, episode.versions[i], label)
                         end
                     end
@@ -156,7 +156,7 @@ end
     --
     function VIEW:controlThumbnail()
         for k, episode in pairs(model.episodes) do
-            -- print(episode.name)
+            --print("controlThumbnail",episode.name)
             local button = self.layer[episode.name .. "Icon"]
             if button then
                 setButtonListener(button, episode)
@@ -251,23 +251,35 @@ end
         if episode.isOnlineImg then
             cmd:setButtonImage(bookXXIcon, episode.name, lang)
         else
-            local src = self.layer[episode.name]
+            local src = self.layer[episode.name.."Icon"] or self.layer[episode.name.."_"..lang]
             if src then
+                --print(src.imagePath)
                 bookXXIcon.fill = {
                     type = "image",
                     filename = _K.imgDir .. src.imagePath,
                     baseDir = _K.systemDir
                 }
-                for k, v in pairs(model.episodes) do
-                    if self.layer[v.name] then
-                        self.layer[v.name].alpha = 0
-                    end
-                end
             end
         end
+        bookXXIcon.alpha = 1
+
     end
     ---
     function VIEW:createDialog(episode, isPurchased, isDownloaded)
+        -- init
+        for k, v in pairs(model.episodes) do
+            if self.layer[v.name.."Icon"] then
+                self.layer[v.name.."Icon"].alpha = 0
+            end
+            for i = 1, #v.versions do
+               local obj  = self.layer[v.name.."_"..v.versions[i]]
+                if obj then
+                    obj.alpha = 0
+                end
+            end
+
+        end
+        --
         self.episode = episode
         print("VIEW:createDialog", episode.name)
         local bookXXIcon = self.layer[episode.name.."Icon"] or self.layer[episode.name.."_"..episode.selectedVersion]
@@ -276,12 +288,12 @@ end
         end
        
         if bookXXIcon then
-            setDialogButton(bookXXIcon, episode, self)
+            setDialogButton(bookXXIcon, episode, self, episode.selectedVersion)
         end
         --
         if episode.versions then
             for i = 1, #episode.versions do
-
+                --print(episode.versions[i])
                 local iconLayer = self.layer[episode.name.."_"..episode.versions[i]] or {}
                 iconLayer.alpha = 0
                 if episode.versions[i] == episode.selectedVersion then
@@ -357,7 +369,7 @@ end
 
             if cmd.isUpdateAvailable(bookXXIcon.selectedPurchase, bookXXIcon.selectedVersion) then
                 -- show downloadBtn
-                print("", "isUpdateAvailable")
+                --print("", "isUpdateAvailable")
                 bookXXIcon.downloadBtn.episode = bookXXIcon.episode
                 bookXXIcon.downloadBtn.selectedVersion = bookXXIcon.selectedVersion
                 function bookXXIcon.downloadBtn:tap(e)
@@ -366,10 +378,10 @@ end
                 end
                 bookXXIcon.downloadBtn.alpha = 1
                 bookXXIcon.downloadBtn:addEventListener("tap", bookXXIcon.downloadBtn)
-                print(self.sceneGroup)
-                print ("", "setUpdateMark", bookXXIcon.downloadBtn, self.sceneGroup)
+                --print(self.sceneGroup)
+                --print ("", "setUpdateMark", bookXXIcon.downloadBtn, self.sceneGroup)
                 setUpdateMark(bookXXIcon.downloadBtn, self.sceneGroup)
-                print("", "setUpdateMark ended")
+                --print("", "setUpdateMark ended")
             end
         else
             for i = 1, #bookXXIcon.versions do

@@ -72,6 +72,7 @@ end
 local function _startDownload(selectedPurchase, version)
     local deferred = Deferred()
     local path = system.pathForFile(selectedPurchase..version..".zip", system.TemporaryDirectory)
+    local _time     = os.time()
     print(path)
     local fh, reason = io.open( path, "r" )
     if fh then
@@ -84,7 +85,7 @@ local function _startDownload(selectedPurchase, version)
                 end )
         else
             local options = {
-                zipFile = selectedPurchase..version..".zip",
+                zipFile = selectedPurchase..version.._time..".zip",
                 zipBaseDir = system.TemporaryDirectory,
                 -- dstBaseDir = _K.DocumentsDir,
                 dstBaseDir = system.ApplicationSupportDirectory,
@@ -101,11 +102,11 @@ local function _startDownload(selectedPurchase, version)
         print("---------------------")
         local params    = {}
         params.progress = true
-        network.download( url.."?a="..os.time(), "GET",
+        network.download( url.."?a=".._time, "GET",
             function(event)
                 networkListener(event, deferred, selectedPurchase, version)
             end,
-            params, selectedPurchase..version..".zip", system.TemporaryDirectory )
+            params, selectedPurchase..version.._time..".zip", system.TemporaryDirectory )
     end
     return deferred:promise()
 end
@@ -207,20 +208,20 @@ M.setButtonImage = function (_button, id, version)
     local version = version or ""
     local button = _button
     local imgName = model.backgroundImg or button.imagePath:sub(1, button.imagePath:len()-4).. display.imageSuffix ..".png"
-
+    local _time = os.time()
     params.progress = true
     
     --
     local function buttonImageListener( event )
         if ( event.isError ) then
             print( "Network error - download failed: ", event.response )
-            local path = system.pathForFile( button.name..".png", system.TemporaryDirectory)
+            local path = system.pathForFile( button.name.._time..".png", system.TemporaryDirectory)
             local fhd = io.open( path )
             -- Determine if file exists
             if fhd then
                 button.fill = {
                     type = "image",
-                    filename = button.name..".png",
+                    filename = button.name.._time..".png",
                     baseDir = system.TemporaryDirectory
                 }
                fhd:close()
@@ -233,7 +234,7 @@ M.setButtonImage = function (_button, id, version)
             print( "Displaying response image file with " ..button.name ..".png")
             button.fill = {
                 type = "image",
-                filename = button.name..".png",
+                filename = button.name.._time..".png",
                 baseDir = system.TemporaryDirectory
             }
         end
@@ -241,11 +242,11 @@ M.setButtonImage = function (_button, id, version)
     print("download image", button.name, URL..id..version.."/"..imgName)
     --
     network.download(
-        URL..id..version.."/"..imgName.."?time="..os.time(),
+        URL..id..version.."/"..imgName.."?time=".._time,
         "GET",
         buttonImageListener,
         params,
-        button.name..".png",
+        button.name.._time..".png",
         system.TemporaryDirectory
     )
 end

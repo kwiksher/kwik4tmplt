@@ -110,7 +110,7 @@ function M.new()
     end
     --
     local function setButtonListener(button, episode, version)
-        button.episode = {name = episode.name, versions = episode.versions, isOnlineImg = episode.isOnlineImg} 
+        button.episode = {name = episode.name, versions = episode.versions, isOnlineImg = episode.isOnlineImg, isFree = episode.isFree} 
         button.episode.selectedVersion = version
 
         -- Not work this transition because BookPurchased state is necessay to goto a book version

@@ -190,7 +190,7 @@ function updatedAssetsTable(item, bookName, version)
 end
 
 function isUpdated(book,page, type, date)
-    if assetsTableLocal[book][page] then
+    if assetsTableLocal[book][page] and assetsTableLocal[book][page][type]then
         return not (assetsTableLocal[book][page][type].date == date)
     end
     return true

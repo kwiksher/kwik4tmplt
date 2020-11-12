@@ -55,7 +55,11 @@ function M.new (host)
             local sec     = os.difftime( os.time(), self.startTime) 
             local remain  = math.floor(sec * (1.0/percent))
             local time    = os.date("*t", remain)
-            spinner.spinnerText.text = math.floor(percent*100).." % (" ..self.size .."/" ..self.bookSize .." Mb) \nEstimated time of completion\n" ..time.min.." min "..time.sec .." sec"
+            if time then
+                spinner.spinnerText.text = math.floor(percent*100).." % (" ..self.size .."/" ..self.bookSize .." Mb) \nEstimated time of completion\n" ..time.min.." min "..time.sec .." sec"
+            else
+                print(self.size, self.bookSize, self.startTime)
+            end
         end
     end
 

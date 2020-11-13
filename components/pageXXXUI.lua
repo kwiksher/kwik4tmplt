@@ -48,6 +48,9 @@ _Class.new = function(scene, imagePage)
   end
   --
   function UI:setVars()
+    {{#Variable}}
+      self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/Variable}}
     {{#extLibCode}}
       self:_vars("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/extLibCode}}
@@ -68,6 +71,9 @@ _Class.new = function(scene, imagePage)
     {{#components}}
     self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#Variable}}
+      self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/Variable}}
     {{#extLibCode}}
       self:_create("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/extLibCode}}
@@ -81,6 +87,9 @@ _Class.new = function(scene, imagePage)
     {{#components}}
     self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#Variable}}
+      self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/Variable}}
     {{#extLibCode}}
       self:_didShow("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/extLibCode}}
@@ -94,6 +103,9 @@ _Class.new = function(scene, imagePage)
     {{#components}}
     self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#Variable}}
+      self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/Variable}}
     {{#extLibCode}}
       self:_didHide("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/extLibCode}}
@@ -104,6 +116,9 @@ _Class.new = function(scene, imagePage)
     {{#components}}
     self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/components}}
+    {{#Variable}}
+      self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
+    {{/Variable}}
     {{#extLibCode}}
       self:_destroy("{{type}}",  const.{{layer}}_{{type}}_{{trigger}}, {{custom}})
     {{/extLibCode}}

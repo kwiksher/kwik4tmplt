@@ -57,8 +57,8 @@ function _M:didShow(UI)
       {{#kwik}}
         layer.{{myLName}} = display.newImageRect( _K.imgDir.. UI.tSearch["{{dois}}"][1], _K.systemDir, UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][3]  )
       {{/kwik}}
-      layer.{{myLName}}.x        = UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][4]
-      layer.{{myLName}}.y        = UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][5]
+      layer.{{myLName}}.x        = UI.tSearch["{{dois}}"][4]
+      layer.{{myLName}}.y        = UI.tSearch["{{dois}}"][5]
       layer.{{myLName}}.alpha    = UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][8]
       layer.{{myLName}}.oldAlpha = UI.tSearch["{{dois}}"][2], UI.tSearch["{{dois}}"][8]
       {{#randX}}

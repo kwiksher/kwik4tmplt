@@ -26,7 +26,7 @@ function _M:didShow(UI)
       padding     = UI.tSearch["{{dois}}"][3],
       sentence    = UI.tSearch["{{dois}}"][4],
       volume      = {{avol}},
-      sentenceDir = "audio",
+--      sentenceDir = "audio",
       line        = UI.tSearch["{{dois}}"][5],
       button      = UI.tSearch["{{dois}}"][6],
       font        = UI.tSearch["{{dois}}"][7],
@@ -45,6 +45,7 @@ function _M:didShow(UI)
       wordTouch    = UI.tSearch["{{dois}}"][15],
       readDir      = UI.tSearch["{{dois}}"][16],
       channel      = UI.tSearch["{{dois}}"][17],
+      sentenceDir  = UI.tSearch["{{dois}}"][18],
       lang         = _K.lang
     }
     sceneGroup:insert( layer.{{myLName}})

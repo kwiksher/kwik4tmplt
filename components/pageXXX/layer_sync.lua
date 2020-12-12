@@ -102,7 +102,7 @@ function _M:localPos(UI)
   sceneGroup:insert(layer.speak{{spe}})
   --
   {{#multLayers}}
-    UI.tab{{um}}["{{dois}}"] = { dX, dY, elpad, allAudios.{{elaudio}}, layer.{{myLName}}_txt, {{sbut}}, {{elFont}}, {{elFontColor}}, elFontSize, {{elColorHi}}, {{elTouch}}, "{{rightLeft}}", {{vchan}} }
+    UI.tab{{um}}["{{dois}}"] = { dX, dY, elpad, allAudios.{{elaudio}}, layer.{{myLName}}_txt, {{sbut}}, {{elFont}}, {{elFontColor}}, elFontSize, {{elColorHi}}, {{elTouch}}, "{{rightLeft}}", {{vchan}}, {{elTouchFolder}} }
     {{^elshow}}
       -- send button out of screen
       layer.speak{{spe}}.x = -500

@@ -14,18 +14,88 @@ end
 --
 function _M:localPos()
 end
+---------------------------
+_M.layerName = "{{gtName}}"
+_M.layerWidth = {{elW}}
+_M.layerHeight = {{elH}}
+_M.randXStart = {{randXStart}}
+_M.randXEnd   = {{randXEnd}})
+_M.randYStart = {{randYStart}}
+_M.randYEnd   = {{randYEnd}})
+_M.nX         = {{nX}}
+_M.nY         = {{nY}}
+_M.layerX     = {{elX}}
+_M.layerY     = {{elY}}
+--function M:getLayer(UI)
+	local layer = = UI.layer
+	return {{gtLayer}}
+end
 --
+function _M:getDssolvedLayer(UI)
+	local layer = UI.layer
+	return layer.{{gtDissolve}}
+end
+--
+_M.restart = {{gtRestart}}
+--
+_M.actionName = ".action_{{gtAction}}"
+--
+_M.animationEndX = {{endX}}
+_M.animationEndY = {{endY}}
+_M.animationEndAlpha = {{gtEndAlpha}}
+_M.animationDuration = {{gtDur}}
+_M.animationScaleY = {{scalH}}
+_M.animationScaleX  = {{scalW}}
+_M.animationRotation = {{rotation}}
+_M.animationEasing   = {{gtEase}}
+_M.animationReverse  = {{gtReverse}}
+_M.animationSwipeX   = {{gtSwipeX}}
+_M.animationSwipeY   = {{gtSwipeY}}
+_M.animationDelay   = {{gtDelay}}
+_M.animationLoop   = {{gtLoop}}
+_M.animationNewAngle = {{gtNewAngle}}
+--
+_M.isSceneGroup  = {{isSceneGroup}}
+--
+_M.audioVolume = {{avol}}
+_N.audioChannel = {{achannel}}
+_M.audioName    = {{gtAudio}}
+_M.audioLoop    = {{aloop}}
+_M.audioFadeIn  = {{tofade}}
+--
+{{#gtBread}}
+_M.breadcrumWidth = {{gtbw}}/4
+_M.breadcrumHeight = {{gtbh}}/4
+{{/gtBread}}
+{{/ultimate}}
+{{^ultimate}}
+{{#gtBread}}
+_M.breadcrumWidth = {{gtbw}}
+_M.breadcrumHeight = {{gtbh}}
+_M.breadShape      = "{{gtbshape}}"
+_M.breadcrumColor  = {{gtbcolor}}
+_M.breadcrumInterval = {{gtbinter}}
+_M.breadcrumTime     = {{gtbsec}}
+{{/gtBread}}
+{{/ultimate}}
+--
+{{#gtTypePath}}
+_M.pathAnimation = {
+	{{pathCurve}} angle = {{gtAngle}}
+}
+{{/gtTypePath}}
+---------------------------
 function _M:didShow(UI)
   -- UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", phase = "didShow", UI=UI})	}
   self:repoHeader(UI)
   self:buildAnim(UI)
 	{{#aplay}}
 		{{#gtDissolve}}
-			_K.trans.{{gtName}}:play()
+			_K.trans[self.layerName]:play()
 		{{/gtDissolve}}
 		{{^gtDissolve}}
-	--	if _K.gt.{{gtName}} then
-	--		_K.gt.{{gtName}}:play()
+	--	if _K.gt[self.layerName] then
+	--		_K.gt[self.layerName]:play()
 	--	end
 		{{/gtDissolve}}
 	{{/aplay}}
@@ -49,7 +119,7 @@ local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
 	      mX = endX + layer.x
 	      mY = endY + layer.y
 	  else
-	      mX = endX +layer.width/2) 
+	      mX = endX +layer.width/2)
 	      mY = endY +layer.height/2)
 	  end
 	{{/CenterReferencePoint}}
@@ -94,10 +164,10 @@ local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
         mY = endY  + (  layer.height )
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
-		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
+		mX = _M.layerWidth + math.random(_M.randXStart, _M.randXEnd)
 	{{/randX}}
 	{{#randY}}
-		mY =  {{elH}} + math.random({{randYStart}}, {{randYEnd}})
+		mY =  _M.layerHeigh + math.random(_M.randYStart, _M.randYEnd)
 	{{/randY}}
 	return mX, mY
 end
@@ -112,54 +182,54 @@ local function getPos(layer, _endX, _endY)
     mY = endY + height/2
 	{{/DefaultReference}}
 	{{#TextReference}}
-    mX = endX + {{nX}} - {{elX}} 
-    mY = endY + {{nY}} - {{elY}} -height*0.5
+    mX = endX + _M.nX - _M.layerX
+    mY = endY + _M.nY - _M.layerY -height*0.5
 	{{/TextReference}}
 	{{#TopLeftReferencePoint}}
 		--TopLeftReferencePoint
-      mX = endX 
-      mY = endY 
+      mX = endX
+      mY = endY
 	{{/TopLeftReferencePoint}}
 	{{#TopCenterReferencePoint}}
 	--TopCenterReferencePoint
-      mX = endX + width/2 
-      mY = endY 
+      mX = endX + width/2
+      mY = endY
 	{{/TopCenterReferencePoint}}
 	{{#TopRightReferencePoint}}
 	--TopRightReferencePoint
-      mX = endX + width 
-      mY = endY 
+      mX = endX + width
+      mY = endY
 	{{/TopRightReferencePoint}}
 	{{#CenterLeftReferencePoint}}
 	--CenterLeftReferencePoint
-      mX = endX 
+      mX = endX
       mY = endY + height/2
 	{{/CenterLeftReferencePoint}}
 	{{#CenterRightReferencePoint}}
 	--CenterRightReferencePoint
-      mX = endX + width 
-      mY = endY + height/2 
+      mX = endX + width
+      mY = endY + height/2
 	{{/CenterRightReferencePoint}}
 	{{#BottomLeftReferencePoint}}
 	--BottomLeftReferencePoint
-      mX = endX 
-      mY = endY + height 
+      mX = endX
+      mY = endY + height
 	{{/BottomLeftReferencePoint}}
 	{{#BottomRightReferencePoint}}
 	--BottomRightReferencePoint
-      mX = endX + width 
-      mY = endY + height 
+      mX = endX + width
+      mY = endY + height
 	{{/BottomRightReferencePoint}}
 	{{#BottomCenterReferencePoint}}
 	--BottomCenterReferencePoint
-      mX = endX + width/2 
-      mY = endY + height 
+      mX = endX + width/2
+      mY = endY + height
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
-		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})
+		mX = _M.layerWidth + math.random(_M.randXStart, _M.randXEnd)
 	{{/randX}}
 	{{#randY}}
-		mY =  {{elH}} + math.random({{randYStart}}, {{randYEnd}})
+		mY =  _M.layerHeigh + math.random(_M.randYStart, _M.randYEnd)
 	{{/randY}}
 	return mX, mY
 end
@@ -167,46 +237,46 @@ end
 
 --
 function _M:repoHeader(UI)
-	local layer = UI.layer
+	local layer = self:getLayer(UI)
 	{{#TopLeftReferencePoint}}
-	{{gtLayer}}.anchorX = 0
-	{{gtLayer}}.anchorY = 0;
-	_K.repositionAnchor({{gtLayer}}, 0,0)
+	layer.anchorX = 0
+	layer.anchorY = 0;
+	_K.repositionAnchor(layer, 0,0)
 	{{/TopLeftReferencePoint}}
 	{{#TopCenterReferencePoint}}
-	{{gtLayer}}.anchorX = 0.5
-	{{gtLayer}}.anchorY = 0;
-	_K.repositionAnchor({{gtLayer}}, 0.5,0)
+	layer.anchorX = 0.5
+	layer.anchorY = 0;
+	_K.repositionAnchor(layer, 0.5,0)
 	{{/TopCenterReferencePoint}}
 	{{#TopRightReferencePoint}}
-	{{gtLayer}}.anchorX = 1
-	{{gtLayer}}.anchorY = 0;
-	_K.repositionAnchor({{gtLayer}}, 1,0)
+	layer.anchorX = 1
+	layer.anchorY = 0;
+	_K.repositionAnchor(layer, 1,0)
 	{{/TopRightReferencePoint}}
 	{{#CenterLeftReferencePoint}}
-	{{gtLayer}}.anchorX = 0
-	{{gtLayer}}.anchorY = 0.5;
-	_K.repositionAnchor({{gtLayer}}, 0,0.5)
+	layer.anchorX = 0
+	layer.anchorY = 0.5;
+	_K.repositionAnchor(layer, 0,0.5)
 	{{/CenterLeftReferencePoint}}
 	{{#CenterRightReferencePoint}}
-	{{gtLayer}}.anchorX = 1
-	{{gtLayer}}.anchorY = 0.5;
-	_K.repositionAnchor({{gtLayer}}, 1,0.5)
+	layer.anchorX = 1
+	layer.anchorY = 0.5;
+	_K.repositionAnchor(layer, 1,0.5)
 	{{/CenterRightReferencePoint}}
 	{{#BottomLeftReferencePoint}}
-	{{gtLayer}}.anchorX = 0
-	{{gtLayer}}.anchorY = 1;
-	_K.repositionAnchor({{gtLayer}}, 0,1)
+	layer.anchorX = 0
+	layer.anchorY = 1;
+	_K.repositionAnchor(layer, 0,1)
 	{{/BottomLeftReferencePoint}}
 	{{#BottomRightReferencePoint}}
-	{{gtLayer}}.anchorX = 1
-	{{gtLayer}}.anchorY = 1;
-	_K.repositionAnchor({{gtLayer}}, 1,1)
+	layer.anchorX = 1
+	layer.anchorY = 1;
+	_K.repositionAnchor(layer, 1,1)
 	{{/BottomRightReferencePoint}}
 	{{#BottomCenterReferencePoint}}
-	{{gtLayer}}.anchorX = 0.5
-	{{gtLayer}}.anchorY = 1;
-	_K.repositionAnchor({{gtLayer}}, 0.5,1)
+	layer.anchorX = 0.5
+	layer.anchorY = 1;
+	_K.repositionAnchor(layer, 0.5,1)
 	{{/BottomCenterReferencePoint}}
 end
 --
@@ -216,44 +286,33 @@ local function getPath(t)
     _t.x, _t.y =  _K.ultimatePosition(t.x, t.y)
     return _t
 end
-{{#gtBread}}
-local gtbw = {{gtbw}}/4
-local gtbh = {{gtbh}}/4
-{{/gtBread}}
-{{/ultimate}}
-{{^ultimate}}
-{{#gtBread}}
-local gtbw = {{gtbw}}
-local gtbh = {{gtbh}}
-{{/gtBread}}
-{{/ultimate}}
 --
 function _M:buildAnim(UI)
-	local layer = UI.layer
+	local layer = self:getLayer(UI)
 	local sceneGroup = UI.scene.view
 	-- Wait request for '+gtName+'\r\n';
-	if {{gtLayer}} == nil then return end
-	{{gtLayer}}.xScale = {{gtLayer}}.oriXs
-	{{gtLayer}}.yScale = {{gtLayer}}.oriYs
+	if layer == nil then return end
+	layer.xScale = layer.oriXs
+	layer.yScale = layer.oriYs
 
 	{{#gtDissolve}}
-		_K.trans.{{gtName}} = {}
-		_K.trans.{{gtName}}.play = function()
-			transition.dissolve({{gtLayer}}, layer.{{gtDissolve}},	{{gtDur}}, {{gtDelay}})
+		_K.trans[self.layerName] = {}
+		_K.trans[self.layerName].play = function()
+			transition.dissolve(layer, self:getDssolvedLayer(UI),	self.animationDuration, self.animationDelay}})
 		end
-		_K.trans.{{gtName}}.pause = function() print("pause is not supported in dissove") end
-		_K.trans.{{gtName}}.resume = function()
-			transition.dissolve({{gtLayer}}, layer.{{gtDissolve}},	{{gtDur}}, {{gtDelay}})
+		_K.trans[self.layerName].pause = function() print("pause is not supported in dissove") end
+		_K.trans[self.layerName].resume = function()
+			transition.dissolve(layer, self:getDssolvedLayer(UI),	self.animationDuration, self.animationDelay)
 		end
 	{{/gtDissolve}}
 	{{^gtDissolve}}
-		local {{gtName}} = function(event)
-			if _K.gt.{{gtName}} then
-				_K.gt.{{gtName}}:toBeginning()
+		local restartHandler= function(event)
+			if _K.gt[self.layerName] then
+				_K.gt[self.layerName]:toBeginning()
 			end
 		end -- end of function
 		{{#gtRestart}}
-		local _restart = {{gtRestart}}
+		local _restart = self.restart
 		{{/gtRestart}}
 		{{^gtRestart}}
 		local _restart = false
@@ -262,77 +321,77 @@ function _M:buildAnim(UI)
 			local deltaX = 0
 			local deltaY = 0
 			{{/isComic}}
-			local onEnd_{{gtComplete}} = function()
+			local onEndHandler = function()
 				if _restart then
 						{{#getTypeShake}}
-						{{gtLayer}}.rotation = 0
+						layer.rotation = 0
 						{{/getTypeShake}}
 						{{^isComic}}
-						{{gtLayer}}.x				 = {{gtLayer}}.oriX
-						{{gtLayer}}.y				 = {{gtLayer}}.oriY
+						layer.x				 = layer.oriX
+						layer.y				 = layer.oriY
 						{{/isComic}}
-						{{gtLayer}}.alpha		 = {{gtLayer}}.oldAlpha
-						{{gtLayer}}.rotation	= 0
-						{{gtLayer}}.isVisible = true
-						{{gtLayer}}.xScale		= {{gtLayer}}.oriXs
-						{{gtLayer}}.yScale		= {{gtLayer}}.oriYs
+						layer.alpha		 = layer.oldAlpha
+						layer.rotation	= 0
+						layer.isVisible = true
+						layer.xScale		= layer.oriXs
+						layer.yScale		= layer.oriYs
 						{{#tabSS}}
-						{{gtLayer}}:pause()
-						{{gtLayer}}.currentFrame = 1
+						layer:pause()
+						layer.currentFrame = 1
 						{{/tabSS}}
 						{{^tabSS}}
 						{{#tabMC}}
-						{{gtLayer}}::stopAtFrame(1)
+						layer::stopAtFrame(1)
 						{{/tabMC}}
 						{{/tabSS}}
 				end
 				{{#gtAction}}
 			--	{{gtAction}}()
-        Runtime:dispatchEvent({name=UI.page..".action_{{gtAction}}", event={}, UI=UI})
+        Runtime:dispatchEvent({name=UI.page..self.actionName, event={}, UI=UI})
 				{{/gtAction}}
 				{{#gtAudio}}
-				audio.setVolume({{avol}}, { channel={{achannel}} })
+				audio.setVolume({self.audioVolume, { channel=self.audioChannel })
 				{{#alloRepeat}}
-				{{gtAudio}}x9 = audio.play({{gtAudio}}, { channel={{achannel}}, loops={{aloop}}{{tofade}} })
+				audio.play(self.audioName, { channel=self.audioChannel, loops=self.audioLoop, fadein=self.audioFadeIn}} })
 				{{/alloRepeat}}
 				{{^alloRepeat}}
-				audio.play(UI.allAudios.{{gtAudio}}, { channel={{achannel}}, loops={{aloop}}{{tofade}} })
+				audio.play(UI.allAudios[self.audioName], { channel=self.audioChannel, loops=self.audioLoop, fadein=self.audioFadeIn}} })
 				{{/alloRepeat}}
 				{{/gtAudio}}
 			end --ends reStart for {{gtName}}
 			{{#endX}}
 				{{^groupAndPage}}
-				local mX, mY = getPos({{gtLayer}}, {{endX}}, {{endY}})
+				local mX, mY = getPos(layer, self.animationEndX, self.animationEndY)
 				{{#isComic}}
-				deltaX = {{gtLayer}}.oriX -mX
-				deltaY = {{gtLayer}}.oriY -mY
+				deltaX = layer.oriX -mX
+				deltaY = layer.oriY -mY
 				mX, mY = display.contentCenterX - deltaX, display.contentCenterY - deltaY
 				{{/isComic}}
 				{{/groupAndPage}}
 	   		{{#groupAndPage}}
-				local mX, mY = getPosGroupAndPage({{gtLayer}}, {{endX}}, {{endY}}, {{isSceneGroup}})
+				local mX, mY = getPosGroupAndPage(layer, self.animationEndX, self.animationEndY, self.isSceneGroup)
 				{{/groupAndPage}}
 			{{/endX}}
 			{{^gtTypePath}}
-				_K.gt.{{gtName}} = _K.gtween.new(
-					{{gtLayer}},
-					{{gtDur}},
+				_K.gt[self.layerName] = _K.gtween.new(
+					layer,
+					self.animationDuration,
 					{{^Linear}}
 					{
 						{{#Pulse}}
-						  xScale ={{scalW}}, yScale ={{scalH}},
+						  xScale = self.animationScaleX, yScale = self.animationScaleY,
 						{{/Pulse}}
 						{{#Rotation}}
-							rotation = {{rotation}},
+							rotation =  self.animationRotation,
 						{{/Rotation}}
 						{{#Shake}}
-							rotation = {{rotation}},
+							rotation =  self.animationRotation,
 						{{/Shake}}
 						{{#Bounce}}
 							y=mY,
 						{{/Bounce}}
 						{{#Blink}}
-						 xScale = {{scalW}}, yScale = {{scalH}},
+						 xScale =  self.animationScaleX, yScale = self.animationScaleY,
 						{{/Blink}}
 					},
 					{{/Linear}}
@@ -342,66 +401,64 @@ function _M:buildAnim(UI)
 						x = mX, y = mY,
 						{{/endX}}
 						{{#gtEndAlpha}}
-						alpha={{gtEndAlpha}},
+						alpha=self.animationEndAlpha,
 						{{/gtEndAlpha}}
 						{{#rotation}}
-						rotation={{rotation}},
+						rotation= self.animationRotation,
 						{{/rotation}}
 						{{#scalW}}
-						xScale={{scalW}} * {{gtLayer}}.xScale,
+						xScale={{scalW}} * layer.xScale,
 						{{/scalW}}
 						{{#scalH}}
-						yScale={{scalH}} * {{gtLayer}}.yScale,
+						yScale={{scalH}} * layer.yScale,
 						{{/scalH}}
 					},
 					{{/Linear}}
 					{
-						ease = _K.gtween.easing.{{gtEase}},
-						repeatCount = {{gtLoop}},
-						reflect = {{gtReverse}}{{gtSwipes}},
-						delay={{gtDelay}},
-						onComplete=onEnd_{{gtComplete}}
+						ease = _K.gtween.easing[self.animationEasing],
+						repeatCount = self.animationLoop,
+						reflect =self,animationReverse, xSwipe=self.animationSwipeX, ySwipe=self.animationSwipeY,
+						delay=self.animationDelay,
+						onComplete=onEndHandler
 						{{#gtBread}}
 						, breadcrumb = true, breadAnchor = 5,
-						breadShape = "{{gtbshape}}", breadW =gtbw, breadH = gtbh
+						breadShape = self.breadShape, breadW =self.breadcrumWidth, breadH = self.breadcrumHeight
 						{{#gtbcolor}}
-						, breadColor = { {{gtbcolor}} }
+						, breadColor = {self.breadcrumColor }
 						{{/gtbcolor}}
 						{{^gtbcolor}}
 						, breadColor = {"rand"}
 						{{/gtbcolor}}
-						, breadInterval = {{gtbinter}}
+						, breadInterval = self.breadcrumInterval
 						{{#gtbdispose}}
-						, breadTimer = {{gtbsec}}
+						, breadTimer = self.breadcrumTime
 						{{/gtbdispose}}
 						{{/gtBread}}
 						})
 			{{/gtTypePath}}
 			{{#gtTypePath}}
-			_K.gt.{{gtName}} = _K.btween.new(
-				{{gtLayer}},
-				{{gtDur}},
+			_K.gt[self.layerName] = _K.btween.new(
+				layer,
+				self.animationDuration,
+				self.pathAnimation,
 				{
-					{{pathCurve}} angle = {{gtAngle}}
-				},
-				{
-					ease			 = _K.gtween.easing.{{gtEase}},
-					repeatCount = {{gtLoop}},
-					reflect		 = {{gtReverse}}{{gtSwipes}},
-					delay			 = {{gtDelay}},
-					onComplete = onEnd_{{gtComplete}}
+					ease			 = _K.gtween.easing[self.animationEasing],
+					repeatCount = self.animationLoop,
+					reflect =self,animationReverse, xSwipe=self.animationSwipeX, ySwipe=self.animationSwipeY,
+					delay			 = self.animationDelay,
+					onComplete = onEndHandler
 					{{#gtBread}}
 					, breadcrumb = true, breadAnchor = 5,
-					breadShape = "{{gtbshape}}", breadW =gtbw, breadH = gtbh
+					breadShape = self.breadShape, breadW =self.breadcrumWidth, breadH = self.breadcrumHeight
 					{{#gtbcolor}}
-					, breadColor = { {{gtbcolor}} }
+					, breadColor = { self.breadcrumColor }
 					{{/gtbcolor}}
 					{{^gtbcolor}}
 					, breadColor = {"rand"}
 					{{/gtbcolor}}
-					, breadInterval = {{gtbinter}}
+					, breadInterval = self.breadcrumInterval
 					{{#gtbdispose}}
-					, breadTimer = {{gtbsec}}
+					, breadTimer = self.breadcrumTime
 					{{/gtbdispose}}
 					{{/gtBread}}
 				},
@@ -410,29 +467,29 @@ function _M:buildAnim(UI)
 					x= mX, y= mY,
 					{{/endX}}
 					{{#gtEndAlpha}}
-					alpha={{gtEndAlpha}},
+					alpha=self.animationEndAlpha,
 					{{/gtEndAlpha}}
 					{{#rotation}}
-					rotation={{rotation}},
+					rotation= self.animationRotation,
 					{{/rotation}}
 					{{#scalW}}
-					xScale={{scalW}} * {{gtLayer}}.xScale,
+					xScale= self.animationScaleX * layer.xScale,
 					{{/scalW}}
 					{{#scalH}}
-					yScale={{scalH}} * {{gtLayer}}.yScale,
+					yScale=self.animationScaleY * layer.yScale,
 					{{/scalH}}
 					{{#gtNewAngle}}
-					newAngle = {{gtNewAngle}}
+					newAngle = self.animationNewAngle
 					{{/gtNewAngle}}
 					})
-				_K.gt.{{gtName}}.pathAnim = true
+				_K.gt[self.layerName].pathAnim = true
 			{{/gtTypePath}}
 				{{^aplay}}
-				_K.gt.{{gtName}}:pause()
+				_K.gt[self.layerName]:pause()
 				{{/aplay}}
-  			-- _K.gt.{{gtName}}:toBeginning()
+  			-- _K.gt[self.layerName]:toBeginning()
 	  		{{#isComic}}
-  		{{gtLayer}}.anim["{{gtName}}"] = _K.gt.{{gtName}}
+  		layer.anim[self.layerName] = _K.gt[self.layerName]
   		{{/isComic}}
 		{{/gtDissolve}}
 	--
@@ -441,20 +498,20 @@ end
 --
 function _M:play(UI)
 	{{#gtDissolve}}
-		_K.trans.{{gtName}}:play()
+		_K.trans[self.layerName]:play()
 	{{/gtDissolve}}
 	{{^gtDissolve}}
-		-- _K.gt.{{gtName}}:toBeginning()
-		_K.gt.{{gtName}}:play()
+		-- _K.gt[self.layerName]:toBeginning()
+		_K.gt[self.layerName]:play()
 	{{/gtDissolve}}
 end
 --
 function _M:resume(UI)
 	{{#gtDissolve}}
-		_K.trans.{{gtName}}:resume()
+		_K.trans[self.layerName]:resume()
 	{{/gtDissolve}}
 	{{^gtDissolve}}
-		_K.gt.{{gtName}}:play()
+		_K.gt[self.layerName]:play()
 	{{/gtDissolve}}
 end
 --

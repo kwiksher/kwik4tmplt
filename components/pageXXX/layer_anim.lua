@@ -5,15 +5,6 @@
 local _M = {}
 --
 local _K = require "Application"
---
-function _M:myMain()
-end
---
-function _M:localVars()
-end
---
-function _M:localPos()
-end
 ---
 parseValue = function(value, newValue)
 	if newValue then
@@ -32,10 +23,10 @@ _M.ultimate = parseValue({{ultimate}})
 _M.layerName = "{{gtName}}"
 _M.layerWidth = {{elW}}
 _M.layerHeight = {{elH}}
-_M.randXStart = {{randXStart}}
-_M.randXEnd   = {{randXEnd}}
-_M.randYStart = {{randYStart}}
-_M.randYEnd   = {{randYEnd}}
+_M.randXStart = parseValue({{randXStart}})
+_M.randXEnd   = parseValue({{randXEnd}})
+_M.randYStart = parseValue({{randYStart}})
+_M.randYEnd   = parseValue({{randYEnd}})
 _M.nX         = {{nX}}
 _M.nY         = {{nY}}
 _M.layerX     = {{elX}}
@@ -126,7 +117,7 @@ _M.isSpritesheet = parseValue({{tabSS}})
 _M.isMovieClip   = parseValue({{tabMC}})
 
 local animationFunc = {}
-local postionFunc = {}
+local positionFunc = {}
 
 _M.positionFuncName = parseValue(parseValue({{groupAndPage}}), "grpupAndPage") or "default"
 
@@ -135,32 +126,9 @@ if _M.animationType == "Path" then
 		{{pathCurve}} angle = {{gtAngle}}
 	}
 end
----------------------------
-function _M:didShow(UI)
-  -- UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", phase = "didShow", UI=UI})	}
-  self:repoHeader(UI)
-  self:buildAnim(UI)
-	if self.audioPlay then
-		if self.animationType == "Dissolve" then
-			_K.trans[self.layerName]:play()
-		else
-			--	if _K.gt[self.layerName] then
-			--		_K.gt[self.layerName]:play()
-			--	end
-		end
-	end
-end
---
-function _M:toDispose()
-	_K.cancelAllTweens()
-	_K.cancelAllTransitions()
-end
---
-function _M:toDestory()
-end
 --
 --
-postionFunc["groupAndPage"] = function (layer, _endX, _endY, isSceneGroup)
+positionFunc["groupAndPage"] = function (layer, _endX, _endY, isSceneGroup)
 	local mX, mY
 	local endX, endY =  _K.ultimatePosition(_endX, _endY)
 	local width, height = layer.width*layer.xScale, layer.height*layer.yScale
@@ -206,16 +174,16 @@ postionFunc["groupAndPage"] = function (layer, _endX, _endY, isSceneGroup)
         mX = endX + width/2
         mY = endY + height
 	end
-	if _M.randXStart ~=nil then
+	if _M.randXStart then
 		mX = _M.layerWidth + math.random(_M.randXStart, _M.randXEnd)
 	end
-	if _M.randYStart ~= nil then
+	if _M.randYStart then
 		mY =  _M.layerHeight + math.random(_M.randYStart, _M.randYEnd)
 	end
 	return mX, mY
 end
 --
-postionFunc["default"] = function (layer, _endX, _endY, isSceneGroup)
+positionFunc["default"] = function (layer, _endX, _endY, isSceneGroup)
 	local endX, endY =  _K.ultimatePosition(_endX, _endY)
 	local width, height = layer.width*layer.xScale, layer.height*layer.yScale
 	if _M.defaultReference then
@@ -258,10 +226,10 @@ postionFunc["default"] = function (layer, _endX, _endY, isSceneGroup)
       mX = endX + width/2
       mY = endY + height
 	end
-	if _M.randXStart ~=nil then
+	if _M.randXStart then
 		mX = _M.layerWidth + math.random(_M.randXStart, _M.randXEnd)
 	end
-	if _M.randYStart ~= nil then
+	if _M.randYStart then
 		mY =  _M.layerHeight + math.random(_M.randYStart, _M.randYEnd)
 	end
 	return mX, mY
@@ -499,9 +467,40 @@ animationFunc["Dissolve"] = function(self, UI)
 	_K.trans[self.layerName].resume = function()
 		transition.dissolve(layer, self:getDssolvedLayer(UI),	self.animationDuration, self.animationDelay) end
 end
+
 --
 _M.buildAnim = animationFunc[_M.animationType]
+---------------------------
 --
+function _M:localVars()
+end
+--
+function _M:localPos()
+end
+--
+function _M:didShow(UI)
+	-- UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", phase = "didShow", UI=UI})	}
+	self:repoHeader(UI)
+	self:buildAnim(UI)
+	if self.audioPlay then
+		if self.animationType == "Dissolve" then
+			_K.trans[self.layerName]:play()
+		else
+			--	if _K.gt[self.layerName] then
+			--		_K.gt[self.layerName]:play()
+			--	end
+		end
+	end
+end
+--
+function _M:toDispose()
+	_K.cancelAllTweens()
+	_K.cancelAllTransitions()
+end
+--
+function _M:toDestory()
+end
+---
 function _M:play(UI)
 	if self.animationType =="Dissolve" then
 		_K.trans[self.layerName]:play()

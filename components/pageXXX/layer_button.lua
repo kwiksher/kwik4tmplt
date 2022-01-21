@@ -2,15 +2,11 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
-local _M = require("components.kwik.tabButFunction").new(scene)
+local _M = require("components.kwik.layer_button").new()
 --
 local widget = require("widget")
 local _K = require "Application"
-{{#buyProductHide}}
-local model       = require("components.store.model")
-local IAP    = require ( "components.store.IAP" )
-local view        = require("components.store.view").new()
-{{/buyProductHide}}
+
 --
 -- scene, layer and sceneGroup should be INPUT
 -- tab{{um}} should be INPUT
@@ -18,219 +14,126 @@ local view        = require("components.store.view").new()
 --
 -- UI.tSearch = tabja
 --
-{{#bn}}
-{{#ultimate}}
-local imageWidth             = {{elW}}/4
-local imageHeight            = {{elH}}/4
-local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
-{{#randX}}
-local randXStart = _K.ultimatePosition({{randXStart}})
-local randXEnd = _K.ultimatePosition({{randXEnd}})
-{{/randX}}
-{{#randY}}
-local dummy, randYStart = _K.ultimatePosition(0, {{randYStart}})
-local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
-{{/randY}}
-{{#idist}}
-local idist     = {{idist}}/4
-{{/idist}}
-{{/ultimate}}
-{{^ultimate}}
-local imageWidth = {{elW}}
-local imageHeight = {{elH}}
-local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
-{{#randX}}
-local randXStart = {{randXStart}}
-local randXEnd = {{randXEnd}}
-{{/randX}}
-{{#randY}}
-local randYStart = {{randYStart}}
-local randYEnd = {{randYEnd}}
-{{/randY}}
-{{#idist}}
-local idist     = {{idist}}
-{{/idist}}
-{{/ultimate}}
-local oriAlpha = {{oriAlpha}}
---
-{{#kwk}}
-local imagePath = "{{bn}}.{{fExt}}"
-{{/kwk}}
-{{^kwk}}
-local imageName = "/{{bn}}.{{fExt}}"
-{{/kwk}}
-{{/bn}}
+_M.ultimate = parseValue({{ultimate}})
+_M.isTmplt  = parseValue({{isTmplt}})
+_M.isSharedAsset = parseValue({{kwk}})
+_M.multLayers = parseValue({{multLayers}})
+_M.buyProductHide = parseValue({{buyProductHide}})
+_M.pageNum = "p{{docNum}}"
+_M.isTV = parseValue({{TV}})
+
+_M.layerName     = "{{myLName}}"
+_M.oriAlpha = {{oriAlpha}}
+_M.imagePath = "{{bn}}.{{fExt}}"
+_M.imageName = "/{{bn}}.{{fExt}}"
+_M.langGroupName = "{{dois}}"
+_M.langTableName = "tab{{um}}"
+_M.scaleX     = parseValue({{scaleW}})
+_M.scaleY     = parseValue({{scaleH}})
+_M.rotation   = parseValue({{rotate}})
+if _M.ultimate then
+  _M.imageWidth  = {{elW}}/4
+  _M.imageHeight = {{elH}}/4
+  _M.mX, _M.mY   = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
+  _M.randXStart  = _K.ultimatePosition({{randXStart}})
+  _M.randXEnd    = _K.ultimatePosition({{randXEnd}})
+  _M.dummy, _M.randYStart = _K.ultimatePosition(0, {{randYStart}})
+  _M.dummy, _M.randYEnd   = _K.ultimatePosition(0, {{randYEnd}})
+  _M.infinityDistance = (parseValue({{idist}}) or 0)/4
+else
+  _M.imageWidth  = {{elW}}
+  _M.imageHeight = {{elH}}
+  _M.mX, _M.mY         = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
+  _M.randXStart  = parseValue({{randXStart}})
+  _M.randXEnd    = parseValue({{randXEnd}})
+  _M.randYStart  = parseValue({{randYStart}})
+  _M.randYEnd    = parseValue({{randYEnd}})
+  _M.infinityDistance = parseValue({{idist}}) or 0
+end
+
+_M.eventName = "{{myLName}}_{{layerType}}_{{triggerName}}"
+_M.overFileName  = "{{bOver}}.{{rExt}}"
+
+_M.button = {}
+{{#tabButFunction}}
+-- obj will be layer.XXX or sceneGroup
+-- this euals to (not self.isPress). isPress uses widge.tNewButton«
+_M.button = {{tabButFunction.obj}}
+  _M.button.btaps={{tabButFunction.btaps}}
+  _M.button.eventName = _M.eventName
+{{/tabButFunction}}
+
+_M.mask = parseValue{{mask}}
+if _M.ultimate then
+  _M.maskName = "{{bn}}".. "_mask.jpg"
+else
+  _M.maskName = "{{bn}}".. "_mask" .. (display.imageSuffix or "")..".jpg"
+end
+
+_M.inventory = "unlock_".."{{inApp}}"
 
 function _M:localVars (UI)
-   {{#isTmplt}}
-   {{^kwk}}
-   local imagePath = "p"..UI.imagePage..imageName
-   {{/kwk}}
-   mX, mY, imageWidth, imageHeight , imagePath = _K.getModel("{{myLName}}", imagePath, UI.dummy)
-   {{/isTmplt}}
-  self:buttonVars(UI)
+  if not self.isSharedAsset then
+    self.imagePath = "p"..UI.imagePage ..self.imageName
+  end
+  if self.isTmplt then
+   self.mX, self.mY, self.imageWidth, self.imageHeight , self.imagePath= _K.getModel(self.layerName, self.imagePath, UI.dummy)
+  end
+  if self.#multLayers then
+    UI[self.langTableName][self.langGroupName] = {imagePath,imageWidth, imageHeight, mX, mY, imagePath, self.eventName, oriAlpha }
+  end
 end
 --
 function _M:localPos(UI)
-  {{#buyProductHide}}
   local sceneGroup  = UI.scene.view
-  local layer       = UI.layer
   -- Page properties
-  view:init(sceneGroup, layer)
-  IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, function(e) print("IAP cancelled") end, model.debug)
-  {{/buyProductHide}}
-
-  self:buttonLocal(UI)
+  if self.buyProductHide then
+    local model       = require("components.store.model")
+    local IAP         = require ( "components.store.IAP" )
+    local view        = require("components.store.view").new()
+    view:init(sceneGroup, layer)
+    IAP:init(model.catalogue, view.restoreAlert, view.purchaseAlert, function(e) print("IAP cancelled") end, model.debug)
+  end
+  --
+  if not self.multLayers then
+    if not self.isSharedAsset then
+      self.imagePath = "p"..UI.imagePage..self.imageName
+    end
+    if not self.isPress then
+        self:createButton(UI)
+      else
+        self:createWidgetButton(UI)
+      end
+    end
 end
 --
 function _M:didShow(UI)
   local sceneGroup = UI.scene.view
-  local layer      = UI.layer
-  local self       = UI.scene
   --
-  {{^multLayers}}
-  {{#tabButFunction}}
-  if {{tabButFunction.obj}} == nil then return end
-    {{#mask}}
-    local suffix = display.imageSuffix or ""
-   {{#ultimate}}
-    local maskName = "{{bn}}".. "_mask.jpg"
-   {{/ultimate}}
-   {{^ultimate}}
-    local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
-   {{/ultimate}}
-    local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName, _K.systemDir )
-    layer.{{myLName}}:setMask( mask )
-    {{/mask}}
-    _M:createTabButFunction(UI, {obj={{tabButFunction.obj}}, btaps={{tabButFunction.btaps}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
-  {{/tabButFunction}}
-    {{#buyProductHide}}
+  if not self.multLayers then
+    if self.button then
+      _M:addEventListener(UI)
+    end
+    if self.buyProductHide then
+      local IAP         = require ( "components.store.IAP" )
       --Hide button if purchase was already made
-    if IAP.getInventoryValue("unlock_".."{{inApp}}") then
-         --This page was purchased, do not show the BUY button
-       layer.{{layer}}.alpha = 0
+      if IAP.getInventoryValue(self.inventory) then
+          --This page was purchased, do not show the BUY button
+          sceneGroup[self.layerName].alpha = 0
+        end
       end
-    {{/buyProductHide}}
-  {{/multLayers}}
+    end
 end
 --
 function _M:toDispose(UI)
-  local layer      = UI.layer
   local sceneGroup = UI.scene.view
-
-  {{^multLayers}}
-  {{#tabButFunction}}
-  if {{tabButFunction.obj}} == nil then return end
-    _M:removeTabButFunction(UI, {obj={{tabButFunction.obj}}, eventName="{{myLName}}_{{layerType}}_{{triggerName}}"})
-  {{/tabButFunction}}
-  {{/multLayers}}
+  if not self.multLayers then
+    if self.button then
+      _M:removeEvwentListener(UI)
+    end
+  end
 end
 --
 function _M:toDestroy(UI)
 end
 --
-function _M:buttonVars(UI)
-  local sceneGroup = UI.scene.view
-  local layer      = UI.layer
-  {{#multLayers}}
-  {{^kwk}}
-  local imagePath = "p"..UI.imagePage..imageName
-  {{/kwk}}
-     UI.tab{{um}}["{{dois}}"] = {imagePath,imageWidth, imageHeight, mX, mY, imagePath, "{{myLName}}_{{layerType}}_{{triggerName}}", oriAlpha }
-  {{/multLayers}}
-end
---
-function _M:buttonLocal(UI)
-  local sceneGroup = UI.scene.view
-  local layer      = UI.layer
-{{#bn}}
-  {{^multLayers}}
-  {{^kwk}}
-  local imagePath = "p"..UI.imagePage..imageName
-  {{/kwk}}
-    {{^Press}}
-       layer.{{myLName}} = display.newImageRect( _K.imgDir.. imagePath, _K.systemDir, imageWidth, imageHeight )
-    if layer.{{myLName}} == nil then return end
-      layer.{{myLName}}.x        = mX
-      layer.{{myLName}}.y        = mY
-      layer.{{myLName}}.alpha    = oriAlpha
-      layer.{{myLName}}.oldAlpha = oriAlpha
-      {{#randX}}
-        layer.{{myLName}}.x = math.random( randXStart, randXEnd);
-      {{/randX}}
-      {{#randY}}
-        layer.{{myLName}}.y = math.random( randYStart, randYEnd);
-      {{/randY}}
-      {{#scaleW}}
-          layer.{{myLName}}.xScale = {{scaleW}}
-      {{/scaleW}}
-      {{#scaleH}}
-          layer.{{myLName}}.yScale = {{scaleH}}
-      {{/scaleH}}
-      {{#rotate}}
-          layer.{{myLName}}:rotate({{rotate}});
-      {{/rotate}}
-      layer.{{myLName}}.oriX  = layer.{{myLName}}.x
-      layer.{{myLName}}.oriY  = layer.{{myLName}}.y
-      layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
-      layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
-      layer.{{myLName}}.name  = "{{myLName}}"
-      layer.{{myLName}}.blendMode = "{{bmode}}"
-      sceneGroup.{{myLName}}  = layer.{{myLName}}
-      sceneGroup:insert(layer.{{myLName}})
-    {{/Press}}
-    {{#Press}}
-        local function on{{myLName}}Event(self)
-          if layer.{{myLName}}.enabled == nil or layer.{{myLName}}.enabled then
-             layer.{{myLName}}.type = "press"
-            -- {{bfun}}(layer.{{myLName}})
-            {{#TV}}
-             if layer.{{myLName}}.isKey then
-                UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
-             end
-            {{/TV}}
-            {{^TV}}
-              UI.scene:dispatchEvent({name="{{myLName}}_{{layerType}}_{{triggerName}}", layer=layer.{{myLName}} })
-            {{/TV}}
-           end
-        end
-        layer.{{myLName}} = widget.newButton {
-           id          = "{{myLName}}",
-           defaultFile = _K.imgDir..imagePath,
-           overFile    = _K.imgDir.."{{bOver}}.{{rExt}}",
-           width       = imageWidth,
-           height      = imageHeight,
-           onRelease   = on{{myLName}}Event,
-           baseDir     = _K.systemDir
-        }
-        --
-        {{#mask}}
-        local suffix = display.imageSuffix or ""
-         {{#ultimate}}
-          local maskName = "{{bn}}".. "_mask.jpg"
-         {{/ultimate}}
-         {{^ultimate}}
-          local maskName = "{{bn}}".. "_mask" .. suffix..".jpg"
-         {{/ultimate}}
-        local mask = graphics.newMask(_K.imgDir.."p{{docNum}}/"..maskName, _K.systemDir)
-        layer.{{myLName}}:setMask( mask )
-        {{/mask}}
-        --
-        layer.{{myLName}}.x        = mX
-        layer.{{myLName}}.y        = mY
-        layer.{{myLName}}.oriX     = mX
-        layer.{{myLName}}.oriY     = mY
-        layer.{{myLName}}.oriXs    = layer.{{myLName}}.xScale
-        layer.{{myLName}}.oriYs    = layer.{{myLName}}.yScale
-        layer.{{myLName}}.alpha    = oriAlpha
-        layer.{{myLName}}.oldAlpha = oriAlpha
-        layer.{{myLName}}.name     = "{{myLName}}"
-        layer.{{myLName}}.on     = on{{myLName}}Event
-        sceneGroup.{{myLName}}     = layer.{{myLName}}
-        sceneGroup:insert(layer.{{myLName}})
-    {{/Press}}
-  {{/multLayers}}
-{{/bn}}
-end
---
-return _M

@@ -23,7 +23,7 @@ _M.layerX     = {{elX}}
 _M.layerY     = {{elY}}
 --
 function _M:getLayer(UI)
-	local layer = = UI.layer
+	local layer = UI.layer
 	return {{gtLayer}}
 end
 --

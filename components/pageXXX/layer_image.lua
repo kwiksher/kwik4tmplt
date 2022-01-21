@@ -42,23 +42,23 @@ _M.layerSet = {
 {{/isComic}}
 --
 if _M.ultimate then
-           _M.imageWidth  = {{elW}}/4
-           _M.imageHeight = {{elH}}/4
-  _M.mX   , _M.mY         = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
-           _M.randXStart  = _K.ultimatePosition({{randXStart}})
-           _M.randXEnd    = _K.ultimatePosition({{randXEnd}})
+  _M.imageWidth  = {{elW}}/4
+  _M.imageHeight = {{elH}}/4
+  _M.mX, _M.mY   = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
+  _M.randXStart  = _K.ultimatePosition({{randXStart}})
+  _M.randXEnd    = _K.ultimatePosition({{randXEnd}})
   _M.dummy, _M.randYStart = _K.ultimatePosition(0, {{randYStart}})
   _M.dummy, _M.randYEnd   = _K.ultimatePosition(0, {{randYEnd}})
-           _M.infinityDistance = (parseValue({{idist}}) or 0)/4
+  _M.infinityDistance = (parseValue({{idist}}) or 0)/4
 else
-        _M.imageWidth  = {{elW}}
-        _M.imageHeight = {{elH}}
+  _M.imageWidth  = {{elW}}
+  _M.imageHeight = {{elH}}
   _M.mX, _M.mY         = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
-        _M.randXStart  = parseValue({{randXStart}})
-        _M.randXEnd    = parseValue({{randXEnd}})
-        _M.randYStart  = parseValue({{randYStart}})
-        _M.randYEnd    = parseValue({{randYEnd}})
-        _M.infinityDistance = parseValue({{idist}}) or 0
+  _M.randXStart  = parseValue({{randXStart}})
+  _M.randXEnd    = parseValue({{randXEnd}})
+  _M.randYStart  = parseValue({{randYStart}})
+  _M.randYEnd    = parseValue({{randYEnd}})
+  _M.infinityDistance = parseValue({{idist}}) or 0
 end
 --
 _M.layerName     = "{{myLName}}"
@@ -83,7 +83,7 @@ function _M:localVars(UI)
    self.mX, self.mY, self.imageWidth, self.imageHeight , self.imagePath= _K.getModel(self.layerName, self.imagePath, UI.dummy)
   end
   if self.multLayers then
-    UI[self.langTableName][self.langGroupName] = {self.imagePath, self.imageWidth, self.imageHeight, sefl.mX, self.mY, sefl.oriAlpha}
+    UI[self.langTableName][self.langGroupName] = {self.imagePath, self.imageWidth, self.imageHeight, self.mX, self.mY, self.oriAlpha}
   end
 end
 --
@@ -108,21 +108,23 @@ function _M:localPos(UI)
 end
 --
 function _M:didShow(UI)
+  local sceneGroup = UI.scene.view
   if not self.multLayers then
     if self.infinity then
        -- Infinity background
-       if UI.layer[self.layerName] == nil  or UI.layer[self.kayerName.."_2"] == nil then return end
-       Runtime:addEventListener("enterFrame", UI.layer[self.layerName])
-       Runtime:addEventListener("enterFrame", UI.layer[self.kayerName.."_2"])
+       if sceneGroup[self.layerName] == nil  or sceneGroup[self.kayerName.."_2"] == nil then return end
+       Runtime:addEventListener("enterFrame", sceneGroup[self.layerName])
+       Runtime:addEventListener("enterFrame", sceneGroup[self.kayerName.."_2"])
     end
   end
 end
 --
 function _M:toDispose(UI)
+  local sceneGroup = UI.scene.view
   if self.infinity then
-    if UI.layer[self.layerName] == nil  or UI.layer[self.kayerName.."_2"] == nil then return end
-      Runtime:removeEventListener("enterFrame", UI.layer[self.layerName])
-      Runtime:removeEventListener("enterFrame", UI.layer[self.kayerName.."_2"])
+    if sceneGroup[self.layerName] == nil  or sceneGroup[self.kayerName.."_2"] == nil then return end
+      Runtime:removeEventListener("enterFrame", sceneGroup[self.layerName])
+      Runtime:removeEventListener("enterFrame", sceneGroup[self.kayerName.."_2"])
     end
   end
 end

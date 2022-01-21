@@ -2,12 +2,21 @@
 -- Version: {{vers}}
 -- Project: {{ProjName}}
 --
-local _M = {}
 --
 local _K = require "Application"
+local _M = require("components.kwik.layer_image").new()
+
+_M.ultimate = parseValue({{ultimate}})
+_M.isComic  = parseValue({{isComic}})
+_M.infinity = parseValue({{infinity}})
+_M.isTmplt  = parseValue({{isTmplt}})
+_M.multLayers = parseValue({{multLayers}})
+_M.layerSetName = parseValue({{mySet}})
+--
+_M.layerSet = nil
 {{#isComic}}
 {{#mySet}}
-local layerSet_{{mySet}} = {
+_M.layerSet = {
   {{#layerSet}}
     {
       myLName = "{{myLName}}",
@@ -31,367 +40,91 @@ local layerSet_{{mySet}} = {
   }
 {{/mySet}}
 {{/isComic}}
-{{#infinity}}
--- Infinity background animation
-local function infinityBack(self, event)
-     local xd, yd = self.x,self.y
-     if (self.direction == "left" or self.direction == "right") then
-         xd = self.width
-         if (self.distance ~= nil) then
-            xd = self.width + self.distance
-        end
-     elseif (self.direction == "up" or self.direction == "down") then
-         yd = self.height
-         if (self.distance ~= nil) then
-            yd = self.height + self.distance
-        end
-     end
-     if (self.direction == "left") then  --horizontal loop
-        if self.x < (-xd + (self.speed*2)) then
-           self.x = xd
-        else
-           self.x = self.x - self.speed
-        end
-     elseif (self.direction == "right") then  --horizontal loop
-        if self.x > (xd - (self.speed*2)) then
-           self.x = -xd
-        else
-           self.x = self.x + self.speed
-        end
-     elseif (self.direction == "up") then  --vertical loop
-        if self.y < (-yd + (self.speed*2)) then
-           self.y = yd
-        else
-           self.y = self.y - self.speed
-        end
-     elseif (self.direction == "down") then  --vertical loop
-        if self.y > (yd - (self.speed*2)) then
-           self.y = -yd
-        else
-           self.y = self.y + self.speed
-        end
-     end
-end
-{{/infinity}}
 --
-function _M:myMain()
+if _M.ultimate then
+           _M.imageWidth  = {{elW}}/4
+           _M.imageHeight = {{elH}}/4
+  _M.mX   , _M.mY         = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
+           _M.randXStart  = _K.ultimatePosition({{randXStart}})
+           _M.randXEnd    = _K.ultimatePosition({{randXEnd}})
+  _M.dummy, _M.randYStart = _K.ultimatePosition(0, {{randYStart}})
+  _M.dummy, _M.randYEnd   = _K.ultimatePosition(0, {{randYEnd}})
+           _M.infinityDistance = (parseValue({{idist}}) or 0)/4
+else
+        _M.imageWidth  = {{elW}}
+        _M.imageHeight = {{elH}}
+  _M.mX, _M.mY         = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
+        _M.randXStart  = parseValue({{randXStart}})
+        _M.randXEnd    = parseValue({{randXEnd}})
+        _M.randYStart  = parseValue({{randYStart}})
+        _M.randYEnd    = parseValue({{randYEnd}})
+        _M.infinityDistance = parseValue({{idist}}) or 0
 end
--- not
-
-{{#ultimate}}
-local imageWidth             = {{elW}}/4
-local imageHeight            = {{elH}}/4
-local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
-{{#randX}}
-local randXStart = _K.ultimatePosition({{randXStart}})
-local randXEnd = _K.ultimatePosition({{randXEnd}})
-{{/randX}}
-{{#randY}}
-local dummy, randYStart = _K.ultimatePosition(0, {{randYStart}})
-local dummy, randYEnd     = _K.ultimatePosition(0, {{randYEnd}})
-{{/randY}}
-{{#idist}}
-local idist     = {{idist}}/4
-{{/idist}}
-{{/ultimate}}
-{{^ultimate}}
-local imageWidth = {{elW}}
-local imageHeight = {{elH}}
-local mX, mY                 = _K.ultimatePosition({{mX}}, {{mY}}, "{{align}}")
-{{#randX}}
-local randXStart = {{randXStart}}
-local randXEnd = {{randXEnd}}
-{{/randX}}
-{{#randY}}
-local randYStart = {{randYStart}}
-local randYEnd = {{randYEnd}}
-{{/randY}}
-{{#idist}}
-local idist     = {{idist}}
-{{/idist}}
-{{/ultimate}}
-local oriAlpha = {{oriAlpha}}
 --
-{{#kwk}}
-local imagePath = "{{bn}}.{{fExt}}"
-{{/kwk}}
-{{^kwk}}
-local imageName = "/{{bn}}.{{fExt}}"
-{{/kwk}}
+_M.layerName     = "{{myLName}}"
+_M.oriAlpha = {{oriAlpha}}
+_M.isSharedAsset = parseValue({{kwk}})
+_M.imagePath = "{{bn}}.{{fExt}}"
+_M.imageName = "/{{bn}}.{{fExt}}"
+_M.langGroupName = "{{dois}}"
+_M.langTableName = "tab{{um}}"
+_M.scaleX     = parseValue({{scaleW}})
+_M.scaleY     = parseValue({{scaleH}})
+_M.rotation   = parseValue({{rotate}})
+_M.blendMode     = "{{bmode}}"
+_M.layerAsBg     = parseValue({{layerAsBg}}
+_M.infinitySpeed = parseValue({{infinitySpeed}})
 --
 function _M:localVars(UI)
-	{{^kwk}}
-	local imagePath = "p"..UI.imagePage ..imageName
- {{/kwk}}
-  {{#isTmplt}}
-   mX, mY, imageWidth, imageHeight , imagePath= _K.getModel("{{myLName}}", imagePath, UI.dummy)
-  {{/isTmplt}}
-  {{#multLayers}}
-    UI.tab{{um}}["{{dois}}"] = {imagePath, imageWidth, imageHeight, mX, mY, oriAlpha}
-  {{/multLayers}}
-  {{^multLayers}}
-  {{/multLayers}}
+	if not self.isSharedAsset then
+    self.imagePath = "p"..UI.imagePage ..self.imageName
+  end
+  if self.isTmplt then
+   self.mX, self.mY, self.imageWidth, self.imageHeight , self.imagePath= _K.getModel(self.layerName, self.imagePath, UI.dummy)
+  end
+  if self.multLayers then
+    UI[self.langTableName][self.langGroupName] = {self.imagePath, self.imageWidth, self.imageHeight, sefl.mX, self.mY, sefl.oriAlpha}
+  end
 end
---
---[[
-local info     = require ("assets.sprites.".."page{{docNum}}")
-local sheet    = graphics.newImageSheet ( _K.spriteDir.."page{{docNum}}.png", _K.systemDir, info:getSheet() )
-local sequence = {start=1, count= #info:getSheet().frames }
-function newImageRect(name, width, height)
-  local image
-  if string.find(name, "background") == nil then
-      image = display.newSprite(sheet, sequence)
-      image.name = name
-      image:setFrame (info:getFrameIndex (name))
-      image.width, image.height = width, height
-      else
-       image = display.newImageRect(_K.imgDir..name.."."..{{fExt}}, _K.systemDir, width, height)
-      end
-   return image
-end
---]]
 --
 function _M:localPos(UI)
-  local sceneGroup  = UI.scene.view
-  local layer       = UI.layer
-	{{^kwk}}
-	local imagePath = "p"..UI.imagePage ..imageName
-  {{/kwk}}
-   {{^multLayers}}
-  local function myNewImage()
-    layer.{{myLName}} = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
-    -- layer.{{myLName}} = newImageRect({{bn}}, imageWidth, imageHeight )
-    if layer.{{myLName}} == nil then return end
-    layer.{{myLName}}.imagePath = imagePath
-    layer.{{myLName}}.x = mX
-    layer.{{myLName}}.y = mY
-    layer.{{myLName}}.alpha = oriAlpha
-    layer.{{myLName}}.oldAlpha = oriAlpha
-    layer.{{myLName}}.blendMode = "{{bmode}}"
-    {{#randX}}
-      layer.{{myLName}}.x = math.random( randXStart, randXEnd)
-    {{/randX}}
-    {{#randY}}
-      layer.{{myLName}}.y = math.random( randYStart, randYEnd)
-    {{/randY}}
-    {{#scaleW}}
-      layer.{{myLName}}.xScale = {{scaleW}}
-    {{/scaleW}}
-    {{#scaleH}}
-      layer.{{myLName}}.yScale = {{scaleH}}
-    {{/scaleH}}
-    {{#rotate}}
-      layer.{{myLName}}:rotate( {{rotate}} )
-    {{/rotate}}
-    layer.{{myLName}}.oriX = layer.{{myLName}}.x
-    layer.{{myLName}}.oriY = layer.{{myLName}}.y
-    layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
-    layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
-    layer.{{myLName}}.name = "{{myLName}}"
-    sceneGroup.{{myLName}} = layer.{{myLName}}
-    {{#layerAsBg}}
-      sceneGroup:insert( 1, layer.{{myLName}})
-    {{/layerAsBg}}
-    {{^layerAsBg}}
-      sceneGroup:insert( layer.{{myLName}})
-    {{/layerAsBg}}
-    --
-    {{#infinity}}
-      layer.{{myLName}}_2 = display.newImageRect( _K.imgDir..imagePath, _K.systemDir, imageWidth, imageHeight)
-        -- layer.{{myLName}}_2 = newImageRect({{bn}}, imageWidth, imageHeight )
-      if layer.{{myLName}}_2 == nil then return end
-      layer.{{myLName}}_2.blendMode = "{{bmode}}"
-      sceneGroup:insert( layer.{{myLName}}_2)
-      sceneGroup.{{myLName}}_2 = layer.{{myLName}}_2
-      layer.{{myLName}}.anchorX = 0
-      layer.{{myLName}}.anchorY = 0;
-      _K.repositionAnchor(layer.{{myLName}}, 0,0)
-      layer.{{myLName}}_2.anchorX = 0
-      layer.{{myLName}}_2.anchorY = 0;
-      _K.repositionAnchor(layer.{{myLName}}_2, 0,0)
-      {{#up}}
-        layer.{{myLName}}.x = layer.{{myLName}}.oriX
-        layer.{{myLName}}.y = 0;
-        {{#idist}}
-          layer.{{myLName}}_2.y = layer.{{myLName}}.height + {{idist}}
-          layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
-          layer.{{myLName}}.distance = {{idist}}
-          layer.{{myLName}}_2.distance = {{idist}}
-        {{/idist}}
-        {{^idist}}
-          layer.{{myLName}}_2.y = layer.{{myLName}}.height
-          layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
-        {{/idist}}
-          layer.{{myLName}}.enterFrame = infinityBack
-          layer.{{myLName}}.speed = {{infinitySpeed}}
-          layer.{{myLName}}.direction = "{{idir}}"
-          layer.{{myLName}}_2.enterFrame = infinityBack
-          layer.{{myLName}}_2.speed = {{infinitySpeed}}
-          layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/up}}
-      {{#down}}
-        layer.{{myLName}}.x = layer.{{myLName}}.oriX
-        layer.{{myLName}}.y = 0;
-        {{#idist}}
-          layer.{{myLName}}_2.y = -layer.{{myLName}}.height - {{idist}}
-          layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
-          layer.{{myLName}}.distance = idist
-          layer.{{myLName}}_2.distance = idist
-        {{/idist}}
-        {{^idist}}
-          layer.{{myLName}}_2.y = -layer.{{myLName}}.height
-          layer.{{myLName}}_2.x = layer.{{myLName}}.oriX;
-        {{/idist}}
-          layer.{{myLName}}.enterFrame = infinityBack
-          layer.{{myLName}}.speed = {{infinitySpeed}}
-          layer.{{myLName}}.direction = "{{idir}}"
-          layer.{{myLName}}_2.enterFrame = infinityBack
-          layer.{{myLName}}_2.speed = {{infinitySpeed}}
-          layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/down}}
-      {{#right}}
-        layer.{{myLName}}.x = 0
-        layer.{{myLName}}.y = layer.{{myLName}}.oriY;
-        {{#idist}}
-          layer.{{myLName}}_2.x = -layer.{{myLName}}.width + {{idist}}
-          layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
-          layer.{{myLName}}.distance = idist
-          layer.{{myLName}}_2.distance = idist
-        {{/idist}}
-        {{^idist}}
-          layer.{{myLName}}_2.x = -layer.{{myLName}}.width
-          layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
-        {{/idist}}
-        layer.{{myLName}}.enterFrame = infinityBack
-        layer.{{myLName}}.speed = {{infinitySpeed}}
-        layer.{{myLName}}.direction = "{{idir}}"
-        layer.{{myLName}}_2.enterFrame = infinityBack
-        layer.{{myLName}}_2.speed = {{infinitySpeed}}
-        layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/right}}
-      {{#left}}
-        layer.{{myLName}}.x = 0
-        layer.{{myLName}}.y = layer.{{myLName}}.oriY;
-        {{#idist}}
-          layer.{{myLName}}_2.x = layer.{{myLName}}.width + {{idist}}
-          layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
-                layer.{{myLName}}.distance = idist
-                layer.{{myLName}}_2.distance = idist
-        {{/idist}}
-        {{^idist}}
-          layer.{{myLName}}_2.x = layer.{{myLName}}.width
-          layer.{{myLName}}_2.y = layer.{{myLName}}.oriY;
-        {{/idist}}
-          layer.{{myLName}}.enterFrame = infinityBack
-          layer.{{myLName}}.speed = {{infinitySpeed}}
-          layer.{{myLName}}.direction = "{{idir}}"
-          layer.{{myLName}}_2.enterFrame = infinityBack
-          layer.{{myLName}}_2.speed = {{infinitySpeed}}
-          layer.{{myLName}}_2.direction = "{{idir}}"
-      {{/left}}
-    {{/infinity}}
-   end
-  {{/multLayers}}
-
-{{#isComic}}
-  {{#mySet}}
-  local options = {
-   frames ={},
-    sheetContentWidth = imageWidth,
-    sheetContentHeight = imageHeight
-  }
-  local widthDiff = options.sheetContentWidth - {{mX}}/2
-  local heightDiff = options.sheetContentHeight - {{mY}}/2
-  --
-  for i=1, #layerSet_{{mySet}} do
-    local target = layerSet_{{mySet}}[i]
-    local _x = (target.x - target.width/2)/4 + widthDiff/2
-    local _y = (target.y - target.height/2)/4 + heightDiff/2
-    -- print(_x, _y)
-    options.frames[i] = {
-      x = _x,
-      y = _y,
-      width = target.width/4,
-      height = target.height/4
-    }
-    -- print(target.width/4, target.height/4)
+	if not self.isSharedAsset then
+    self.imagePath = "p"..UI.imagePage ..imageName
   end
-  layer.{{mySet}} = display.newGroup()
-  local sheet = graphics.newImageSheet(_K.imgDir..imagePath, _K.systemDir, options )
-  for i=1, #layerSet_{{mySet}} do
-    local target = layerSet_{{mySet}}[i]
-    local frame = options.frames[i]
-    local frame1 = display.newImageRect( sheet, i, frame.width, frame.height )
-    frame1.x, frame1.y = _K.ultimatePosition(target.x, target.y)
-    frame1.name = target.myLName
-    frame1.oriX              = frame1.x
-    frame1.oriY              = frame1.y
-    frame1.oriXs             = 1
-    frame1.oriYs             = 1
-    frame1.oldAlpha          = 1
-    frame1.anim              = {}
-    target.panel = frame1
-    UI.layer[target.myLName] = frame1
-    layer.{{mySet}}:insert(frame1)
+  if not self.multLayers then
+    local layer = self:myNewImage(UI)
+    if self.isComic then
+      if self.layerSet then
+        self:myComicImage(UI, layer)
+      else
+        self:myNewImage(UI)
+      end
+    end
+  else
+    if not self.isComic then
+      self:myNewImage(UI)
+    end
   end
-  --
-  layer.{{myLName}}.imagePath = imagePath
-  -- layer.{{myLName}}.x = mX
-  -- layer.{{myLName}}.y = mY
-  layer.{{myLName}}.alpha = oriAlpha
-  layer.{{myLName}}.oldAlpha = oriAlpha
-  layer.{{myLName}}.blendMode = "{{bmode}}"
-  {{#scaleW}}
-    layer.{{myLName}}.xScale = {{scaleW}}
-  {{/scaleW}}
-  {{#scaleH}}
-    layer.{{myLName}}.yScale = {{scaleH}}
-  {{/scaleH}}
-  {{#rotate}}
-    layer.{{myLName}}:rotate( {{rotate}} )
-  {{/rotate}}
-  layer.{{myLName}}.oriX = layer.{{myLName}}.x
-  layer.{{myLName}}.oriY = layer.{{myLName}}.y
-  layer.{{myLName}}.oriXs = layer.{{myLName}}.xScale
-  layer.{{myLName}}.oriYs = layer.{{myLName}}.yScale
-  layer.{{myLName}}.name = "{{myLName}}"
-  sceneGroup.{{myLName}} = layer.{{myLName}}
-  sceneGroup:insert( layer.{{myLName}})
-  {{/mySet}}
-  {{^mySet}}
-    myNewImage()
-  {{/mySet}}
-{{/isComic}}
-{{^multLayers}}
-{{^isComic}}
-  myNewImage()
-{{/isComic}}
-{{/multLayers}}
 end
 --
 function _M:didShow(UI)
-  local sceneGroup  = UI.scene.view
-  local layer       = UI.layer
-  {{^multLayers}}
-    {{#infinity}}
+  if not self.multLayers then
+    if self.infinity then
        -- Infinity background
-       if layer.{{myLName}} == nil  or layer.{{myLName}}_2 == nil then return end
-       Runtime:addEventListener("enterFrame", layer.{{myLName}})
-       Runtime:addEventListener("enterFrame", layer.{{myLName}}_2)
-    {{/infinity}}
-  {{/multLayers}}
+       if UI.layer[self.layerName] == nil  or UI.layer[self.kayerName.."_2"] == nil then return end
+       Runtime:addEventListener("enterFrame", UI.layer[self.layerName])
+       Runtime:addEventListener("enterFrame", UI.layer[self.kayerName.."_2"])
+    end
+  end
 end
 --
 function _M:toDispose(UI)
-  local sceneGroup  = UI.scene.view
-  local layer       = UI.layer
-  {{^multLayers}}
-    {{#infinity}}
-      if layer.{{myLName}} == nil  or layer.{{myLName}}_2 == nil then return end
-      Runtime:removeEventListener("enterFrame", layer.{{myLName}})
-      Runtime:removeEventListener("enterFrame", layer.{{myLName}}_2)
-    {{/infinity}}
-  {{/multLayers}}
+  if self.infinity then
+    if UI.layer[self.layerName] == nil  or UI.layer[self.kayerName.."_2"] == nil then return end
+      Runtime:removeEventListener("enterFrame", UI.layer[self.layerName])
+      Runtime:removeEventListener("enterFrame", UI.layer[self.kayerName.."_2"])
+    end
+  end
 end
 --
 function  _M:toDestory()

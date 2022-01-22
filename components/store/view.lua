@@ -390,7 +390,7 @@ end
                 labelBtn.alpha = 0
                 if versionBtn then
                     if cmd.hasDownloaded(versionBtn.selectedPurchase, versionBtn.selectedVersion) then
-                        print(versionBtn.selectedVersion .. "(saved)")
+                        print("", "hasDownloaded True", versionBtn.selectedVersion .. "(saved)")
                         function versionBtn:tap(e)
                             print("versionBtn tap for gotoScene")
                             --self.gotoScene
@@ -400,7 +400,7 @@ end
                         versionBtn:addEventListener("tap", versionBtn)
                         labelBtn.alpha = 1
                     else
-                        print(versionBtn.selectedVersion .. "(not saved)")
+                        print("", "hasDownloaded False", versionBtn.selectedVersion .. "(not saved)")
                         -- Runtime:dispatchEvent({name = "downloadManager:purchaseCompleted", target = _episode.versions[i]})
                         function versionBtn:tap(e)
                             print("versionBtn tap for download")
@@ -412,12 +412,17 @@ end
 
                     if cmd.isUpdateAvailable(versionBtn.selectedPurchase, versionBtn.selectedVersion) then
                         -- show downloadBtn
+                        print("", "isUpdateAvailable True")
                         function versionBtn:tap(e)
                             VIEW.fsm:startDownload(self.episode, self.selectedVersion)
                             return true
                         end
                         versionBtn:addEventListener("tap", versionBtn)
                         setUpdateMark(versionBtn, self.sceneGroup)
+                    else
+                        if versionBtn.updateMark then
+                            versionBtn.updateMark.alpha = 0
+                        end
                     end
 
                 else
@@ -571,23 +576,19 @@ end
             end
             button:addEventListener("tap", button)
         else
-            -- local versions = model.episodes[selectedPurchase].versions
-            -- for k, v in pairs(versions) do print(k, v) end
-            -- for i=1, #versions do
-            --     local versionBtn = self.versionGroup[selectedPurchase..versions[i]]
-            --     print(selectedPurchase..versions[i],versionBtn)
-            --     if versionBtn then
-            --         if versionBtn.tap then
-            --                 print("removeEventListener")
-            --             versionBtn:removeEventListener("tap", versionBtn)
-            --         end
-            --         function versionBtn:tap(e)
-            --                 self.fsm:clickImage(self.episode, self.selectedVersion)
-            --         end
-            --         versionBtn:addEventListener("tap", versionBtn)
+            local versions = model.episodes[selectedPurchase].versions
+            for k, v in pairs(versions) do print(k, v) end
+            for i=1, #versions do
+                local versionBtn = self.versionGroup[selectedPurchase..versions[i]]
+                print(selectedPurchase..versions[i],versionBtn)
+                if versionBtn then
+                    if versionBtn.tap then
+                            print("removeEventListener")
+                        versionBtn:removeEventListener("tap", versionBtn)
+                    end
             --         self.versionGroup[selectedPurchase..versions[i]] = nil
-            --     end
-            -- end
+                end
+            end
             if model.URL then
                 if button.savingTxt then
                     button.savingTxt.alpha = 0

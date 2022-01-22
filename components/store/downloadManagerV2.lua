@@ -14,6 +14,8 @@ local model = require("components.store.model")
 
 local URL       = model.URL
 
+local serverAssets = {}
+
 function isDir(name)
     if type(name)~="string" then return false end
     local cd = lfs.currentdir()
@@ -118,12 +120,16 @@ M.fetchAssets = function ()
             end
         end
     end
+    M.processFetch(aQueue)
+end
+
+M.processFetch = function(aQueue)
     local promise = fetchAssetJson(aQueue)
     if promise == nil then
         print("fetchAssets is finished")
     else
         promise:done(function()
-            fetchAssetJson(aQueue)
+            M.processFetch(aQueue)
         end)
         promise:fail(function(error)
             print("error in fetchAssets")
@@ -218,6 +224,7 @@ M.saveDownloadablesAsJson = function(options, name, version)
     else
         print("error",reason)
     end
+    serverAssets[name.._version] = assets
     return downloadables, assets
 end
 
@@ -445,10 +452,21 @@ M.downloadAsset = function (aQueue, selectedPurchase, version)
 end
 
 M.isUpdateAvailable = function(name, version)
-    
     local downloadables = M.getDownloadables(name, version)
     --print("isUpdateAvailable", #downloadables)
-    return #downloadables > 0  
+    local assets = serverAssets[name..version]
+    if  #downloadables > 0  then
+        for i=1, #assets do
+            for k, v in pairs(assets[i]) do
+                if type (v) == "table" then
+                    if isUpdated(name..version, "p"..i, k, v.date) then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
 end
 
 function M.isUpdateAvailableInVersions(name)

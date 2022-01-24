@@ -113,9 +113,9 @@ end
 
 function M.hasDownloaded(episode, version)
     print("hasDownloaded", episode, version)
-    if not model.URL then 
+    if not model.URL then
         print ("no model.URL means it is embedded")
-       return  true  
+       return  true
     end
     local _ver = version or ""
     local path = system.pathForFile( model.episodes[episode].dir.._ver.."/copyright.txt", system.ApplicationSupportDirectory )
@@ -126,7 +126,7 @@ function M.hasDownloaded(episode, version)
 end
 
 function M.isUpdateAvailable(name, version)
-    if model.downloadManager == "V2" then 
+    if model.downloadManager == "V2" then
         return V2.isUpdateAvailable(name,version)
     else
         return false
@@ -134,14 +134,14 @@ function M.isUpdateAvailable(name, version)
 end
 
 function M.isUpdateAvailableInVersions(name)
-    if model.downloadManager == "V2" then 
+    if model.downloadManager == "V2" then
         return V2.isUpdateAvailableInVersions(name)
     else
         return false
     end
 end
 
-function M:init(onSuccess, onError)
+function M:init(onSuccess, onError, onInit)
     onDownloadComplete = onSuccess
     onDownloadError    = onError
     downloadQueue = queue.new()
@@ -155,9 +155,17 @@ function M:init(onSuccess, onError)
         end
     end)
     -- fetch assets.json for all books
-    if model.downloadManager == "V2" then 
+    if model.downloadManager == "V2" then
         print("--------fetchAssets---------")
-        V2.fetchAssets()
+        local promise = V2.fetchAssets()
+        promise:done(function()
+            onInit()
+        end)
+        promise:fail(function(error)
+            print("error in fetchAssets")
+        end)
+        promise:always(function()
+        end)
     end
 end
 
@@ -207,14 +215,14 @@ function M:startDownload(episode, version)
     end
 end
 --
-M.setButtonImage = function (_button, id, version)
+M.setButtonImage = function (_button, id, _version)
     local params = {}
-    local version = version or ""
+    local version = _version or ""
     local button = _button
     local imgName = model.backgroundImg or button.imagePath:sub(1, button.imagePath:len()-4).. display.imageSuffix ..".png"
     local _time = os.time()
     params.progress = true
-    
+
     --
     local function buttonImageListener( event )
         if ( event.isError ) then
@@ -243,7 +251,8 @@ M.setButtonImage = function (_button, id, version)
             }
         end
     end
-    print("download image", button.name, URL..id..version.."/"..imgName)
+
+    print("", "download image", button.name, URL..id..version.."/"..imgName)
     --
     network.download(
         URL..id..version.."/"..imgName.."?time=".._time,

@@ -94,8 +94,9 @@ local function fetchAssetJson(aQueue)
 end
 
 M.fetchAssets = function ()
+    local deferred = Deferred()
     local aQueue = queue.new()
-    -- also load bookName..version.."_assets.json" to assetsTableLocal[page] 
+    -- also load bookName..version.."_assets.json" to assetsTableLocal[page]
     for k, v in pairs(model.episodes) do
         print(k, v)
         if #v.versions > 0 then
@@ -120,16 +121,18 @@ M.fetchAssets = function ()
             end
         end
     end
-    M.processFetch(aQueue)
+    M.processFetch(aQueue, deferred)
+    return deferred:promise()
 end
 
-M.processFetch = function(aQueue)
+M.processFetch = function(aQueue, deferred)
     local promise = fetchAssetJson(aQueue)
     if promise == nil then
         print("fetchAssets is finished")
+        deferred:resolve()
     else
         promise:done(function()
-            M.processFetch(aQueue)
+            M.processFetch(aQueue, deferred)
         end)
         promise:fail(function(error)
             print("error in fetchAssets")
@@ -177,11 +180,11 @@ function updatedAssetsTable(item, bookName, version)
     print("--- updateAssetsTable ---", page, type)
 
     local _version = version or ""
-    
+
     if assetsTableLocal[bookName.._version][page] == nil then
         assetsTableLocal[bookName.._version][page] = {}
     end
-    
+
     if assetsTableLocal[bookName.._version][page][type] == nil then
         assetsTableLocal[bookName.._version][page][type] = {}
     end
@@ -231,11 +234,11 @@ end
 M.getDownloadables = function(name, version)
     local _version = version or ""
     local path = system.pathForFile("downloadable_"..name.._version..".json", system.TemporaryDirectory)
-    print("getDownloadables", path)
     if isFile(path) then
+        print("", "getDownloadables", path)
         return json.decode(jsonFile("downloadable_"..name.._version..".json", system.TemporaryDirectory))
     else
-        print("getDownloadables None")
+        print("", "getDownloadables None")
         return {}
     end
 end
@@ -281,7 +284,7 @@ end
 
 local function moveAsset(bookProject, version, item)
     local const = {
-        audios = "audios", 
+        audios = "audios",
         read2me = "audios",
         videos  = "videos",
         PNGs    = "videos",
@@ -294,7 +297,7 @@ local function moveAsset(bookProject, version, item)
     }
 
     local path = system.pathForFile("", system.ApplicationSupportDirectory)
-    local success = lfs.chdir( path )  --returns true on success    
+    local success = lfs.chdir( path )  --returns true on success
     if ( success ) then
         if not isFileOrDir(bookProject..version) then
             lfs.mkdir( bookProject..version)
@@ -303,7 +306,7 @@ local function moveAsset(bookProject, version, item)
             --lfs.mkdir( bookProject)
         end
         path = system.pathForFile(bookProject..version, system.ApplicationSupportDirectory)
-        lfs.chdir(path) 
+        lfs.chdir(path)
         print(item.type, const[item.type])
         if item.type ~= "images" then
             if not isFileOrDir(const[item.type]) then
@@ -316,7 +319,7 @@ local function moveAsset(bookProject, version, item)
                 lfs.mkdir("images")
             end
             path = system.pathForFile(bookProject..version.."/images", system.ApplicationSupportDirectory)
-            lfs.chdir(path) 
+            lfs.chdir(path)
             if not isFileOrDir("p"..item.page) then
                 lfs.mkdir("p"..item.page)
             end
@@ -325,13 +328,13 @@ local function moveAsset(bookProject, version, item)
 
     -- assets sub dir
     print("moveAsset", const[item.type], bookProject..version.."/"..const[item.type])
-    print(system.pathForFile(const[item.type], system.ApplicationSupportDirectory), 
+    print(system.pathForFile(const[item.type], system.ApplicationSupportDirectory),
         system.pathForFile(bookProject..version.."/"..const[item.type], system.ApplicationSupportDirectory))
     --[[
-        os.rename(system.pathForFile(const[item.type], system.ApplicationSupportDirectory), 
+        os.rename(system.pathForFile(const[item.type], system.ApplicationSupportDirectory),
             system.pathForFile(bookProject.."/"..const[item.type], system.ApplicationSupportDirectory))
     ]]
- 
+
     local function _move(src, dst)
         local assetFolder = system.pathForFile(src, system.ApplicationSupportDirectory )
         for file in lfs.dir(assetFolder) do
@@ -363,7 +366,7 @@ local function uncompressZip(filename, baseDir, bookProj, version, item, deferre
         zipFile = filename,
         zipBaseDir = baseDir,
         dstBaseDir = system.ApplicationSupportDirectory,
-        listener = function(event) 
+        listener = function(event)
             if ( event.isError ) then
                 print( "Unzip error" )
                 deferred:reject()
@@ -439,7 +442,7 @@ M.downloadAsset = function (aQueue, selectedPurchase, version)
                         --though you did not get a file, so trap for that
                     else
                         local url = URL ..selectedPurchase.._version.."/p"..item.page.."/"..item.type..".zip"
-                        downloadZip(url, selectedPurchase.._version.."p"..item.page.."_"..item.type..".zip", 
+                        downloadZip(url, selectedPurchase.._version.."p"..item.page.."_"..item.type..".zip",
                             selectedPurchase, _version, item, deferred)
                     end
                 end
@@ -453,13 +456,13 @@ end
 
 M.isUpdateAvailable = function(name, version)
     local downloadables = M.getDownloadables(name, version)
-    --print("isUpdateAvailable", #downloadables)
-    local assets = serverAssets[name..version]
+    print("isUpdateAvailable", #downloadables)
+    local assets = serverAssets[name..(version or "")]
     if  #downloadables > 0  then
         for i=1, #assets do
             for k, v in pairs(assets[i]) do
                 if type (v) == "table" then
-                    if isUpdated(name..version, "p"..i, k, v.date) then
+                    if isUpdated(name..(version or ""), "p"..i, k, v.date) then
                         return true
                     end
                 end
@@ -471,7 +474,7 @@ end
 
 function M.isUpdateAvailableInVersions(name)
     print("M.isUpateAvailableInVersions", name)
-    if #model.episodes[name].versions > 0 then
+    if model.episodes[name].versions and #model.episodes[name].versions > 0 then
         for k, v in pairs(model.episodes[name].versions) do
             --print(k, v)
             local b = M.isUpdateAvailable(name, v )

@@ -322,26 +322,28 @@ function _Class:init(overlay, view)
         self.failedListener,
         model.debug
     )
-    downloadManager:init(self.onDownloadComplete, self.onDownloadError) --
-    self.fsm:enterStartState()
-    if (system.getInfo("environment") == "simulator") then
-        self.fsm:setDebugFlag(true)
-    end
-    if overlay then
-        if downloadManager.isDownloadQueue() then
-            self.fromThumbnail = true
-            self.fsm:onDownloadQueue()
-        else
-            self.fsm:showThumbnail()
+    downloadManager:init(self.onDownloadComplete, self.onDownloadError, function()
+
+        self.fsm:enterStartState()
+        if (system.getInfo("environment") == "simulator") then
+            self.fsm:setDebugFlag(true)
         end
-    else
-        -- mydebug.print()
-        if model.currentEpisode.isPurchased then
-            self.fsm:showDialogPurchased()
+        if overlay then
+            if downloadManager.isDownloadQueue() then
+                self.fromThumbnail = true
+                self.fsm:onDownloadQueue()
+            else
+                self.fsm:showThumbnail()
+            end
         else
-            self.fsm:showDialogNotPurchased()
+            -- mydebug.print()
+            if model.currentEpisode.isPurchased then
+                self.fsm:showDialogPurchased()
+            else
+                self.fsm:showDialogNotPurchased()
+            end
         end
-    end
+    end) --
 end
 
 function _Class:resume()

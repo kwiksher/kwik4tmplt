@@ -170,14 +170,18 @@ end
 M.gotoTOC = function(params)
     if type.pages == model.bookShelfType then
        if setSystemDir[type.pages](model.isIAP(model.tocPage)) then
+        if _G.appName == "TOC" then
             local storeFSM = require("components.store.storeFSM").getInstance()
             storeFSM:exit()
-            composer.gotoScene("views.page0"..model.tocPage.."Scene", {params = params})
+        end
+        composer.gotoScene("views.page0"..model.tocPage.."Scene", {params = params})
         end
     elseif type.embedded == model.bookShelfType then
         if master.isEmbedded then
-            local storeFSM = require("components.store.storeFSM").getInstance()
-            storeFSM:exit()
+            if _G.appName == "TOC" then
+                local storeFSM = require("components.store.storeFSM").getInstance()
+                storeFSM:exit()
+            end
             Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
         end
     elseif type.tmplt == model.bookShelfType then
@@ -275,16 +279,19 @@ end
 M.gotoSceneBook = function(episode, page, version, params)
     local _ver = version or ""
     if master.isEmbedded then
-        local storeFSM = require("components.store.storeFSM").getInstance()
-        storeFSM:exit()
+        if _G.appName == "TOC" then
+            local storeFSM = require("components.store.storeFSM").getInstance()
+            storeFSM:exit()
+        end
         Runtime:dispatchEvent({name="changeThisMug", appName=episode.._ver, page=page})
     else
         if episode == "TOC" then
             M.currentPage = 1
             setSystemDir[type.tmplt](false)
-
-            local storeFSM = require("components.store.storeFSM").getInstance()
-            storeFSM:exit()
+            if _G.appName == "TOC" then
+                local storeFSM = require("components.store.storeFSM").getInstance()
+                storeFSM:exit()
+            end
             composer.gotoScene("views.page01Scene", {params = params})
         else
             print("gotoSceneBook ".. model.getPageName(episode))
@@ -302,7 +309,7 @@ M.gotoSceneNextBook = function(version)
     local store_model
     if master.isEmbedded then
         currentBook = _G.appName
-        store_model = require("App.TOC.components.store.model")
+        store_model = require("components.store.model")
     else
         store_model = model
         print("currentbook:"..currentBook)
@@ -326,16 +333,21 @@ M.gotoSceneNextBook = function(version)
             epname ="TOC"
         end
         if master.isEmbedded then
-            -- local storeFSM = require("components.store.storeFSM").getInstance()
-            -- storeFSM:exit()
+            if _G.appName == "TOC" then
+                local storeFSM = require("components.store.storeFSM").getInstance()
+                storeFSM:exit()
+            end
+            print("gotoSceneNextBook", epname.._ver)
             Runtime:dispatchEvent({name="changeThisMug", appName=epname.._ver})
         else
             M.gotoSceneBook(epname, 1, _ver)
         end
     else
         if master.isEmbedded then
-            local storeFSM = require("components.store.storeFSM").getInstance()
-            storeFSM:exit()
+            if _G.appName == "TOC" then
+                local storeFSM = require("components.store.storeFSM").getInstance()
+                storeFSM:exit()
+            end
             Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
         else
             M.gotoSceneBook("TOC", 1, _ver)
@@ -349,7 +361,7 @@ M.gotoScenePreviousBook = function(version)
     local store_model
     if master.isEmbedded then
         currentBook = _G.appName
-        store_model = require("App.TOC.components.store.model")
+        store_model = require("components.store.model")
     else
         store_model = model
         print("currentbook:"..currentBook)
@@ -373,16 +385,21 @@ M.gotoScenePreviousBook = function(version)
             epname ="TOC"
         end
         if master.isEmbedded then
-            -- local storeFSM = require("components.store.storeFSM").getInstance()
-            -- storeFSM:exit()
+            if _G.appName == "TOC" then
+                local storeFSM = require("components.store.storeFSM").getInstance()
+                storeFSM:exit()
+            end
+            print("gotoScenePreviousBook", epname.._ver)
             Runtime:dispatchEvent({name="changeThisMug", appName=epname.._ver})
         else
             M.gotoSceneBook(epname, 1, _ver)
         end
     else
         if master.isEmbedded then
-            local storeFSM = require("components.store.storeFSM").getInstance()
-            storeFSM:exit()
+            if _G.appName == "TOC" then
+                local storeFSM = require("components.store.storeFSM").getInstance()
+                storeFSM:exit()
+            end
             Runtime:dispatchEvent({name="changeThisMug", appName="TOC"})
         else
             M.gotoSceneBook("TOC", 1, _ver)
@@ -455,9 +472,11 @@ function M.gotoScene(event, version)
     print("UI.gotoScene ".. episode.name, version)
     local _ver = version or ""
     if master.isEmbedded then
-        -- local storeFSM = require("components.store.storeFSM").getInstance()
-        -- storeFSM:exit()
-        Runtime:dispatchEvent({name="changeThisMug", appName=episode.name.._ver})
+        if _G.appName == "TOC" then
+            local storeFSM = require("components.store.storeFSM").getInstance()
+            storeFSM:exit()
+        end
+    Runtime:dispatchEvent({name="changeThisMug", appName=episode.name.._ver})
     elseif bookShelfType == type.tmplt then
         readPageJson(episode.name, version)
         setSystemDir[type.tmplt](true)

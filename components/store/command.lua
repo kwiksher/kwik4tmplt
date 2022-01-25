@@ -57,7 +57,7 @@ function M.new ()
         end
         if page then
             if master.isEmbedded then
-                package.loaded[page] = require("plugin.KwikShelf."..page)
+                package.loaded[page] = require(page)
             end
             model.currentEpisode = {name=episode.name, isPurchased = event.target.isPurchased}
             timer.performWithDelay(1, function()

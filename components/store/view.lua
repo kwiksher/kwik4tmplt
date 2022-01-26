@@ -20,6 +20,9 @@ function M.new()
     --
     --
     local function copyDisplayObject(src, dst, id, group)
+        if src == nil or src.width == nil then
+            return nil
+        end
         local obj = display.newImageRect(_K.imgDir .. src.imagePath, _K.systemDir, src.width, src.height)
         if obj == nil then
             print("copyDisplay object fail", id)
@@ -92,15 +95,14 @@ function M.new()
             local label = self.layer[episode.name .. "Label"]
             if button then
                 setButton(self, button, episode, nil, label)
-            else
-                if episode.versions then
-                    for i = 1, #episode.versions do
-                        button = self.layer[episode.name .. "_"..episode.versions[i]]
-                        label = self.layer[episode.name .."_"..episode.versions[i].. "Label"]
-                        --print(episode.name .. "_"..episode.versions[i])
-                        if button and label then
-                            setButton(self, button, episode, episode.versions[i], label)
-                        end
+            end
+            if episode.versions then
+                for i = 1, #episode.versions do
+                    button = self.layer[episode.name .. "_"..episode.versions[i]]
+                    label = self.layer[episode.name .."_"..episode.versions[i].. "Label"]
+                    --print(episode.name .. "_"..episode.versions[i])
+                    if button and label then
+                        setButton(self, button, episode, episode.versions[i], label)
                     end
                 end
             end
@@ -159,13 +161,12 @@ end
             local button = self.layer[episode.name .. "Icon"]
             if button then
                 setButtonListener(button, episode)
-            else
-                if episode.versions then
-                    for i = 1, #episode.versions do
-                        button = self.layer[episode.name .. "_"..episode.versions[i]]
-                        if button then
-                            setButtonListener(button, episode, episode.versions[i] )
-                        end
+            end
+            if episode.versions then
+                for i = 1, #episode.versions do
+                    button = self.layer[episode.name .. "_"..episode.versions[i]]
+                    if button then
+                        setButtonListener(button, episode, episode.versions[i] )
                     end
                 end
             end
@@ -255,7 +256,7 @@ end
                 src = self.layer[episode.name.."_"..lang]
             end
             if src then
-                --print(src.imagePath)
+                -- print("", _K.imgDir .. src.imagePath)
                 bookXXIcon.fill = {
                     type = "image",
                     filename = _K.imgDir .. src.imagePath,
@@ -266,36 +267,46 @@ end
         bookXXIcon.alpha = 1
     end
     ---
+    local function getIcon(self, episode)
+        local bookXXIcon = self.layer[episode.name.."Icon"]
+        if episode.selectedVersion then
+            bookXXIcon = self.layer[episode.name.."_"..episode.selectedVersion]
+        else
+            if episode.versions and _K.lang:len() ==0 then
+                bookXXIcon = self.layer[episode.name.."_en"]
+            end
+        end
+        if model.bookShelfType == 0 then
+            bookXXIcon = self.layer[episode.name .. "Icon"]
+        end
+        if bookXXIcon == nil then
+            bookXXIcon = self.layer["bookXXIcon"]
+        end
+        bookXXIcon.alpha = 1
+        return bookXXIcon
+    end
+    ---
     function VIEW:createDialog(episode, isPurchased, isDownloaded)
         -- init
         for k, v in pairs(model.episodes) do
             if self.layer[v.name.."Icon"] then
                 self.layer[v.name.."Icon"].alpha = 0
             end
+            -- version buttons
             for i = 1, #v.versions do
                local obj  = self.layer[v.name.."_"..v.versions[i]]
                 if obj then
                     obj.alpha = 0
                 end
             end
-
+        end
+        if self.layer["bookXXIcon"] then
+            self.layer["bookXXIcon"].alpha = 0
         end
         --
         self.episode = episode
         print("VIEW:createDialog", episode.name, episode.selectedVersion)
-        local bookXXIcon = self.layer[episode.name.."Icon"]
-
-        if episode.selectedVersion then
-            bookXXIcon = self.layer[episode.name.."_"..episode.selectedVersion]
-        end
-
-        if model.bookShelfType == 0 then
-            bookXXIcon = self.layer[episode.name .. "Icon"]
-        end
-
-        if bookXXIcon == nil then
-            bookXXIcon = self.layer["bookXXIcon"]
-        end
+        local bookXXIcon = getIcon(self, episode)
 
         if bookXXIcon then
             setDialogButton(bookXXIcon, episode, self, episode.selectedVersion)
@@ -446,17 +457,7 @@ end
     --
     --
     function VIEW:controlDialog(episode, isPurchased, isDownloaded)
-        local bookXXIcon = self.layer[episode.name.."Icon"]
-        if episode.selectedPurchase then
-            bookXXIcon = self.layer[episode.name.."_"..episode.selectedVersion]
-        end
-        if model.bookShelfType == 0 then
-            bookXXIcon = self.layer[episode.name .. "Icon"]
-        end
-
-        if bookXXIcon == nil then
-            bookXXIcon = self.layer["bookXXIcon"]
-        end
+        local bookXXIcon = getIcon(self, episode)
 
         if bookXXIcon then
             bookXXIcon.episode = episode

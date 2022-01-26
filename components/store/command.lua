@@ -44,6 +44,7 @@ function M.new ()
     end
     --
     function CMD.showOverlay(event)
+        print("CMD.showOverlay", event.target.episode.name)
         local episode =  event.target.episode
         local options = {
             isModal = true,
@@ -57,15 +58,18 @@ function M.new ()
         end
         if page then
             if master.isEmbedded then
-                package.loaded[page] = require(page)
+                print("App.".._G.appName.."."..page)
+                package.loaded[page] = require("App.".._G.appName.."."..page)
             end
+            print(2)
             model.currentEpisode = {name=episode.name, isPurchased = event.target.isPurchased}
             timer.performWithDelay(1, function()
+                print("--- done showOverlay---")
                 composer.showOverlay(page, options)
             end)
-            print("--- done showOverlay---")
             return true
         else
+            print("", "Error page is nil")
             return false
         end
     end

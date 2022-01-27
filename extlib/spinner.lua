@@ -50,10 +50,10 @@ function M.new (host)
     end
 
     function obj:updateText()
-        if self.bookSize > 0 then 
+        if self.bookSize > 0 then
             local percent = self.size/self.bookSize
-            local sec     = os.difftime( os.time(), self.startTime) 
-            local remain  = math.floor(sec * (1.0/percent))
+            local sec     = os.difftime( os.time(), self.startTime)
+            local remain  = math.floor(sec * (1.0/percent)) - sec
             local time    = os.date("*t", remain)
             if time then
                 spinner.spinnerText.text = math.floor(percent*100).." % (" ..self.size .."/" ..self.bookSize .." Mb) \nEstimated time of completion\n" ..time.min.." min "..time.sec .." sec"

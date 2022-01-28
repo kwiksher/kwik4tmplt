@@ -19,7 +19,7 @@ function M.new (host)
             --Add a little spinning rectangle
             local spinnerRect = display.newRect(0, 0,35,35)
             spinnerRect:setFillColor(0, 0)
-            spinnerRect:setStrokeColor(1,1,1)
+            spinnerRect:setStrokeColor(0,1,1)
             spinnerRect.strokeWidth = 2
             transition.to(spinnerRect, { time=4000, rotation=360, iterations=999999, transition=easing.inOutQuad})
             --Create a group and add all these objects to it
@@ -51,12 +51,18 @@ function M.new (host)
 
     function obj:updateText()
         if self.bookSize > 0 then
-            local percent = self.size/self.bookSize
+            local percent = self.size/(self.bookSize*1024*1024)
             local sec     = os.difftime( os.time(), self.startTime)
+            if percent > 1 then
+                percent = 1
+            end
+
             local remain  = math.floor(sec * (1.0/percent)) - sec
             local time    = os.date("*t", remain)
+
             if time then
-                spinner.spinnerText.text = math.floor(percent*100).." % (" ..self.size .."/" ..self.bookSize .." Mb) \nEstimated time of completion\n" ..time.min.." min "..time.sec .." sec"
+                print("", remain, time.min.." min "..time.sec .." sec")
+                spinner.spinnerText.text = math.floor(percent*100).." % (" ..math.floor(self.size/(1024*1024)) .."/" ..self.bookSize .." Mb) \nEstimated time of completion\n" ..time.min.." min "..time.sec .." sec"
             else
                 print(self.size, self.bookSize, self.startTime)
             end

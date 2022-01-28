@@ -266,7 +266,7 @@ M.processDownload = function (downloadables, deferred, selectedPurchase, version
     else
         promise:done(function(item)
             print(item.type)
-            spinner.size = spinner.size + math.floor(item.size/(1024*1024))
+            spinner.size = spinner.size + item.size
             spinner:updateText()
             updatedAssetsTable(item, selectedPurchase, version)
             M.processDownload(downloadables, deferred, selectedPurchase, version)

@@ -154,8 +154,10 @@ function M:init(onSuccess, onError, onInit)
             downloadQueue:offer({product=selectedPurchase, version=version})
         end
     end)
-    -- fetch assets.json for all books
-    if model.downloadManager == "V2" then
+    if model.downloadManager ~= "V2" then
+        onInit()
+    else
+        -- fetch assets.json for all books
         print("--------fetchAssets---------")
         local promise = V2.fetchAssets()
         promise:done(function()

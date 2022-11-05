@@ -136,6 +136,7 @@ M.processFetch = function(aQueue, deferred)
         end)
         promise:fail(function(error)
             print("error in fetchAssets")
+            deferred:reject()
         end)
         promise:always(function()
         end)
@@ -266,7 +267,7 @@ M.processDownload = function (downloadables, deferred, selectedPurchase, version
     else
         promise:done(function(item)
             print(item.type)
-            spinner.size = spinner.size + item.size
+            spinner.size = spinner.size + math.floor(item.size/(1024*1024))
             spinner:updateText()
             updatedAssetsTable(item, selectedPurchase, version)
             M.processDownload(downloadables, deferred, selectedPurchase, version)
@@ -456,9 +457,9 @@ end
 
 M.isUpdateAvailable = function(name, version)
     local downloadables = M.getDownloadables(name, version)
-    print("isUpdateAvailable", #downloadables)
+    print("V2.isUpdateAvailable", #downloadables)
     local assets = serverAssets[name..(version or "")]
-    if  #downloadables > 0  then
+    if assets and #downloadables > 0  then
         for i=1, #assets do
             for k, v in pairs(assets[i]) do
                 if type (v) == "table" then
@@ -473,7 +474,7 @@ M.isUpdateAvailable = function(name, version)
 end
 
 function M.isUpdateAvailableInVersions(name)
-    print("M.isUpateAvailableInVersions", name)
+    print("V2.isUpateAvailableInVersions", name)
     if model.episodes[name].versions and #model.episodes[name].versions > 0 then
         for k, v in pairs(model.episodes[name].versions) do
             --print(k, v)

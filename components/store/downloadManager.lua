@@ -154,19 +154,18 @@ function M:init(onSuccess, onError, onInit)
             downloadQueue:offer({product=selectedPurchase, version=version})
         end
     end)
-    if model.downloadManager ~= "V2" then
-        onInit()
-    else
-        -- fetch assets.json for all books
+    -- fetch assets.json for all books
+    if model.downloadManager == "V2" then
         print("--------fetchAssets---------")
         local promise = V2.fetchAssets()
         promise:done(function()
-            onInit()
         end)
         promise:fail(function(error)
-            print("error in fetchAssets")
+          print("","error in fetchAssets")
         end)
         promise:always(function()
+          print("", "onInit")
+          onInit()
         end)
     end
 end
@@ -229,13 +228,13 @@ M.setButtonImage = function (_button, id, _version)
     local function buttonImageListener( event )
         if ( event.isError ) then
             print( "Network error - download failed: ", event.response )
-            local path = system.pathForFile( button.name.._time..".png", system.TemporaryDirectory)
+            local path = system.pathForFile( button.name..".png", system.TemporaryDirectory)
             local fhd = io.open( path )
             -- Determine if file exists
             if fhd then
                 button.fill = {
                     type = "image",
-                    filename = button.name.._time..".png",
+                    filename = button.name..".png",
                     baseDir = system.TemporaryDirectory
                 }
                fhd:close()
@@ -248,7 +247,7 @@ M.setButtonImage = function (_button, id, _version)
             print( "Displaying response image file with " ..button.name ..".png")
             button.fill = {
                 type = "image",
-                filename = button.name.._time..".png",
+                filename = button.name..".png",
                 baseDir = system.TemporaryDirectory
             }
         end
@@ -261,7 +260,7 @@ M.setButtonImage = function (_button, id, _version)
         "GET",
         buttonImageListener,
         params,
-        button.name.._time..".png",
+        button.name..".png",
         system.TemporaryDirectory
     )
 end

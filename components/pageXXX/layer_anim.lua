@@ -49,8 +49,8 @@ local function getPosGroupAndPage(layer, _endX, _endY, isSceneGroup)
 	      mX = endX + layer.x
 	      mY = endY + layer.y
 	  else
-	      mX = endX +layer.width/2) 
-	      mY = endY +layer.height/2)
+	      mX = endX +layer.width/2
+	      mY = endY +layer.height/2
 	  end
 	{{/CenterReferencePoint}}
 	{{#TopLeftReferencePoint}}
@@ -112,48 +112,48 @@ local function getPos(layer, _endX, _endY)
     mY = endY + height/2
 	{{/DefaultReference}}
 	{{#TextReference}}
-    mX = endX + {{nX}} - {{elX}} 
+    mX = endX + {{nX}} - {{elX}}
     mY = endY + {{nY}} - {{elY}} -height*0.5
 	{{/TextReference}}
 	{{#TopLeftReferencePoint}}
 		--TopLeftReferencePoint
-      mX = endX 
-      mY = endY 
+      mX = endX
+      mY = endY
 	{{/TopLeftReferencePoint}}
 	{{#TopCenterReferencePoint}}
 	--TopCenterReferencePoint
-      mX = endX + width/2 
-      mY = endY 
+      mX = endX + width/2
+      mY = endY
 	{{/TopCenterReferencePoint}}
 	{{#TopRightReferencePoint}}
 	--TopRightReferencePoint
-      mX = endX + width 
-      mY = endY 
+      mX = endX + width
+      mY = endY
 	{{/TopRightReferencePoint}}
 	{{#CenterLeftReferencePoint}}
 	--CenterLeftReferencePoint
-      mX = endX 
+      mX = endX
       mY = endY + height/2
 	{{/CenterLeftReferencePoint}}
 	{{#CenterRightReferencePoint}}
 	--CenterRightReferencePoint
-      mX = endX + width 
-      mY = endY + height/2 
+      mX = endX + width
+      mY = endY + height/2
 	{{/CenterRightReferencePoint}}
 	{{#BottomLeftReferencePoint}}
 	--BottomLeftReferencePoint
-      mX = endX 
-      mY = endY + height 
+      mX = endX
+      mY = endY + height
 	{{/BottomLeftReferencePoint}}
 	{{#BottomRightReferencePoint}}
 	--BottomRightReferencePoint
-      mX = endX + width 
-      mY = endY + height 
+      mX = endX + width
+      mY = endY + height
 	{{/BottomRightReferencePoint}}
 	{{#BottomCenterReferencePoint}}
 	--BottomCenterReferencePoint
-      mX = endX + width/2 
-      mY = endY + height 
+      mX = endX + width/2
+      mY = endY + height
 	{{/BottomCenterReferencePoint}}
 	{{#randX}}
 		mX = {{elW}} + math.random({{randXStart}}, {{randXEnd}})

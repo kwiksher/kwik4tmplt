@@ -22,10 +22,10 @@ function _M:didShow(UI)
           constrainAngle={{gangle}} ,
         {{/gangle}}
         {{#gboundsX}}
-          xBounds ={ {{gboundsXS}}, {{gboundsXE}} }, 
+          xBounds ={ {{gboundsXS}}, {{gboundsXE}} },
         {{/gboundsX}}
         {{#gboundsY}}
-          yBounds ={ {{gboundsYS}}, {{gboundsYE}} }, 
+          yBounds ={ {{gboundsYS}}, {{gboundsYE}} },
         {{/gboundsY}}
     })
     {{#gdrop}}
@@ -109,7 +109,7 @@ function _M:didShow(UI)
         {{/gdrop}}
       {{#gdropr}}
           {{#gcomplete}}
-          if ({{glayer}}_lock == 0) then
+          if ({{glayer}}_lock == nil or {{glayer}}_lock == 0) then
               UI.dragLayer = dragLayer
                scene:dispatchEvent({name="{{gcomplete}}", event={UI=UI} })
           end
